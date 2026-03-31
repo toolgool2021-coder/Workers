@@ -91,7 +91,6 @@ html, body {
     padding: 25px;
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
     transition: all 0.3s ease;
-    cursor: pointer;
     text-align: center;
     border: 2px solid;
     position: relative;
@@ -199,72 +198,6 @@ html, body {
     color: #eee;
     margin-top: 5px;
 }
-
-.color-picker-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid white;
-    background: rgba(168, 85, 247, 0.8);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.color-picker-btn:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
-}
-
-.color-menu {
-    display: none;
-    position: absolute;
-    top: 45px;
-    right: 10px;
-    background: rgba(10, 10, 10, 0.95);
-    border: 2px solid #a855f7;
-    border-radius: 10px;
-    padding: 10px;
-    z-index: 100;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-}
-
-.color-menu.active {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-}
-
-.color-option {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid white;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.color-option:hover {
-    transform: scale(1.15);
-}
-
-.color-option.cyan { background: #00ffff; }
-.color-option.purple { background: #a855f7; }
-.color-option.gold { background: #ffd700; }
-.color-option.green { background: #00ff88; }
-.color-option.pink { background: #ff69b4; }
-.color-option.orange { background: #ff8c00; }
-.color-option.red { background: #ff4545; }
-.color-option.blue { background: #1e90ff; }
 
 /* ===== КОНТАКТЫ ===== */
 .contact-section {
