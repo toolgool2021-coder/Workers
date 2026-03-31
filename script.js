@@ -1,11 +1,25 @@
-const colors = ['cyan', 'purple', 'gold', 'green', 'pink', 'orange', 'red', 'blue'];
+// Таблица цветов для быстрого доступа
+const colorMap = {
+    cyan: { hex: '#00ffff', bg: 'rgba(0, 255, 255, 0.2)', bg2: 'rgba(168, 85, 247, 0.1)' },
+    purple: { hex: '#a855f7', bg: 'rgba(168, 85, 247, 0.2)', bg2: 'rgba(0, 255, 200, 0.05)' },
+    gold: { hex: '#ffd700', bg: 'rgba(255, 215, 0, 0.2)', bg2: 'rgba(255, 165, 0, 0.1)' },
+    green: { hex: '#00ff88', bg: 'rgba(0, 255, 136, 0.2)', bg2: 'rgba(0, 200, 100, 0.1)' },
+    pink: { hex: '#ff69b4', bg: 'rgba(255, 105, 180, 0.2)', bg2: 'rgba(255, 20, 147, 0.1)' },
+    orange: { hex: '#ff8c00', bg: 'rgba(255, 140, 0, 0.2)', bg2: 'rgba(255, 100, 0, 0.1)' },
+    red: { hex: '#ff4545', bg: 'rgba(255, 69, 69, 0.2)', bg2: 'rgba(255, 0, 0, 0.1)' },
+    blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
+};
 
+const colors = Object.keys(colorMap);
+
+// Загрузка рабочих из TXT
 async function loadWorkers() {
     try {
         const response = await fetch('Workers/Crafters.txt');
         const text = await response.text();
         const workers = parseWorkers(text);
         renderWorkers(workers);
+        applyStoredColors();
     } catch (error) {
         console.error('Ошибка загрузки файла:', error);
         document.getElementById('workersList').innerHTML = '<p style="text-align: center; color: #ff6b6b;">Ошибка загрузки данных</p>';
@@ -55,7 +69,8 @@ function renderWorkers(workers) {
 
 function createWorkerCard(worker) {
     const card = document.createElement('div');
-    card.className = `worker-card color-${worker.color}`;
+    card.className = 'worker-card';
+    card.dataset.workerId = worker.id;
     
     const xpParts = worker.xp.split('/');
     const xpCurrent = parseInt(xpParts[0]);
@@ -66,6 +81,10 @@ function createWorkerCard(worker) {
     if (worker.badge) {
         badgeHTML = `<img src="${worker.badge}" alt="badge" class="badge" title="Badge">`;
     }
+
+    // Устанавливаем цвет из данных или сохранённый
+    const savedColor = localStorage.getItem(`worker-color-${worker.id}`) || worker.color;
+    applyColorToCard(card, savedColor);
 
     card.innerHTML = `
         <button class="color-picker-btn" onclick="toggleColorMenu(event)">
@@ -100,12 +119,32 @@ function createWorkerCard(worker) {
     return card;
 }
 
+// Применяем цвет �� карточке через CSS переменные (БЕЗ телепортации)
+function applyColorToCard(card, colorName) {
+    const color = colorMap[colorName];
+    if (color) {
+        card.style.setProperty('--card-color', color.hex);
+        card.style.setProperty('--card-bg', color.bg);
+        card.style.setProperty('--card-bg-2', color.bg2);
+    }
+}
+
+// Загружаем все сохранённые цвета при старте
+function applyStoredColors() {
+    document.querySelectorAll('.worker-card').forEach(card => {
+        const workerId = card.dataset.workerId;
+        const savedColor = localStorage.getItem(`worker-color-${workerId}`);
+        if (savedColor) {
+            applyColorToCard(card, savedColor);
+        }
+    });
+}
+
 function toggleColorMenu(event) {
     event.stopPropagation();
     const card = event.target.closest('.worker-card');
     const menu = card.querySelector('.color-menu');
     
-    // Закрываем все остальные меню
     document.querySelectorAll('.color-menu.active').forEach(m => {
         if (m !== menu) m.classList.remove('active');
     });
@@ -116,45 +155,20 @@ function toggleColorMenu(event) {
 function setWorkerColor(workerId, color, event) {
     event.stopPropagation();
     
-    const card = event.target.closest('.worker-card');
-    const oldColor = [...card.classList].find(c => c.startsWith('color-'));
-    
-    if (oldColor) {
-        card.classList.remove(oldColor);
-    }
-    
-    card.classList.add(`color-${color}`);
+    const card = document.querySelector(`[data-worker-id="${workerId}"]`);
+    applyColorToCard(card, color);
     card.querySelector('.color-menu').classList.remove('active');
 
     // Сохраняем в localStorage
-    const workerId_stored = card.querySelector('.color-menu').dataset.workerId;
-    localStorage.setItem(`worker-color-${workerId_stored}`, color);
+    localStorage.setItem(`worker-color-${workerId}`, color);
 }
-
-// Загружаем сохранённые цвета при загрузке страницы
-window.addEventListener('load', () => {
-    loadWorkers();
-    
-    setTimeout(() => {
-        document.querySelectorAll('.worker-card').forEach(card => {
-            const workerId = card.querySelector('.color-menu').dataset.workerId;
-            const savedColor = localStorage.getItem(`worker-color-${workerId}`);
-            
-            if (savedColor) {
-                const oldColor = [...card.classList].find(c => c.startsWith('color-'));
-                if (oldColor) card.classList.remove(oldColor);
-                card.classList.add(`color-${savedColor}`);
-            }
-        });
-    }, 100);
-});
 
 // Закрываем меню при клике вне
 document.addEventListener('click', () => {
     document.querySelectorAll('.color-menu.active').forEach(m => m.classList.remove('active'));
 });
 
-// СНЕЖНАЯ АНИМАЦИЯ
+// ===== СНЕЖНАЯ АНИМАЦИЯ (МЕДЛЕННЕЕ, КАК В TL-SCHEDULES) =====
 const canvas = document.getElementById('snowCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -168,12 +182,12 @@ function createSnowflake() {
         y: Math.random() * canvas.height - canvas.height,
         radius: Math.random() * 3 + 2,
         opacity: Math.random() * 0.5 + 0.3,
-        vx: Math.random() * 1 - 0.5,
-        vy: Math.random() * 2 + 1
+        vx: Math.random() * 0.3 - 0.15,  // Медленнее по X
+        vy: Math.random() * 0.8 + 0.3    // Медленнее по Y
     };
 }
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 30; i++) {  // Меньше снежинок
     snowflakes.push(createSnowflake());
 }
 
@@ -204,3 +218,6 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// Загружаем рабочих при загрузке страницы
+window.addEventListener('load', loadWorkers);
