@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои Рабочие</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* ===== СНЕГ ===== */
+        #snowCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ===== КОНТЕЙНЕР ===== */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* ===== ЗАГОЛОВОК ===== */
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        .project-logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+        }
+
+        @keyframes logoGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
+            }
+        }
+
+        .project-title {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #a855f7 0%, #00ffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.2));
+        }
+
+        .project-subtitle {
+            font-size: 14px;
+            color: #00ffff;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        /* ===== РАБОЧИЕ СЕКЦИЯ ===== */
+        .workers-section {
+            background: rgba(168, 85, 247, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            margin-bottom: 60px;
+        }
+
+        .workers-section h2 {
+            color: #00ffff;
+            margin-bottom: 25px;
+            font-size: 24px;
+            text-shadow: 0 0 10px #00ffff;
+            text-align: center;
+        }
+
+        .workers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .worker-card {
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid;
+            position: relative;
+        }
+
+        /* Цвета карточек */
+        .worker-card.color-cyan {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(168, 85, 247, 0.1));
+            border-color: #00ffff;
+        }
+
+        .worker-card.color-purple {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 255, 200, 0.05));
+            border-color: #a855f7;
+        }
+
+        .worker-card.color-gold {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+            border-color: #ffd700;
+        }
+
+        .worker-card.color-green {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
+            border-color: #00ff88;
+        }
+
+        .worker-card.color-pink {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 20, 147, 0.1));
+            border-color: #ff69b4;
+        }
+
+        .worker-card.color-orange {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 100, 0, 0.1));
+            border-color: #ff8c00;
+        }
+
+        .worker-card.color-red {
+            background: linear-gradient(135deg, rgba(255, 69, 69, 0.2), rgba(255, 0, 0, 0.1));
+            border-color: #ff4545;
+        }
+
+        .worker-card.color-blue {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2), rgba(0, 102, 204, 0.1));
+            border-color: #1e90ff;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px solid;
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .worker-card.color-cyan .avatar { border-color: #00ffff; }
+        .worker-card.color-purple .avatar { border-color: #a855f7; }
+        .worker-card.color-gold .avatar { border-color: #ffd700; }
+        .worker-card.color-green .avatar { border-color: #00ff88; }
+        .worker-card.color-pink .avatar { border-color: #ff69b4; }
+        .worker-card.color-orange .avatar { border-color: #ff8c00; }
+        .worker-card.color-red .avatar { border-color: #ff4545; }
+        .worker-card.color-blue .avatar { border-color: #1e90ff; }
+
+        .worker-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .worker-name {
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .worker-card.color-cyan .worker-name { color: #00ffff; }
+        .worker-card.color-purple .worker-name { color: #a855f7; }
+        .worker-card.color-gold .worker-name { color: #ffd700; }
+        .worker-card.color-green .worker-name { color: #00ff88; }
+        .worker-card.color-pink .worker-name { color: #ff69b4; }
+        .worker-card.color-orange .worker-name { color: #ff8c00; }
+        .worker-card.color-red .worker-name { color: #ff4545; }
+        .worker-card.color-blue .worker-name { color: #1e90ff; }
+
+        .worker-name:hover {
+            text-decoration: underline;
+            transform: scale(1.05);
+        }
+
+        .badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        .worker-class {
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .worker-card.color-cyan .worker-class { color: #00ffff; }
+        .worker-card.color-purple .worker-class { color: #a855f7; }
+        .worker-card.color-gold .worker-class { color: #ffd700; }
+        .worker-card.color-green .worker-class { color: #00ff88; }
+        .worker-card.color-pink .worker-class { color: #ff69b4; }
+        .worker-card.color-orange .worker-class { color: #ff8c00; }
+        .worker-card.color-red .worker-class { color: #ff4545; }
+        .worker-card.color-blue .worker-class { color: #1e90ff; }
+
+        .xp-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .xp-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .xp-bar {
+            width: 100%;
+            height: 20px;
+            background: #1a1a2e;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            position: relative;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #a855f7);
+            transition: width 0.3s;
+        }
+
+        .xp-text {
+            font-size: 12px;
+            color: #eee;
+            margin-top: 5px;
+        }
+
+        .color-picker-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            background: rgba(168, 85, 247, 0.8);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .color-picker-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+        }
+
+        .color-menu {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 10px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid #a855f7;
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .color-menu.active {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-option:hover {
+            transform: scale(1.15);
+        }
+
+        .color-option.cyan { background: #00ffff; }
+        .color-option.purple { background: #a855f7; }
+        .color-option.gold { background: #ffd700; }
+        .color-option.green { background: #00ff88; }
+        .color-option.pink { background: #ff69b4; }
+        .color-option.orange { background: #ff8c00; }
+        .color-option.red { background: #ff4545; }
+        .color-option.blue { background: #1e90ff; }
+
+        /* ===== КОНТАКТЫ ===== */
+        .contact-section {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 60px;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 30px;
+            border: 2px solid;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .telegram-link {
+            border-color: #0088cc;
+            background: rgba(0, 136, 204, 0.1);
+            box-shadow: 0 0 20px rgba(0, 136, 204, 0.3);
+        }
+
+        .telegram-link:hover {
+            border-color: #00c8ff;
+            background: rgba(0, 136, 204, 0.3);
+            box-shadow: 0 0 40px rgba(0, 136, 204, 0.8);
+            transform: translateY(-3px);
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 24px;
+            }
+
+            .workers-list {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar {
+                width: 120px;
+                height: 120px;
+            }
+
+            .worker-name {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="snowCanvas"></canvas>
+
+<div class="container">
+
+    <!-- ЗАГОЛОВОК ПРОЕКТА -->
+    <div class="project-header">
+        <h1 class="project-title">⚡ Мои Рабочие</h1>
+        <p class="project-subtitle">Список команды разработчиков и специалистов</p>
+    </div>
+
+    <!-- РАБОЧИЕ СПИСОК -->
+    <div class="workers-section">
+        <h2>👥 Команда</h2>
+        <div class="workers-list" id="workersList">
+            <!-- Заполняется JavaScript -->
+        </div>
+    </div>
+
+    <!-- КОНТАКТЫ -->
+    <div class="contact-section">
+        <a href="https://t.me/Toolgool" target="_blank" class="contact-link telegram-link">
+            <i class="fab fa-telegram"></i>
+            <span>Telegram</span>
+        </a>
+    </div>
+
+</div>
+
+<!-- СКРИПТ ДЛЯ ЗАГРУЗКИ WORKERS ИЗ TXT -->
+<script>
+    const colors = ['cyan', 'purple', 'gold', 'green', 'pink', 'orange', 'red', 'blue'];
+
+    async function loadWorkers() {
+        try {
+            const response = await fetch('Workers/Crafters.txt');
+            const text = await response.text();
+            const workers = parseWorkers(text);
+            renderWorkers(workers);
+        } catch (error) {
+            console.error('Ошибка загрузки файла:', error);
+            document.getElementById('workersList').innerHTML = '<p style="text-align: center; color: #ff6b6b;">Ошибка загрузки данных</p>';
+        }
+    }
+
+    function parseWorkers(text) {
+        const lines = text.trim().split('\n').filter(line => line && !line.startsWith('#'));
+        const workers = [];
+
+        lines.forEach(line => {
+            const parts = line.split(':');
+            if (parts.length >= 7) {
+                workers.push({
+                    id: parseInt(parts[0]),
+                    class: parts[1],
+                    craft: parts[2],
+                    xp: parts[3],
+                    name: parts[4],
+                    user: parts[5],
+                    photo: parts[6],
+                    badge: parts[7] || '',
+                    color: parts[8] || 'cyan'
+                });
+            }
+        });
+
+        // Сортировка по ID
+        workers.sort((a, b) => a.id - b.id);
+        return workers;
+    }
+
+    function renderWorkers(workers) {
+        const workersList = document.getElementById('workersList');
+        workersList.innerHTML = '';
+
+        if (workers.length === 0) {
+            workersList.innerHTML = '<p style="text-align: center; color: #a855f7; grid-column: 1/-1;">Нет данных о рабочих</p>';
+            return;
+        }
+
+        workers.forEach(worker => {
+            const card = createWorkerCard(worker);
+            workersList.appendChild(card);
+        });
+    }
+
+    function createWorkerCard(worker) {
+        const card = document.createElement('div');
+        card.className = `worker-card color-${worker.color}`;
+        
+        const xpParts = worker.xp.split('/');
+        const xpCurrent = parseInt(xpParts[0]);
+        const xpMax = parseInt(xpParts[1]);
+        const xpPercent = (xpCurrent / xpMax) * 100;
+
+        let badgeHTML = '';
+        if (worker.badge) {
+            badgeHTML = `<img src="${worker.badge}" alt="badge" class="badge" title="Badge">`;
+        }
+
+        card.innerHTML = `
+            <button class="color-picker-btn" onclick="toggleColorMenu(event)">
+                <i class="fas fa-palette"></i>
+            </button>
+            <div class="color-menu" data-worker-id="${worker.id}">
+                ${colors.map(color => `
+                    <div class="color-option ${color}" onclick="setWorkerColor(${worker.id}, '${color}', event)"></div>
+                `).join('')}
+            </div>
+
+            <img src="${worker.photo}" alt="${worker.name}" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
+            
+            <div class="worker-info">
+                <a href="https://github.com/${worker.user}" target="_blank" class="worker-name">
+                    ${worker.name}
+                    ${badgeHTML}
+                </a>
+            </div>
+
+            <div class="worker-class">Уровень ${worker.class} • ${worker.craft}</div>
+
+            <div class="xp-container">
+                <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
+                <div class="xp-bar">
+                    <div class="xp-fill" style="width: ${xpPercent}%"></div>
+                </div>
+                <div class="xp-text">${worker.xp} XP</div>
+            </div>
+        `;
+
+        return card;
+    }
+
+    function toggleColorMenu(event) {
+        event.stopPropagation();
+        const card = event.target.closest('.worker-card');
+        const menu = card.querySelector('.color-menu');
+        
+        // Закрываем все остальные меню
+        document.querySelectorAll('.color-menu.active').forEach(m => {
+            if (m !== menu) m.classList.remove('active');
+        });
+        
+        menu.classList.toggle('active');
+    }
+
+    function setWorkerColor(workerId, color, event) {
+        event.stopPropagation();
+        
+        const card = event.target.closest('.worker-card');
+        const oldColor = [...card.classList].find(c => c.startsWith('color-'));
+        
+        if (oldColor) {
+            card.classList.remove(oldColor);
+        }
+        
+        card.classList.add(`color-${color}`);
+        card.querySelector('.color-menu').classList.remove('active');
+
+        // Сохраняем в localStorage
+        const workerId_stored = card.querySelector('.color-menu').dataset.workerId;
+        localStorage.setItem(`worker-color-${workerId_stored}`, color);
+    }
+
+    // Загружаем сохранённые цвета при загрузке страницы
+    window.addEventListener('load', () => {
+        loadWorkers();
+        
+        setTimeout(() => {
+            document.querySelectorAll('.worker-card').forEach(card => {
+                const workerId = card.querySelector('.color-menu').dataset.workerId;
+                const savedColor = localStorage.getItem(`worker-color-${workerId}`);
+                
+                if (savedColor) {
+                    const oldColor = [...card.classList].find(c => c.startsWith('color-'));
+                    if (oldColor) card.classList.remove(oldColor);
+                    card.classList.add(`color-${savedColor}`);
+                }
+            });
+        }, 100);
+    });
+
+    // Закрываем меню при клике вне
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.color-menu.active').forEach(m => m.classList.remove('active'));
+    });
+</script>
+
+<!-- СНЕЖНАЯ АНИМАЦИЯ -->
+<script>
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const snowflakes = [];
+
+    function createSnowflake() {
+        return {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            radius: Math.random() * 3 + 2,
+            opacity: Math.random() * 0.5 + 0.3,
+            vx: Math.random() * 1 - 0.5,
+            vy: Math.random() * 2 + 1
+        };
+    }
+
+    for (let i = 0; i < 50; i++) {
+        snowflakes.push(createSnowflake());
+    }
+
+    function animateSnow() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        snowflakes.forEach(flake => {
+            flake.x += flake.vx;
+            flake.y += flake.vy;
+
+            if (flake.y > canvas.height) {
+                flake.y = -10;
+                flake.x = Math.random() * canvas.width;
+            }
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+            ctx.beginPath();
+            ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        requestAnimationFrame(animateSnow);
+    }
+
+    animateSnow();
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+</script>
+
+</body>
+</html>
