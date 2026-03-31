@@ -10,8 +10,6 @@ const colorMap = {
     blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
 };
 
-const colors = Object.keys(colorMap);
-
 // Загрузка рабочих из TXT
 async function loadWorkers() {
     try {
@@ -19,7 +17,6 @@ async function loadWorkers() {
         const text = await response.text();
         const workers = parseWorkers(text);
         renderWorkers(workers);
-        applyStoredColors();
     } catch (error) {
         console.error('Ошибка загрузки файла:', error);
         document.getElementById('workersList').innerHTML = '<p style="text-align: center; color: #ff6b6b;">Ошибка загрузки данных</p>';
@@ -82,20 +79,10 @@ function createWorkerCard(worker) {
         badgeHTML = `<img src="${worker.badge}" alt="badge" class="badge" title="Badge">`;
     }
 
-    // Устанавливаем цвет из данных или сохранённый
-    const savedColor = localStorage.getItem(`worker-color-${worker.id}`) || worker.color;
-    applyColorToCard(card, savedColor);
+    // Применяем цвет из TXT файла
+    applyColorToCard(card, worker.color);
 
     card.innerHTML = `
-        <button class="color-picker-btn" onclick="toggleColorMenu(event)">
-            <i class="fas fa-palette"></i>
-        </button>
-        <div class="color-menu" data-worker-id="${worker.id}">
-            ${colors.map(color => `
-                <div class="color-option ${color}" onclick="setWorkerColor(${worker.id}, '${color}', event)"></div>
-            `).join('')}
-        </div>
-
         <img src="${worker.photo}" alt="${worker.name}" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
         
         <div class="worker-info">
@@ -119,7 +106,7 @@ function createWorkerCard(worker) {
     return card;
 }
 
-// Применяем цвет �� карточке через CSS переменные (БЕЗ телепортации)
+// Применяем цвет к карточке через CSS переменные
 function applyColorToCard(card, colorName) {
     const color = colorMap[colorName];
     if (color) {
@@ -129,46 +116,7 @@ function applyColorToCard(card, colorName) {
     }
 }
 
-// Загружаем все сохранённые цвета при старте
-function applyStoredColors() {
-    document.querySelectorAll('.worker-card').forEach(card => {
-        const workerId = card.dataset.workerId;
-        const savedColor = localStorage.getItem(`worker-color-${workerId}`);
-        if (savedColor) {
-            applyColorToCard(card, savedColor);
-        }
-    });
-}
-
-function toggleColorMenu(event) {
-    event.stopPropagation();
-    const card = event.target.closest('.worker-card');
-    const menu = card.querySelector('.color-menu');
-    
-    document.querySelectorAll('.color-menu.active').forEach(m => {
-        if (m !== menu) m.classList.remove('active');
-    });
-    
-    menu.classList.toggle('active');
-}
-
-function setWorkerColor(workerId, color, event) {
-    event.stopPropagation();
-    
-    const card = document.querySelector(`[data-worker-id="${workerId}"]`);
-    applyColorToCard(card, color);
-    card.querySelector('.color-menu').classList.remove('active');
-
-    // Сохраняем в localStorage
-    localStorage.setItem(`worker-color-${workerId}`, color);
-}
-
-// Закрываем меню при клике вне
-document.addEventListener('click', () => {
-    document.querySelectorAll('.color-menu.active').forEach(m => m.classList.remove('active'));
-});
-
-// ===== СНЕЖНАЯ АНИМАЦИЯ (МЕДЛЕННЕЕ, КАК В TL-SCHEDULES) =====
+// ===== СНЕЖНАЯ АНИМАЦИЯ (МЕДЛЕННЕЕ) =====
 const canvas = document.getElementById('snowCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -182,12 +130,12 @@ function createSnowflake() {
         y: Math.random() * canvas.height - canvas.height,
         radius: Math.random() * 3 + 2,
         opacity: Math.random() * 0.5 + 0.3,
-        vx: Math.random() * 0.3 - 0.15,  // Медленнее по X
-        vy: Math.random() * 0.8 + 0.3    // Медленнее по Y
+        vx: Math.random() * 0.3 - 0.15,
+        vy: Math.random() * 0.8 + 0.3
     };
 }
 
-for (let i = 0; i < 30; i++) {  // Меньше снежинок
+for (let i = 0; i < 30; i++) {
     snowflakes.push(createSnowflake());
 }
 
