@@ -13,7 +13,7 @@ html, body {
     overflow-x: hidden;
 }
 
-/* ===== СНЕГ ===== */
+/* ===== СНЕГ (МЕДЛЕННЕЕ) ===== */
 #snowCanvas {
     position: fixed;
     top: 0;
@@ -41,35 +41,6 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 15px;
-}
-
-.logo-container {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(168, 85, 247, 0.1);
-    border: 2px solid rgba(168, 85, 247, 0.3);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
-    animation: logoGlow 3s ease-in-out infinite;
-}
-
-.project-logo {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
-}
-
-@keyframes logoGlow {
-    0%, 100% {
-        box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
-    }
-    50% {
-        box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
-    }
 }
 
 .project-title {
@@ -126,45 +97,14 @@ html, body {
     position: relative;
 }
 
-/* Цвета карточек */
-.worker-card.color-cyan {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(168, 85, 247, 0.1));
-    border-color: #00ffff;
-}
-
-.worker-card.color-purple {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 255, 200, 0.05));
-    border-color: #a855f7;
-}
-
-.worker-card.color-gold {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
-    border-color: #ffd700;
-}
-
-.worker-card.color-green {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
-    border-color: #00ff88;
-}
-
-.worker-card.color-pink {
-    background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 20, 147, 0.1));
-    border-color: #ff69b4;
-}
-
-.worker-card.color-orange {
-    background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 100, 0, 0.1));
-    border-color: #ff8c00;
-}
-
-.worker-card.color-red {
-    background: linear-gradient(135deg, rgba(255, 69, 69, 0.2), rgba(255, 0, 0, 0.1));
-    border-color: #ff4545;
-}
-
-.worker-card.color-blue {
-    background: linear-gradient(135deg, rgba(30, 144, 255, 0.2), rgba(0, 102, 204, 0.1));
-    border-color: #1e90ff;
+/* Цвета карточек - определены в скрипте через CSS переменные */
+.worker-card {
+    --card-color: #00ffff;
+    --card-bg: rgba(0, 255, 255, 0.2);
+    --card-bg-2: rgba(168, 85, 247, 0.1);
+    
+    background: linear-gradient(135deg, var(--card-bg), var(--card-bg-2));
+    border-color: var(--card-color);
 }
 
 .worker-card:hover {
@@ -178,18 +118,10 @@ html, body {
     border-radius: 50%;
     margin: 0 auto 15px;
     border: 3px solid;
+    border-color: var(--card-color);
     object-fit: cover;
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
 }
-
-.worker-card.color-cyan .avatar { border-color: #00ffff; }
-.worker-card.color-purple .avatar { border-color: #a855f7; }
-.worker-card.color-gold .avatar { border-color: #ffd700; }
-.worker-card.color-green .avatar { border-color: #00ff88; }
-.worker-card.color-pink .avatar { border-color: #ff69b4; }
-.worker-card.color-orange .avatar { border-color: #ff8c00; }
-.worker-card.color-red .avatar { border-color: #ff4545; }
-.worker-card.color-blue .avatar { border-color: #1e90ff; }
 
 .worker-info {
     display: flex;
@@ -206,20 +138,11 @@ html, body {
     cursor: pointer;
     transition: all 0.3s;
     text-decoration: none;
-    color: inherit;
+    color: var(--card-color);
     display: inline-flex;
     align-items: center;
     gap: 6px;
 }
-
-.worker-card.color-cyan .worker-name { color: #00ffff; }
-.worker-card.color-purple .worker-name { color: #a855f7; }
-.worker-card.color-gold .worker-name { color: #ffd700; }
-.worker-card.color-green .worker-name { color: #00ff88; }
-.worker-card.color-pink .worker-name { color: #ff69b4; }
-.worker-card.color-orange .worker-name { color: #ff8c00; }
-.worker-card.color-red .worker-name { color: #ff4545; }
-.worker-card.color-blue .worker-name { color: #1e90ff; }
 
 .worker-name:hover {
     text-decoration: underline;
@@ -240,16 +163,8 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: bold;
+    color: var(--card-color);
 }
-
-.worker-card.color-cyan .worker-class { color: #00ffff; }
-.worker-card.color-purple .worker-class { color: #a855f7; }
-.worker-card.color-gold .worker-class { color: #ffd700; }
-.worker-card.color-green .worker-class { color: #00ff88; }
-.worker-card.color-pink .worker-class { color: #ff69b4; }
-.worker-card.color-orange .worker-class { color: #ff8c00; }
-.worker-card.color-red .worker-class { color: #ff4545; }
-.worker-card.color-blue .worker-class { color: #1e90ff; }
 
 .xp-container {
     background: rgba(0, 0, 0, 0.3);
@@ -269,13 +184,13 @@ html, body {
     background: #1a1a2e;
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid rgba(168, 85, 247, 0.5);
+    border: 1px solid var(--card-color);
     position: relative;
 }
 
 .xp-fill {
     height: 100%;
-    background: linear-gradient(90deg, #00ffff, #a855f7);
+    background: linear-gradient(90deg, var(--card-color), #a855f7);
     transition: width 0.3s;
 }
 
@@ -409,4 +324,4 @@ html, body {
     .worker-name {
         font-size: 16px;
     }
-}
+    }
