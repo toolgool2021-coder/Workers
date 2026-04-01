@@ -1,3 +1,4 @@
-#ID:CLASS:CRAFT'S:XP:NAME:USER:PHOTO:BADGE:COLOR
-1:∞:Owner:⛩:Toolgool:t.me/Toolgool:Image/icon_1.jpg:Badges/badges_1.png:gold
-2:2:Crafter/Farmer:17:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓:𝒅𝒂🐮🕸:t.me/werdochka:Image/icon _2.jpg:Badges/badges_2.webm:blue
+#ID:CLASS:JOB:XP:NAME:USER:PHOTO:BADGE:BADGE_2:BADGE_3:COLOR
+1:∞:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:::gold
+2:2:Crafter:15/35 17:Мария:@masha:Image/icon_2.jpg:::purple
+3:3:Кодер:450/1000 25:Петр:petr-github:Image/icon_3.jpg:::blue
