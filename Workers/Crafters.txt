@@ -1,4 +1,4 @@
 #ID:CLASS:CRAFT'S:XP:NAME:USER:PHOTO:BADGE:COLOR
-1:1:Owner:⛩:Toolgool:t.me/Toolgool:Image/avatar1.jpg:Badges/badge1.png:gold
+1:1:Owner:⛩:Toolgool:t.me/Toolgool:Image/image_1.jpg:Badges/badges_1.png:gold
 2:3:Дизайнер:450/1000:Мария:maria-github:Image/avatar2.jpg:Badges/badge2.png:purple
 3:4:Кодер:800/1000:Петр:petr-github:Image/avatar3.jpg::blue
