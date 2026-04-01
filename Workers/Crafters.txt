@@ -1,4 +1,4 @@
 #ID:CLASS:CRAFT'S:XP:NAME:USER:PHOTO:BADGE:COLOR
-1:5:Крафтер:650/1000:Иван Петров:ivan-github:Image/avatar1.jpg:Image/badge-gold.png:cyan
+1:1:Owner:⛩:Toolgool:t.me/Toolgool:Image/icon_1.jpg.jpg:Image/badges_1.png:Gold
 2:3:Дизайнер:450/1000:Мария Сидорова:maria-github:Image/avatar2.jpg:Image/badge-silver.png:purple
 3:4:Кодер:800/1000:Петр Викторов:petr-github:Image/avatar3.jpg::gold
