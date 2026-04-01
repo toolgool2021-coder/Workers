@@ -1,2 +1,2 @@
 #ID:CLASS:JOB:XP:NAME:USER:PHOTO:BADGE:BADGE_2:BADGE_3:COLOR
-1:∞:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:::gold
+1:∞:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:Badges/badges_2.png:Badges/badges_3.png:gold
