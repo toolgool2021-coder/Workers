@@ -1,2 +1,3 @@
 #ID:CLASS:CRAFT'S:XP:NAME:USER:PHOTO:BADGE:COLOR
-1:1:Owner:⛩:Toolgool:t.me/Toolgool:Image/icon_1.jpg:Badges/badges_1.png:gold
+1:∞:Owner:⛩:Toolgool:t.me/Toolgool:Image/icon_1.jpg:Badges/badges_1.png:gold
+2:2:Crafter/Farmer:17:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓:𝒅𝒂🐮🕸:t.me/werdochka:Image/icon _2.jpg:Badges/badges_2.webm:blue
