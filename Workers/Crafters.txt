@@ -1,5 +1,2 @@
 #ID:CLASS:JOB:XP:NAME:USER:PHOTO:BADGE:BADGE_2:BADGE_3:COLOR
-1:∞:Owner:⛩ 25:Toolgool:@Toolgool:Image/icon_1.jpg:::gold
-2:2:TEST:15/35 17:TEST:@masha:Image/icon_2.jpg:Badges/badge1.png::purple
-3:3:TEST:450/1000 25:Петр:petr-github:Image/icon_3.jpg:Badges/badge1.png:Badges/badge2.png:blue
-4:4:TEST:⛩:TEST:@alex:Image/icon_4.jpg:Badges/badge1.png:Badges/badge2.png:Badges/badge3.png:green
+1:∞:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png::gold
