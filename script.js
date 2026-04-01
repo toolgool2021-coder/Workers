@@ -67,6 +67,17 @@ function renderWorkers(workers) {
     });
 }
 
+function getImageUrl(photoPath) {
+    // Если это просто имя файла (например "icon.jpg"), берём с TLwebsite
+    if (!photoPath.includes('/')) {
+        return IMAGE_BASE_URL + photoPath;
+    }
+    
+    // Если это путь (например "Image/avatar.jpg"), берём имя файла
+    const fileName = photoPath.split('/').pop();
+    return IMAGE_BASE_URL + fileName;
+}
+
 function createWorkerCard(worker) {
     const card = document.createElement('div');
     card.className = 'worker-card';
@@ -87,16 +98,25 @@ function createWorkerCard(worker) {
 
     let badgeHTML = '';
     if (worker.badge) {
-        const badgeUrl = worker.badge.startsWith('Image/') 
-            ? IMAGE_BASE_URL + worker.badge.replace('Image/', '')
-            : worker.badge;
+        const badgeUrl = getImageUrl(worker.badge);
         badgeHTML = `<img src="${badgeUrl}" alt="badge" class="badge" title="Badge" onerror="this.style.display='none'">`;
     }
 
-    // Преобразуем путь для аватарки
-    let photoUrl = worker.photo;
-    if (photoUrl.startsWith('Image/')) {
-        photoUrl = IMAGE_BASE_URL + photoUrl.replace('Image/', '');
+    // Получаем правильный URL для аватарки
+    const photoUrl = getImageUrl(worker.photo);
+
+    // Определяем ссылку - если это t.me ссылка, берём из user напрямую, иначе GitHub
+    let profileLink = '';
+    let isTelegram = false;
+    
+    if (worker.user.includes('t.me/') || worker.user.includes('telegram')) {
+        profileLink = `https://${worker.user}`;
+        isTelegram = true;
+    } else if (worker.user.includes('http')) {
+        profileLink = worker.user;
+    } else {
+        // Если это просто username, предполагаем GitHub
+        profileLink = `https://github.com/${worker.user}`;
     }
 
     // Применяем цвет из TXT файла
@@ -106,7 +126,7 @@ function createWorkerCard(worker) {
         <img src="${photoUrl}" alt="${worker.name}" class="avatar" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
         
         <div class="worker-info">
-            <a href="https://github.com/${worker.user}" target="_blank" class="worker-name">
+            <a href="${profileLink}" target="_blank" class="worker-name" title="${isTelegram ? 'Telegram' : 'GitHub'}">
                 ${worker.name}
                 ${badgeHTML}
             </a>
