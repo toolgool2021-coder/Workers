@@ -1,5 +1,3 @@
 #ID:CLASS:JOB:XP:NAME:USER:PHOTO:BADGE:BADGE_2:BADGE_3:COLOR
 1:∞:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:Badges/badges_2.png:Badges/badges_3.png:gold
-2:2:Crafter:15/35 17:Мария:@masha:Image/icon_2.jpg:Badges/badges_1.png:Badges/badges_2.png::purple
-3:3:Кодер:450/1000 25:Петр:petr-github:Image/icon_3.jpg:Badges/badges_1.png:::blue
-4:4:Dev:⛩ 28:Alex:@alex:Image/icon_4.jpg::::green
+3:2:Crafter/Farmer:15/35 18:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓𝒅𝒂🐮🕸:@werdochka:Image/icon_2.jpg:Badges/badges_4.png:::cyan
