@@ -10,8 +10,8 @@ const colorMap = {
     blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
 };
 
-// Путь к изображениям из TLwebsite
-const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/toolgool2021-coder/TLwebsite/main/images/';
+// Путь к изображениям - берём из Workers репозитория
+const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/toolgool2021-coder/Workers/main/';
 
 // Загрузка рабочих из TXT
 async function loadWorkers() {
@@ -67,17 +67,6 @@ function renderWorkers(workers) {
     });
 }
 
-function getImageUrl(photoPath) {
-    // Если это просто имя файла (например "icon.jpg"), берём с TLwebsite
-    if (!photoPath.includes('/')) {
-        return IMAGE_BASE_URL + photoPath;
-    }
-    
-    // Если это путь (например "Image/avatar.jpg"), берём имя файла
-    const fileName = photoPath.split('/').pop();
-    return IMAGE_BASE_URL + fileName;
-}
-
 function createWorkerCard(worker) {
     const card = document.createElement('div');
     card.className = 'worker-card';
@@ -91,19 +80,19 @@ function createWorkerCard(worker) {
     // Если XP не число (например ⛩), то показываем полную полоску
     if (isNaN(xpCurrent)) {
         xpPercent = 100;
-        xpCurrent = worker.xp;
     } else {
         xpPercent = (xpCurrent / xpMax) * 100;
     }
 
     let badgeHTML = '';
     if (worker.badge) {
-        const badgeUrl = getImageUrl(worker.badge);
+        // Получаем URL для бейджа из Workers репозитория
+        const badgeUrl = IMAGE_BASE_URL + worker.badge;
         badgeHTML = `<img src="${badgeUrl}" alt="badge" class="badge" title="Badge" onerror="this.style.display='none'">`;
     }
 
-    // Получаем правильный URL для аватарки
-    const photoUrl = getImageUrl(worker.photo);
+    // Получаем URL для фото из Workers репозитория
+    const photoUrl = IMAGE_BASE_URL + worker.photo;
 
     // Определяем ссылку - если это t.me ссылка, берём из user напрямую, иначе GitHub
     let profileLink = '';
