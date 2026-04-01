@@ -10,6 +10,9 @@ const colorMap = {
     blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
 };
 
+// Путь к изображениям из TLwebsite
+const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/toolgool2021-coder/TLwebsite/main/images/';
+
 // Загрузка рабочих из TXT
 async function loadWorkers() {
     try {
@@ -70,20 +73,37 @@ function createWorkerCard(worker) {
     card.dataset.workerId = worker.id;
     
     const xpParts = worker.xp.split('/');
-    const xpCurrent = parseInt(xpParts[0]);
-    const xpMax = parseInt(xpParts[1]);
-    const xpPercent = (xpCurrent / xpMax) * 100;
+    let xpCurrent = parseInt(xpParts[0]);
+    let xpMax = parseInt(xpParts[1]);
+    let xpPercent = 100;
+    
+    // Если XP не число (например ⛩), то показываем полную полоску
+    if (isNaN(xpCurrent)) {
+        xpPercent = 100;
+        xpCurrent = worker.xp;
+    } else {
+        xpPercent = (xpCurrent / xpMax) * 100;
+    }
 
     let badgeHTML = '';
     if (worker.badge) {
-        badgeHTML = `<img src="${worker.badge}" alt="badge" class="badge" title="Badge">`;
+        const badgeUrl = worker.badge.startsWith('Image/') 
+            ? IMAGE_BASE_URL + worker.badge.replace('Image/', '')
+            : worker.badge;
+        badgeHTML = `<img src="${badgeUrl}" alt="badge" class="badge" title="Badge" onerror="this.style.display='none'">`;
+    }
+
+    // Преобразуем путь для аватарки
+    let photoUrl = worker.photo;
+    if (photoUrl.startsWith('Image/')) {
+        photoUrl = IMAGE_BASE_URL + photoUrl.replace('Image/', '');
     }
 
     // Применяем цвет из TXT файла
     applyColorToCard(card, worker.color);
 
     card.innerHTML = `
-        <img src="${worker.photo}" alt="${worker.name}" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
+        <img src="${photoUrl}" alt="${worker.name}" class="avatar" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
         
         <div class="worker-info">
             <a href="https://github.com/${worker.user}" target="_blank" class="worker-name">
@@ -108,7 +128,7 @@ function createWorkerCard(worker) {
 
 // Применяем цвет к карточке через CSS переменные
 function applyColorToCard(card, colorName) {
-    const color = colorMap[colorName];
+    const color = colorMap[colorName] || colorMap.cyan;
     if (color) {
         card.style.setProperty('--card-color', color.hex);
         card.style.setProperty('--card-bg', color.bg);
