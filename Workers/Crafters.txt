@@ -1,4 +1,4 @@
 #ID:CLASS:CRAFT'S:XP:NAME:USER:PHOTO:BADGE:COLOR
-1:1:Owner:⛩:Toolgool:t.me/Toolgool:icon.jpg:Instagram.jpg:gold
+1:∞:Owner:⛩:Toolgool:t.me/Toolgool:icon_1.jpg:badges_1.jpg:gold
 2:3:Дизайнер:450/1000:Мария Сидорова:maria-github:Instagram.jpg:Gmail.jpg:purple
 3:4:Кодер:800/1000:Петр Викторов:petr-github:Telegram.jpg::blue
