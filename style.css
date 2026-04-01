@@ -148,26 +148,29 @@ html, body {
 
 .badges-container {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     justify-content: center;
     flex-wrap: wrap;
+    min-height: 46px;
+    align-items: center;
 }
 
 .badge {
-    width: 28px;
-    height: 28px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     object-fit: contain;
     display: inline-block;
     border: 2px solid var(--card-color);
-    padding: 2px;
+    padding: 4px;
     background: rgba(0, 0, 0, 0.3);
     transition: all 0.3s;
+    flex-shrink: 0;
 }
 
 .badge:hover {
     transform: scale(1.15);
-    box-shadow: 0 0 10px var(--card-color);
+    box-shadow: 0 0 15px var(--card-color);
 }
 
 .worker-class {
@@ -308,8 +311,14 @@ html, body {
     }
 
     .badge {
-        width: 24px;
-        height: 24px;
+        width: 36px;
+        height: 36px;
+        padding: 3px;
+    }
+
+    .badges-container {
+        min-height: 40px;
+        gap: 8px;
     }
 
     .xp-start,
