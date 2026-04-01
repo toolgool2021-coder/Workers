@@ -10,13 +10,10 @@ const colorMap = {
     blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
 };
 
-// Путь к изображениям - берём из Workers репозитория
-const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/toolgool2021-coder/Workers/main/';
-
 // Загрузка рабочих из TXT
 async function loadWorkers() {
     try {
-        const response = await fetch('Workers/Crafters.txt');
+        const response = await fetch('./Workers/Crafters.txt');
         const text = await response.text();
         const workers = parseWorkers(text);
         renderWorkers(workers);
@@ -86,13 +83,12 @@ function createWorkerCard(worker) {
 
     let badgeHTML = '';
     if (worker.badge) {
-        // Получаем URL для бейджа из Workers репозитория
-        const badgeUrl = IMAGE_BASE_URL + worker.badge;
-        badgeHTML = `<img src="${badgeUrl}" alt="badge" class="badge" title="Badge" onerror="this.style.display='none'">`;
+        // Используем локальный путь из Workers папки
+        badgeHTML = `<img src="./${worker.badge}" alt="badge" class="badge" title="Badge">`;
     }
 
-    // Получаем URL для фото из Workers репозитория
-    const photoUrl = IMAGE_BASE_URL + worker.photo;
+    // Используем локальный путь из Workers папки
+    const photoUrl = `./${worker.photo}`;
 
     // Определяем ссылку - если это t.me ссылка, берём из user напрямую, иначе GitHub
     let profileLink = '';
@@ -112,7 +108,7 @@ function createWorkerCard(worker) {
     applyColorToCard(card, worker.color);
 
     card.innerHTML = `
-        <img src="${photoUrl}" alt="${worker.name}" class="avatar" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+        <img src="${photoUrl}" alt="${worker.name}" class="avatar">
         
         <div class="worker-info">
             <a href="${profileLink}" target="_blank" class="worker-name" title="${isTelegram ? 'Telegram' : 'GitHub'}">
@@ -145,56 +141,59 @@ function applyColorToCard(card, colorName) {
     }
 }
 
-// ===== СНЕЖНАЯ АНИМАЦИЯ (МЕДЛЕННЕЕ) =====
+// ===== СНЕЖНАЯ АНИМАЦИЯ (КАК В TLwebsite) =====
 const canvas = document.getElementById('snowCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 
-const snowflakes = [];
-
-function createSnowflake() {
-    return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height - canvas.height,
-        radius: Math.random() * 3 + 2,
-        opacity: Math.random() * 0.5 + 0.3,
-        vx: Math.random() * 0.3 - 0.15,
-        vy: Math.random() * 0.8 + 0.3
-    };
-}
-
-for (let i = 0; i < 30; i++) {
-    snowflakes.push(createSnowflake());
-}
-
-function animateSnow() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    snowflakes.forEach(flake => {
-        flake.x += flake.vx;
-        flake.y += flake.vy;
-
-        if (flake.y > canvas.height) {
-            flake.y = -10;
-            flake.x = Math.random() * canvas.width;
-        }
-
-        ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-        ctx.fill();
-    });
-
-    requestAnimationFrame(animateSnow);
-}
-
-animateSnow();
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
 window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
 });
+
+const snowflakes = [];
+const maxFlakes = 150;
+
+for (let i = 0; i < maxFlakes; i++) {
+    snowflakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 3 + 1,
+        speed: Math.random() * 1 + 0.5,
+        opacity: Math.random() * 0.5 + 0.3
+    });
+}
+
+function drawSnow() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.beginPath();
+
+    for (let f of snowflakes) {
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    }
+
+    ctx.fill();
+    updateSnow();
+}
+
+function updateSnow() {
+    for (let f of snowflakes) {
+        f.y += f.speed;
+        f.x += Math.sin(f.y / height * Math.PI * 2) * 0.5;
+
+        if (f.y > height) f.y = 0;
+        if (f.x > width) f.x = 0;
+        if (f.x < 0) f.x = width;
+    }
+
+    requestAnimationFrame(drawSnow);
+}
+
+drawSnow();
 
 // Загружаем рабочих при загрузке страницы
 window.addEventListener('load', loadWorkers);
