@@ -33,13 +33,15 @@ function parseWorkers(text) {
             workers.push({
                 id: parseInt(parts[0]),
                 class: parts[1],
-                craft: parts[2],
+                job: parts[2],
                 xp: parts[3],
                 name: parts[4],
                 user: parts[5],
                 photo: parts[6],
                 badge: parts[7] || '',
-                color: parts[8] || 'cyan'
+                badge_2: parts[8] || '',
+                badge_3: parts[9] || '',
+                color: parts[10] || 'cyan'
             });
         }
     });
@@ -47,6 +49,108 @@ function parseWorkers(text) {
     // Сортировка по ID
     workers.sort((a, b) => a.id - b.id);
     return workers;
+}
+
+function parseXP(xpString) {
+    // Формат: "15/35 17" или "15/35" или "⛩/17 25"
+    const parts = xpString.trim().split(/\s+/);
+    
+    let xpProgress = parts[0]; // "15/35"
+    let currentStage = parts[1] || null; // "17" (опционально)
+    
+    const progressParts = xpProgress.split('/');
+    let xpCurrent = parseInt(progressParts[0]);
+    let xpMax = parseInt(progressParts[1]);
+    let xpPercent = 100;
+    
+    // Если XP не число (например ⛩), то показываем полную полоску
+    if (isNaN(xpCurrent)) {
+        xpPercent = 100;
+        xpCurrent = progressParts[0]; // Сохраняем символ
+    } else {
+        xpPercent = (xpCurrent / xpMax) * 100;
+    }
+    
+    return {
+        xpCurrent,
+        xpMax,
+        xpPercent,
+        xpProgress,
+        currentStage
+    };
+}
+
+function createWorkerCard(worker) {
+    const card = document.createElement('div');
+    card.className = 'worker-card';
+    card.dataset.workerId = worker.id;
+    
+    const xpData = parseXP(worker.xp);
+
+    // Создаём HTML для всех трёх бейджей
+    let badgesHTML = '';
+    if (worker.badge) {
+        badgesHTML += `<img src="./${worker.badge}" alt="badge1" class="badge" title="Badge 1">`;
+    }
+    if (worker.badge_2) {
+        badgesHTML += `<img src="./${worker.badge_2}" alt="badge2" class="badge" title="Badge 2">`;
+    }
+    if (worker.badge_3) {
+        badgesHTML += `<img src="./${worker.badge_3}" alt="badge3" class="badge" title="Badge 3">`;
+    }
+
+    // Используем локальный путь из Workers папки
+    const photoUrl = `./${worker.photo}`;
+
+    // Определяем ссылку в зависимости от формата user
+    let profileLink = '';
+    let userDisplay = worker.name; // Отображаем визуально NAME вместо USER
+    
+    // Если user содержит @, это Telegram username
+    if (worker.user.includes('@')) {
+        const telegramHandle = worker.user.startsWith('@') ? worker.user.substring(1) : worker.user;
+        profileLink = `https://t.me/${telegramHandle}`;
+    } 
+    // Если это полная ссылка
+    else if (worker.user.includes('http')) {
+        profileLink = worker.user;
+    } 
+    // Если это GitHub username
+    else {
+        profileLink = `https://github.com/${worker.user}`;
+    }
+
+    // Применяем цвет из TXT файла
+    applyColorToCard(card, worker.color);
+
+    card.innerHTML = `
+        <img src="${photoUrl}" alt="${worker.name}" class="avatar">
+        
+        <div class="worker-info">
+            <a href="${profileLink}" target="_blank" class="worker-name">
+                ${userDisplay}
+            </a>
+            <div class="badges-container">
+                ${badgesHTML}
+            </div>
+        </div>
+
+        <div class="worker-class">Уровень ${worker.class} • ${worker.job}</div>
+
+        <div class="xp-container">
+            <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
+            <div class="xp-bar-wrapper">
+                <span class="xp-start">${xpData.xpCurrent}</span>
+                <div class="xp-bar">
+                    <div class="xp-fill" style="width: ${xpData.xpPercent}%"></div>
+                    ${xpData.currentStage ? `<span class="xp-stage">${xpData.currentStage}</span>` : ''}
+                </div>
+                <span class="xp-end">${xpData.xpMax}</span>
+            </div>
+        </div>
+    `;
+
+    return card;
 }
 
 function renderWorkers(workers) {
@@ -62,73 +166,6 @@ function renderWorkers(workers) {
         const card = createWorkerCard(worker);
         workersList.appendChild(card);
     });
-}
-
-function createWorkerCard(worker) {
-    const card = document.createElement('div');
-    card.className = 'worker-card';
-    card.dataset.workerId = worker.id;
-    
-    const xpParts = worker.xp.split('/');
-    let xpCurrent = parseInt(xpParts[0]);
-    let xpMax = parseInt(xpParts[1]);
-    let xpPercent = 100;
-    
-    // Если XP не число (например ⛩), то показываем полную полоску
-    if (isNaN(xpCurrent)) {
-        xpPercent = 100;
-    } else {
-        xpPercent = (xpCurrent / xpMax) * 100;
-    }
-
-    let badgeHTML = '';
-    if (worker.badge) {
-        // Используем локальный путь из Workers папки
-        badgeHTML = `<img src="./${worker.badge}" alt="badge" class="badge" title="Badge">`;
-    }
-
-    // Используем локальный путь из Workers папки
-    const photoUrl = `./${worker.photo}`;
-
-    // Определяем ссылку - если это t.me ссылка, берём из user напрямую, иначе GitHub
-    let profileLink = '';
-    let isTelegram = false;
-    
-    if (worker.user.includes('t.me/') || worker.user.includes('telegram')) {
-        profileLink = `https://${worker.user}`;
-        isTelegram = true;
-    } else if (worker.user.includes('http')) {
-        profileLink = worker.user;
-    } else {
-        // Если это просто username, предполагаем GitHub
-        profileLink = `https://github.com/${worker.user}`;
-    }
-
-    // Применяем цвет из TXT файла
-    applyColorToCard(card, worker.color);
-
-    card.innerHTML = `
-        <img src="${photoUrl}" alt="${worker.name}" class="avatar">
-        
-        <div class="worker-info">
-            <a href="${profileLink}" target="_blank" class="worker-name" title="${isTelegram ? 'Telegram' : 'GitHub'}">
-                ${worker.name}
-                ${badgeHTML}
-            </a>
-        </div>
-
-        <div class="worker-class">Уровень ${worker.class} • ${worker.craft}</div>
-
-        <div class="xp-container">
-            <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
-            <div class="xp-bar">
-                <div class="xp-fill" style="width: ${xpPercent}%"></div>
-            </div>
-            <div class="xp-text">${worker.xp} XP</div>
-        </div>
-    `;
-
-    return card;
 }
 
 // Применяем цвет к карточке через CSS переменные
