@@ -52,31 +52,46 @@ function parseWorkers(text) {
 }
 
 function parseXP(xpString) {
-    // Формат: "15/35 17" или "15/35" или "⛩/17 25"
+    // Формат: "15/35 17" - в процессе или "⛩ 25" - пройден полностью
     const parts = xpString.trim().split(/\s+/);
     
-    let xpProgress = parts[0]; // "15/35"
-    let currentStage = parts[1] || null; // "17" (опционально)
+    let xpValue = parts[0]; // "15/35" или "⛩"
+    let stage = parts[1] || null; // "17" или "25"
     
-    const progressParts = xpProgress.split('/');
-    let xpCurrent = parseInt(progressParts[0]);
-    let xpMax = parseInt(progressParts[1]);
+    let isCompleted = false;
+    let xpCurrent = null;
+    let xpMax = null;
     let xpPercent = 100;
     
-    // Если XP не число (например ⛩), то показываем полную полоску
-    if (isNaN(xpCurrent)) {
-        xpPercent = 100;
-        xpCurrent = progressParts[0]; // Сохраняем символ
+    // Проверяем, содержит ли значение "/"
+    if (xpValue.includes('/')) {
+        // В процессе: "15/35"
+        const progressParts = xpValue.split('/');
+        xpCurrent = parseInt(progressParts[0]);
+        xpMax = parseInt(progressParts[1]);
+        
+        if (!isNaN(xpCurrent) && !isNaN(xpMax)) {
+            xpPercent = (xpCurrent / xpMax) * 100;
+            isCompleted = false;
+        } else {
+            // Если числа не парсятся, но есть "/", показываем полный бар
+            isCompleted = true;
+            stage = xpValue; // Используем первое значение как этап
+        }
     } else {
-        xpPercent = (xpCurrent / xpMax) * 100;
+        // Пройден полностью: "⛩" или число
+        isCompleted = true;
+        xpPercent = 100;
+        stage = stage || xpValue; // stage = parts[1], если нет - используем само значение
     }
     
     return {
         xpCurrent,
         xpMax,
         xpPercent,
-        xpProgress,
-        currentStage
+        isCompleted,
+        stage,
+        xpValue
     };
 }
 
@@ -87,7 +102,7 @@ function createWorkerCard(worker) {
     
     const xpData = parseXP(worker.xp);
 
-    // Создаём HTML для всех трёх бейджей
+    // Создаём HTML для бейджей (только если они указаны)
     let badgesHTML = '';
     if (worker.badge) {
         badgesHTML += `<img src="./${worker.badge}" alt="badge1" class="badge" title="Badge 1">`;
@@ -123,6 +138,36 @@ function createWorkerCard(worker) {
     // Применяем цвет из TXT файла
     applyColorToCard(card, worker.color);
 
+    // Строим XP секцию
+    let xpHTML = '';
+    if (xpData.isCompleted) {
+        // Пройден полностью
+        xpHTML = `
+            <div class="xp-container">
+                <div class="xp-label">ЭТАП ПРОЙДЕН</div>
+                <div class="xp-bar">
+                    <div class="xp-fill" style="width: 100%"></div>
+                    ${xpData.stage ? `<span class="xp-stage">${xpData.stage}</span>` : ''}
+                </div>
+            </div>
+        `;
+    } else {
+        // В процессе
+        xpHTML = `
+            <div class="xp-container">
+                <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
+                <div class="xp-bar-wrapper">
+                    <span class="xp-start">${xpData.xpCurrent}</span>
+                    <div class="xp-bar">
+                        <div class="xp-fill" style="width: ${xpData.xpPercent}%"></div>
+                        ${xpData.stage ? `<span class="xp-stage">${xpData.stage}</span>` : ''}
+                    </div>
+                    <span class="xp-end">${xpData.xpMax}</span>
+                </div>
+            </div>
+        `;
+    }
+
     card.innerHTML = `
         <img src="${photoUrl}" alt="${worker.name}" class="avatar">
         
@@ -130,24 +175,12 @@ function createWorkerCard(worker) {
             <a href="${profileLink}" target="_blank" class="worker-name">
                 ${userDisplay}
             </a>
-            <div class="badges-container">
-                ${badgesHTML}
-            </div>
+            ${badgesHTML ? `<div class="badges-container">${badgesHTML}</div>` : ''}
         </div>
 
         <div class="worker-class">Уровень ${worker.class} • ${worker.job}</div>
 
-        <div class="xp-container">
-            <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
-            <div class="xp-bar-wrapper">
-                <span class="xp-start">${xpData.xpCurrent}</span>
-                <div class="xp-bar">
-                    <div class="xp-fill" style="width: ${xpData.xpPercent}%"></div>
-                    ${xpData.currentStage ? `<span class="xp-stage">${xpData.currentStage}</span>` : ''}
-                </div>
-                <span class="xp-end">${xpData.xpMax}</span>
-            </div>
-        </div>
+        ${xpHTML}
     `;
 
     return card;
