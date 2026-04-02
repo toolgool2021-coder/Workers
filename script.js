@@ -95,6 +95,25 @@ function parseXP(xpString) {
     };
 }
 
+function isVideoMedia(path) {
+    if (!path) return false;
+    const ext = path.split('.').pop().toLowerCase();
+    return ['mp4', 'webm', 'mov', 'avi', 'gif'].includes(ext);
+}
+
+function createMediaElement(mediaPath, className = '', attributes = '') {
+    if (!mediaPath) return '';
+    
+    if (isVideoMedia(mediaPath)) {
+        return `<video class="${className}" autoplay muted loop playsinline ${attributes}>
+            <source src="./${mediaPath}">
+            Ваш браузер не поддерживает видео
+        </video>`;
+    } else {
+        return `<img src="./${mediaPath}" alt="media" class="${className}" ${attributes}>`;
+    }
+}
+
 function createWorkerCard(worker) {
     const card = document.createElement('div');
     card.className = 'worker-card';
@@ -105,13 +124,13 @@ function createWorkerCard(worker) {
     // Создаём HTML для бейджей (только если они указаны)
     let badgesHTML = '';
     if (worker.badge) {
-        badgesHTML += `<img src="./${worker.badge}" alt="badge1" class="badge" title="Badge 1">`;
+        badgesHTML += createMediaElement(worker.badge, 'badge', 'title="Badge 1"');
     }
     if (worker.badge_2) {
-        badgesHTML += `<img src="./${worker.badge_2}" alt="badge2" class="badge" title="Badge 2">`;
+        badgesHTML += createMediaElement(worker.badge_2, 'badge', 'title="Badge 2"');
     }
     if (worker.badge_3) {
-        badgesHTML += `<img src="./${worker.badge_3}" alt="badge3" class="badge" title="Badge 3">`;
+        badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
     }
 
     // Используем локальный путь из Workers папки
@@ -168,8 +187,15 @@ function createWorkerCard(worker) {
         `;
     }
 
+    // Аватар (фото или видео)
+    let avatarHTML = `
+        <div class="avatar-container">
+            ${createMediaElement(worker.photo, 'avatar')}
+        </div>
+    `;
+
     card.innerHTML = `
-        <img src="${photoUrl}" alt="${worker.name}" class="avatar">
+        ${avatarHTML}
         
         <div class="worker-info">
             <a href="${profileLink}" target="_blank" class="worker-name">
@@ -183,7 +209,34 @@ function createWorkerCard(worker) {
         ${xpHTML}
     `;
 
+    // Запускаем Intersection Observer для видео (пауза при выходе за экран)
+    const videos = card.querySelectorAll('video');
+    videos.forEach(video => {
+        observeMediaElement(video);
+    });
+
     return card;
+}
+
+// Intersection Observer для остановки видео за пределами экрана
+function observeMediaElement(mediaElement) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Элемент видно на экране - играет видео
+                mediaElement.play().catch(() => {
+                    // Игнорируем ошибки автозапуска
+                });
+            } else {
+                // Элемент вышел за пределы экрана - пауза
+                mediaElement.pause();
+            }
+        });
+    }, {
+        threshold: 0.1 // Запускаем когда 10% элемента видно
+    });
+
+    observer.observe(mediaElement);
 }
 
 function renderWorkers(workers) {
