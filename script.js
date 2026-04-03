@@ -10,22 +10,6 @@ const colorMap = {
     blue: { hex: '#1e90ff', rgb: 'rgb(30, 144, 255)', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
 };
 
-// Классы градиентов (RGB:Цвет-Цвет)
-const gradientMap = {
-    'RGB': { gradient: 'linear-gradient(135deg, #00ffff 0%, #1e90ff 100%)', name: 'RGB' },
-    'Grad:Cyan-Purple': { gradient: 'linear-gradient(135deg, #00ffff 0%, #a855f7 100%)', name: 'Cyan-Purple' },
-    'Grad:Gold-Green': { gradient: 'linear-gradient(135deg, #ffd700 0%, #00ff88 100%)', name: 'Gold-Green' },
-    'Grad:Pink-Red': { gradient: 'linear-gradient(135deg, #ff69b4 0%, #ff4545 100%)', name: 'Pink-Red' },
-    'Grad:Orange-Gold': { gradient: 'linear-gradient(135deg, #ff8c00 0%, #ffd700 100%)', name: 'Orange-Gold' },
-    'Grad:Blue-Cyan': { gradient: 'linear-gradient(135deg, #1e90ff 0%, #00ffff 100%)', name: 'Blue-Cyan' },
-    'Grad:Purple-Pink': { gradient: 'linear-gradient(135deg, #a855f7 0%, #ff69b4 100%)', name: 'Purple-Pink' },
-    'Grad:Green-Cyan': { gradient: 'linear-gradient(135deg, #00ff88 0%, #00ffff 100%)', name: 'Green-Cyan' },
-    'Grad:Red-Orange': { gradient: 'linear-gradient(135deg, #ff4545 0%, #ff8c00 100%)', name: 'Red-Orange' },
-    'Grad:Gold-Red': { gradient: 'linear-gradient(135deg, #ffd700 0%, #ff4545 100%)', name: 'Gold-Red' },
-    'Grad:Purple-Blue': { gradient: 'linear-gradient(135deg, #a855f7 0%, #1e90ff 100%)', name: 'Purple-Blue' },
-    'Grad:Green-Gold': { gradient: 'linear-gradient(135deg, #00ff88 0%, #ffd700 100%)', name: 'Green-Gold' }
-};
-
 // Загрузка рабочих из TXT
 async function loadWorkers() {
     try {
