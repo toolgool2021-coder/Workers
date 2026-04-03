@@ -2,4 +2,4 @@
 1:∞:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:Badges/badges_2.png:Badges/badges_3.png:Gold
 2:∞:Owner:⛩:❦ Брак ,❦:@Ok_si112:Image/icon_3.jpeg:Badges/badges_7.png:Badges/badges_5.webm:Badges/badges_6.webm:gold
 3:2:Crafter/Farmer:15/35 18:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓𝒅𝒂🕸:@werdochka:Image/icon_2.jpg:Badges/badges_4.png:::cyan
-3:1:Crafter:0/15 1:Ñ1ŻÉŁ1X:@N1Z3LIX:Image/icon_4.jpg::::grey
+3:1:Crafter:0/15 1:Ñ1ŻÉŁ1X:@N1Z3LIX:Image/icon_4.jpg::::green
