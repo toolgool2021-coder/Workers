@@ -1,13 +1,13 @@
 // Таблица цветов для быстрого доступа
 const colorMap = {
-    cyan: { hex: '#00ffff', rgb: 'rgb(0, 255, 255)', bg: 'rgba(0, 255, 255, 0.2)', bg2: 'rgba(168, 85, 247, 0.1)' },
-    purple: { hex: '#a855f7', rgb: 'rgb(168, 85, 247)', bg: 'rgba(168, 85, 247, 0.2)', bg2: 'rgba(0, 255, 200, 0.05)' },
-    gold: { hex: '#ffd700', rgb: 'rgb(255, 215, 0)', bg: 'rgba(255, 215, 0, 0.2)', bg2: 'rgba(255, 165, 0, 0.1)' },
-    green: { hex: '#00ff88', rgb: 'rgb(0, 255, 136)', bg: 'rgba(0, 255, 136, 0.2)', bg2: 'rgba(0, 200, 100, 0.1)' },
-    pink: { hex: '#ff69b4', rgb: 'rgb(255, 105, 180)', bg: 'rgba(255, 105, 180, 0.2)', bg2: 'rgba(255, 20, 147, 0.1)' },
-    orange: { hex: '#ff8c00', rgb: 'rgb(255, 140, 0)', bg: 'rgba(255, 140, 0, 0.2)', bg2: 'rgba(255, 100, 0, 0.1)' },
-    red: { hex: '#ff4545', rgb: 'rgb(255, 69, 69)', bg: 'rgba(255, 69, 69, 0.2)', bg2: 'rgba(255, 0, 0, 0.1)' },
-    blue: { hex: '#1e90ff', rgb: 'rgb(30, 144, 255)', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
+    cyan: { hex: '#00ffff', bg: 'rgba(0, 255, 255, 0.2)', bg2: 'rgba(168, 85, 247, 0.1)' },
+    purple: { hex: '#a855f7', bg: 'rgba(168, 85, 247, 0.2)', bg2: 'rgba(0, 255, 200, 0.05)' },
+    gold: { hex: '#ffd700', bg: 'rgba(255, 215, 0, 0.2)', bg2: 'rgba(255, 165, 0, 0.1)' },
+    green: { hex: '#00ff88', bg: 'rgba(0, 255, 136, 0.2)', bg2: 'rgba(0, 200, 100, 0.1)' },
+    pink: { hex: '#ff69b4', bg: 'rgba(255, 105, 180, 0.2)', bg2: 'rgba(255, 20, 147, 0.1)' },
+    orange: { hex: '#ff8c00', bg: 'rgba(255, 140, 0, 0.2)', bg2: 'rgba(255, 100, 0, 0.1)' },
+    red: { hex: '#ff4545', bg: 'rgba(255, 69, 69, 0.2)', bg2: 'rgba(255, 0, 0, 0.1)' },
+    blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
 };
 
 // Загрузка рабочих из TXT
@@ -41,28 +41,31 @@ function parseWorkers(text) {
                 badge: parts[7] || '',
                 badge_2: parts[8] || '',
                 badge_3: parts[9] || '',
-                color: parts[10] || 'cyan',
-                gradient: parts[11] || 'RGB'
+                color: parts[10] || 'cyan'
             });
         }
     });
 
+    // Сортировка по ID
     workers.sort((a, b) => a.id - b.id);
     return workers;
 }
 
 function parseXP(xpString) {
+    // Формат: "15/35 17" - в процессе или "⛩ 25" - пройден полностью
     const parts = xpString.trim().split(/\s+/);
     
-    let xpValue = parts[0];
-    let stage = parts[1] || null;
+    let xpValue = parts[0]; // "15/35" или "⛩"
+    let stage = parts[1] || null; // "17" или "25"
     
     let isCompleted = false;
     let xpCurrent = null;
     let xpMax = null;
     let xpPercent = 100;
     
+    // Проверяем, содержит ли значение "/"
     if (xpValue.includes('/')) {
+        // В процессе: "15/35"
         const progressParts = xpValue.split('/');
         xpCurrent = parseInt(progressParts[0]);
         xpMax = parseInt(progressParts[1]);
@@ -71,13 +74,15 @@ function parseXP(xpString) {
             xpPercent = (xpCurrent / xpMax) * 100;
             isCompleted = false;
         } else {
+            // Если числа не парсятся, но есть "/", показываем полный бар
             isCompleted = true;
-            stage = xpValue;
+            stage = xpValue; // Используем первое значение как этап
         }
     } else {
+        // Пройден полностью: "⛩" или число
         isCompleted = true;
         xpPercent = 100;
-        stage = stage || xpValue;
+        stage = stage || xpValue; // stage = parts[1], если нет - используем само значение
     }
     
     return {
@@ -116,6 +121,7 @@ function createWorkerCard(worker) {
     
     const xpData = parseXP(worker.xp);
 
+    // Создаём HTML для бейджей (только если они указаны)
     let badgesHTML = '';
     if (worker.badge) {
         badgesHTML += createMediaElement(worker.badge, 'badge', 'title="Badge 1"');
@@ -127,26 +133,34 @@ function createWorkerCard(worker) {
         badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
     }
 
+    // Используем локальный путь из Workers папки
     const photoUrl = `./${worker.photo}`;
 
+    // Определяем ссылку в зависимости от формата user
     let profileLink = '';
-    let userDisplay = worker.name;
+    let userDisplay = worker.name; // Отображаем визуально NAME вместо USER
     
+    // Если user содержит @, это Telegram username
     if (worker.user.includes('@')) {
         const telegramHandle = worker.user.startsWith('@') ? worker.user.substring(1) : worker.user;
         profileLink = `https://t.me/${telegramHandle}`;
     } 
+    // Если это полная ссылка
     else if (worker.user.includes('http')) {
         profileLink = worker.user;
     } 
+    // Если это GitHub username
     else {
         profileLink = `https://github.com/${worker.user}`;
     }
 
-    applyColorToCard(card, worker.color, worker.gradient);
+    // Применяем цвет из TXT файла
+    applyColorToCard(card, worker.color);
 
+    // Строим XP секцию
     let xpHTML = '';
     if (xpData.isCompleted) {
+        // Пройден полностью
         xpHTML = `
             <div class="xp-container">
                 <div class="xp-label">ЭТАП ПРОЙДЕН</div>
@@ -157,6 +171,7 @@ function createWorkerCard(worker) {
             </div>
         `;
     } else {
+        // В процессе
         xpHTML = `
             <div class="xp-container">
                 <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
@@ -172,6 +187,7 @@ function createWorkerCard(worker) {
         `;
     }
 
+    // Аватар (фото или видео)
     let avatarHTML = `
         <div class="avatar-container">
             ${createMediaElement(worker.photo, 'avatar')}
@@ -193,6 +209,7 @@ function createWorkerCard(worker) {
         ${xpHTML}
     `;
 
+    // Запускаем Intersection Observer для видео (пауза при выходе за экран)
     const videos = card.querySelectorAll('video');
     videos.forEach(video => {
         observeMediaElement(video);
@@ -201,17 +218,22 @@ function createWorkerCard(worker) {
     return card;
 }
 
+// Intersection Observer для остановки видео за пределами экрана
 function observeMediaElement(mediaElement) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                mediaElement.play().catch(() => {});
+                // Элемент видно на экране - играет видео
+                mediaElement.play().catch(() => {
+                    // Игнорируем ошибки автозапуска
+                });
             } else {
+                // Элемент вышел за пределы экрана - пауза
                 mediaElement.pause();
             }
         });
     }, {
-        threshold: 0.1
+        threshold: 0.1 // Запускаем когда 10% элемента видно
     });
 
     observer.observe(mediaElement);
@@ -232,23 +254,17 @@ function renderWorkers(workers) {
     });
 }
 
-function applyColorToCard(card, colorName, gradientName) {
+// Применяем цвет к карточке через CSS переменные
+function applyColorToCard(card, colorName) {
     const color = colorMap[colorName] || colorMap.cyan;
-    const gradient = gradientMap[gradientName] || gradientMap['RGB'];
-    
     if (color) {
         card.style.setProperty('--card-color', color.hex);
-        card.style.setProperty('--card-color-rgb', color.rgb);
         card.style.setProperty('--card-bg', color.bg);
         card.style.setProperty('--card-bg-2', color.bg2);
     }
-    
-    if (gradient) {
-        card.style.setProperty('--card-gradient', gradient.gradient);
-    }
 }
 
-// ===== СНЕЖНАЯ АНИМАЦИЯ =====
+// ===== СНЕЖНАЯ АНИМАЦИЯ (КАК В TLwebsite) =====
 const canvas = document.getElementById('snowCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -302,4 +318,5 @@ function updateSnow() {
 
 drawSnow();
 
+// Загружаем рабочих при загрузке страницы
 window.addEventListener('load', loadWorkers);
