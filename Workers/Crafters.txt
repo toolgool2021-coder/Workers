@@ -4,4 +4,5 @@
 3:2:Crafter/Farmer:15/35 18:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓𝒅𝒂🕸:@werdochka:Image/icon_2.jpg:Badges/badges_4.png:::cyan
 3:1:Crafter:0/15 1:Ñ1ŻÉŁ1X:@N1Z3LIX:Image/icon_4.jpg::::green
 4:1:crafter:0/15 0:сушка 🐮:@dn012_z:Image/icon_5.jpg::::green
-5:1:crafter:0/15 0:𝒟𝒾𝒶𝓃𝒶🐮:@dishka1909:Image/ocon_6jpg::::green
+5:1:crafter:0/15 0:𝒟𝒾𝒶𝓃𝒶🐮:@dishka1909:Image/ocon_6.jpg::::green
+7:1:crafter:0/15 0:𝐊𝐨𝐭𝐞𝐧𝐨𝐤 ❤ 🐮:@KotenokShuzuka:Image/icon_7.jpg:::: green
