@@ -7,8 +7,127 @@ const colorMap = {
     pink: { hex: '#ff69b4', bg: 'rgba(255, 105, 180, 0.2)', bg2: 'rgba(255, 20, 147, 0.1)' },
     orange: { hex: '#ff8c00', bg: 'rgba(255, 140, 0, 0.2)', bg2: 'rgba(255, 100, 0, 0.1)' },
     red: { hex: '#ff4545', bg: 'rgba(255, 69, 69, 0.2)', bg2: 'rgba(255, 0, 0, 0.1)' },
-    blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' }
+    blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' },
+    yellow: { hex: '#ffff00', bg: 'rgba(255, 255, 0, 0.2)', bg2: 'rgba(255, 215, 0, 0.1)' },
+    legend: { hex: '#ff8c42', bg: 'rgba(255, 140, 66, 0.2)', bg2: 'rgba(184, 134, 11, 0.1)' }
 };
+
+// Таблица уровней с преимуществами
+let levelsData = [];
+
+// Загрузка уровней из Class/List.txt
+async function loadLevels() {
+    try {
+        const response = await fetch('./Class/List.txt');
+        const text = await response.text();
+        levelsData = parseLevels(text);
+        initLevelsModal();
+    } catch (error) {
+        console.error('Ошибка загрузки уровней:', error);
+    }
+}
+
+function parseLevels(text) {
+    const levels = [];
+    const blocks = text.split('{').filter(block => block.trim());
+    
+    blocks.forEach(block => {
+        const lines = block.split('\n').filter(line => line.trim());
+        const level = {};
+        
+        lines.forEach(line => {
+            const [key, value] = line.split(':').map(s => s.trim());
+            if (key && value) {
+                if (key.toLowerCase() === 'name') {
+                    level.name = value;
+                } else if (key.toLowerCase() === 'oil') {
+                    level.oil = value;
+                } else if (key.toLowerCase() === 'color') {
+                    level.color = value;
+                } else if (key.toLowerCase() === 'teg') {
+                    level.teg = value;
+                } else if (key.toLowerCase() === 'advantages') {
+                    level.advantages = value.split(',').map(a => a.trim());
+                }
+            }
+        });
+        
+        if (level.name) {
+            levels.push(level);
+        }
+    });
+    
+    return levels;
+}
+
+function initLevelsModal() {
+    const levelsBtn = document.getElementById('levelsBtn');
+    const levelsModal = document.getElementById('levelsModal');
+    const closeBtn = document.querySelector('.close-levels-modal');
+    const levelsList = document.getElementById('levelsList');
+    const levelDetails = document.getElementById('levelDetails');
+    
+    if (!levelsBtn) return;
+    
+    // Заполняем список уровней
+    levelsList.innerHTML = '';
+    levelsData.forEach((level, index) => {
+        const levelItem = document.createElement('div');
+        levelItem.className = 'level-item';
+        levelItem.innerHTML = `<span>${level.name}</span>`;
+        levelItem.onclick = () => showLevelDetails(index);
+        levelsList.appendChild(levelItem);
+    });
+    
+    // Открытие модала
+    levelsBtn.onclick = () => {
+        levelsModal.style.display = 'flex';
+        if (levelsData.length > 0) {
+            showLevelDetails(0);
+        }
+    };
+    
+    // Закрытие модала
+    closeBtn.onclick = () => {
+        levelsModal.style.display = 'none';
+    };
+    
+    window.onclick = (event) => {
+        if (event.target === levelsModal) {
+            levelsModal.style.display = 'none';
+        }
+    };
+}
+
+function showLevelDetails(index) {
+    const level = levelsData[index];
+    const levelDetails = document.getElementById('levelDetails');
+    const levelsList = document.getElementById('levelsList');
+    
+    // Убираем активный класс со всех
+    document.querySelectorAll('.level-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Добавляем активный класс текущему
+    levelsList.children[index].classList.add('active');
+    
+    // Показываем детали
+    levelDetails.innerHTML = `
+        <div class="level-details-content">
+            <h3>${level.name}</h3>
+            <p class="level-oil"><strong>Диапазон:</strong> ${level.oil}</p>
+            <p class="level-color"><strong>Цвет:</strong> ${level.color}</p>
+            <p class="level-teg"><strong>Тег:</strong> ${level.teg}</p>
+            <div class="level-advantages">
+                <h4>Преимущества:</h4>
+                <ul>
+                    ${level.advantages.map(adv => `<li>${adv}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+    `;
+}
 
 // Загрузка рабочих из TXT
 async function loadWorkers() {
@@ -41,7 +160,9 @@ function parseWorkers(text) {
                 badge: parts[7] || '',
                 badge_2: parts[8] || '',
                 badge_3: parts[9] || '',
-                color: parts[10] || 'cyan'
+                color: parts[10] || 'cyan',
+                teg: parts[11] || '',
+                nameColor: parts[12] || ''
             });
         }
     });
@@ -51,38 +172,60 @@ function parseWorkers(text) {
     return workers;
 }
 
+// Парсинг XP с поддержкой больших значений
+function parseXPValue(xpString) {
+    if (!xpString) return 0;
+    
+    const str = xpString.toString().trim().toLowerCase();
+    
+    // Проверяем на k (тысячи)
+    if (str.includes('k')) {
+        const num = parseFloat(str.replace('k', ''));
+        return isNaN(num) ? 0 : num * 1000;
+    }
+    
+    // Проверяем на m (миллионы)
+    if (str.includes('m')) {
+        const num = parseFloat(str.replace('m', ''));
+        return isNaN(num) ? 0 : num * 1000000;
+    }
+    
+    // Обычное число
+    const num = parseInt(str);
+    return isNaN(num) ? 0 : num;
+}
+
 function parseXP(xpString) {
-    // Формат: "15/35 17" - в процессе или "⛩ 25" - пройден полностью
+    // Формат: "0/15 2" - 0(начало), 15(конец), 2(прогресс пользователя)
     const parts = xpString.trim().split(/\s+/);
     
-    let xpValue = parts[0]; // "15/35" или "⛩"
-    let stage = parts[1] || null; // "17" или "25"
+    let xpValue = parts[0]; // "0/15"
+    let stage = parts[1] || null; // "2"
     
     let isCompleted = false;
     let xpCurrent = null;
     let xpMax = null;
-    let xpPercent = 100;
+    let xpPercent = 0;
     
     // Проверяем, содержит ли значение "/"
     if (xpValue.includes('/')) {
-        // В процессе: "15/35"
+        // В процессе: "0/15"
         const progressParts = xpValue.split('/');
-        xpCurrent = parseInt(progressParts[0]);
-        xpMax = parseInt(progressParts[1]);
+        xpCurrent = parseXPValue(progressParts[0]);
+        xpMax = parseXPValue(progressParts[1]);
         
-        if (!isNaN(xpCurrent) && !isNaN(xpMax)) {
+        if (xpCurrent !== null && xpMax !== null && xpMax > 0) {
             xpPercent = (xpCurrent / xpMax) * 100;
             isCompleted = false;
         } else {
-            // Если числа не парсятся, но есть "/", показываем полный бар
             isCompleted = true;
-            stage = xpValue; // Используем первое значение как этап
+            stage = xpValue;
         }
     } else {
-        // Пройден полностью: "⛩" или число
+        // Пройден полностью
         isCompleted = true;
         xpPercent = 100;
-        stage = stage || xpValue; // stage = parts[1], если нет - используем само значение
+        stage = stage || xpValue;
     }
     
     return {
@@ -114,6 +257,24 @@ function createMediaElement(mediaPath, className = '', attributes = '') {
     }
 }
 
+// Проверка, содержит ли строка только цифры
+function isNumeric(str) {
+    return /^\d+$/.test(str.trim());
+}
+
+// Получение изображения уровня
+function getRangerImage(classValue) {
+    if (!isNumeric(classValue)) return null;
+    
+    const num = parseInt(classValue);
+    if (num >= 1 && num <= 9) {
+        return `./Rangers/${num} LVL.jpg.png`;
+    } else if (num >= 10) {
+        return './Rangers/10+ LVL.jpg.png';
+    }
+    return null;
+}
+
 function createWorkerCard(worker) {
     const card = document.createElement('div');
     card.className = 'worker-card';
@@ -133,23 +294,17 @@ function createWorkerCard(worker) {
         badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
     }
 
-    // Используем локальный путь из Workers папки
-    const photoUrl = `./${worker.photo}`;
-
     // Определяем ссылку в зависимости от формата user
     let profileLink = '';
-    let userDisplay = worker.name; // Отображаем визуально NAME вместо USER
+    let userDisplay = worker.name;
     
-    // Если user содержит @, это Telegram username
     if (worker.user.includes('@')) {
         const telegramHandle = worker.user.startsWith('@') ? worker.user.substring(1) : worker.user;
         profileLink = `https://t.me/${telegramHandle}`;
     } 
-    // Если это полная ссылка
     else if (worker.user.includes('http')) {
         profileLink = worker.user;
     } 
-    // Если это GitHub username
     else {
         profileLink = `https://github.com/${worker.user}`;
     }
@@ -157,28 +312,26 @@ function createWorkerCard(worker) {
     // Применяем цвет из TXT файла
     applyColorToCard(card, worker.color);
 
-    // Строим XP секцию
+    // Строим XP секцию с анимацией
     let xpHTML = '';
     if (xpData.isCompleted) {
-        // Пройден полностью
         xpHTML = `
             <div class="xp-container">
                 <div class="xp-label">ЭТАП ПРОЙДЕН</div>
                 <div class="xp-bar">
-                    <div class="xp-fill" style="width: 100%"></div>
+                    <div class="xp-fill xp-animate" style="width: 100%"></div>
                     ${xpData.stage ? `<span class="xp-stage">${xpData.stage}</span>` : ''}
                 </div>
             </div>
         `;
     } else {
-        // В процессе
         xpHTML = `
             <div class="xp-container">
                 <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
                 <div class="xp-bar-wrapper">
                     <span class="xp-start">${xpData.xpCurrent}</span>
                     <div class="xp-bar">
-                        <div class="xp-fill" style="width: ${xpData.xpPercent}%"></div>
+                        <div class="xp-fill xp-animate" style="width: 0%" data-target="${xpData.xpPercent}"></div>
                         ${xpData.stage ? `<span class="xp-stage">${xpData.stage}</span>` : ''}
                     </div>
                     <span class="xp-end">${xpData.xpMax}</span>
@@ -187,35 +340,86 @@ function createWorkerCard(worker) {
         `;
     }
 
-    // Аватар (фото или видео)
+    // Класс с изображением или текстом
+    let classHTML = '';
+    const rangerImage = getRangerImage(worker.class);
+    
+    if (rangerImage) {
+        classHTML = `
+            <div class="worker-class-with-image">
+                <div class="class-image-container">
+                    <img src="${rangerImage}" alt="Level" class="class-image">
+                    <div class="class-level-text">${worker.class}</div>
+                </div>
+                <div class="worker-job">${worker.job}</div>
+            </div>
+        `;
+    } else {
+        // Логика для текстовых классов
+        const classDisplay = /^\d+$/.test(worker.class) ? `Уровень ${worker.class}` : `${worker.class}`;
+        classHTML = `<div class="worker-class">${classDisplay} • ${worker.job}</div>`;
+    }
+
+    // Тег перед именем
+    let tagHTML = '';
+    if (worker.teg) {
+        tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
+    }
+
+    // Аватар
     let avatarHTML = `
         <div class="avatar-container">
             ${createMediaElement(worker.photo, 'avatar')}
         </div>
     `;
 
+    // Применяем кастомный цвет имени если есть
+    const nameStyle = worker.nameColor ? `style="color: ${worker.nameColor}"` : '';
+
     card.innerHTML = `
         ${avatarHTML}
         
         <div class="worker-info">
-            <a href="${profileLink}" target="_blank" class="worker-name">
+            ${tagHTML}
+            <a href="${profileLink}" target="_blank" class="worker-name" ${nameStyle}>
                 ${userDisplay}
             </a>
             ${badgesHTML ? `<div class="badges-container">${badgesHTML}</div>` : ''}
         </div>
 
-        <div class="worker-class">Уровень ${worker.class} • ${worker.job}</div>
+        ${classHTML}
 
         ${xpHTML}
     `;
 
-    // Запускаем Intersection Observer для видео (пауза при выходе за экран)
+    // Запускаем Intersection Observer для видео
     const videos = card.querySelectorAll('video');
     videos.forEach(video => {
         observeMediaElement(video);
     });
 
+    // Запускаем анимацию XP когда карточка появляется на экране
+    const xpFill = card.querySelector('.xp-animate');
+    if (xpFill && xpFill.dataset.target) {
+        observeXPAnimation(xpFill);
+    }
+
     return card;
+}
+
+// Intersection Observer для анимации XP
+function observeXPAnimation(element) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !element.classList.contains('animated')) {
+                const targetPercent = parseFloat(element.dataset.target);
+                element.style.width = targetPercent + '%';
+                element.classList.add('animated');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    observer.observe(element);
 }
 
 // Intersection Observer для остановки видео за пределами экрана
@@ -223,18 +427,12 @@ function observeMediaElement(mediaElement) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Элемент видно на экране - играет видео
-                mediaElement.play().catch(() => {
-                    // Игнорируем ошибки автозапуска
-                });
+                mediaElement.play().catch(() => {});
             } else {
-                // Элемент вышел за пределы экрана - пауза
                 mediaElement.pause();
             }
         });
-    }, {
-        threshold: 0.1 // Запускаем когда 10% элемента видно
-    });
+    }, { threshold: 0.1 });
 
     observer.observe(mediaElement);
 }
@@ -264,7 +462,7 @@ function applyColorToCard(card, colorName) {
     }
 }
 
-// ===== СНЕЖНАЯ АНИМАЦИЯ (КАК В TLwebsite) =====
+// ===== СНЕЖНАЯ АНИМАЦИЯ =====
 const canvas = document.getElementById('snowCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -318,5 +516,8 @@ function updateSnow() {
 
 drawSnow();
 
-// Загружаем рабочих при загрузке страницы
-window.addEventListener('load', loadWorkers);
+// Загружаем при загрузке страницы
+window.addEventListener('load', () => {
+    loadWorkers();
+    loadLevels();
+});
