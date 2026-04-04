@@ -195,7 +195,7 @@ function parseXPValue(xpString) {
     return isNaN(num) ? 0 : num;
 }
 
-// ИСПРАВЛЕННАЯ функция парсинга XP
+// ИСПРАВЛЕННАЯ функция парсинга XP с тремя показателями
 function parseXP(xpString) {
     // Формат: "0/40000 30000" - 0(начало), 40000(конец), 30000(текущий прогресс пользователя)
     const parts = xpString.trim().split(/\s+/);
@@ -204,6 +204,7 @@ function parseXP(xpString) {
     let xpProgress = parts[1] || null; // "30000" - текущий прогресс пользователя
     
     let isCompleted = false;
+    let xpStart = null;
     let xpCurrent = null;
     let xpMax = null;
     let xpPercent = 0;
@@ -212,7 +213,7 @@ function parseXP(xpString) {
     if (xpValue.includes('/')) {
         // В процессе: "0/40000"
         const progressParts = xpValue.split('/');
-        const xpStart = parseXPValue(progressParts[0]);
+        xpStart = parseXPValue(progressParts[0]);
         xpMax = parseXPValue(progressParts[1]);
         
         // Если есть прогресс пользователя, используем его
@@ -239,6 +240,7 @@ function parseXP(xpString) {
     }
     
     return {
+        xpStart,
         xpCurrent,
         xpMax,
         xpPercent,
@@ -368,9 +370,11 @@ function createWorkerCard(worker) {
             <div class="xp-container">
                 <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
                 <div class="xp-bar-wrapper">
-                    <span class="xp-start">${xpData.xpCurrent}</span>
+                    <span class="xp-start">${xpData.xpStart}</span>
                     <div class="xp-bar">
-                        <div class="xp-fill xp-animate" style="width: 0%" data-target="${xpData.xpPercent}"></div>
+                        <div class="xp-fill xp-animate" style="width: 0%" data-target="${xpData.xpPercent}">
+                            <span class="xp-progress-text">${xpData.xpCurrent}</span>
+                        </div>
                     </div>
                     <span class="xp-end">${xpData.xpMax}</span>
                 </div>
