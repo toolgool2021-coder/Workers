@@ -63,6 +63,179 @@ html, body {
     margin: 0;
 }
 
+/* ===== КНОПКА УРОВНЕЙ ===== */
+.levels-button-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.levels-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 30px;
+    border: 2px solid #a855f7;
+    border-radius: 10px;
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+.levels-btn:hover {
+    background: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.8);
+    transform: translateY(-3px);
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО УРОВНЕЙ ===== */
+.levels-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.levels-modal-content {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 255, 255, 0.05));
+    border: 2px solid rgba(168, 85, 247, 0.5);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 900px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 50px rgba(168, 85, 247, 0.5);
+}
+
+.close-levels-modal {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #a855f7;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-levels-modal:hover {
+    color: #00ffff;
+    transform: scale(1.2);
+}
+
+.levels-modal-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+}
+
+.levels-list-side h2 {
+    color: #00ffff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.levels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.level-item {
+    padding: 12px 15px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 8px;
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.level-item:hover {
+    background: rgba(168, 85, 247, 0.2);
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+.level-item.active {
+    background: rgba(168, 85, 247, 0.3);
+    border-color: #a855f7;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    color: #ffffff;
+}
+
+.level-details {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.level-details-content h3 {
+    color: #00ffff;
+    margin-bottom: 15px;
+    font-size: 20px;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.level-details-content p {
+    color: #aaa;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.level-oil, .level-color, .level-teg {
+    color: #a855f7;
+}
+
+.level-advantages {
+    margin-top: 20px;
+}
+
+.level-advantages h4 {
+    color: #00ffff;
+    margin-bottom: 10px;
+}
+
+.level-advantages ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.level-advantages li {
+    color: #aaa;
+    padding: 8px;
+    margin: 5px 0;
+    background: rgba(168, 85, 247, 0.1);
+    border-left: 3px solid #a855f7;
+    padding-left: 12px;
+    border-radius: 4px;
+}
+
 /* ===== РАБОЧИЕ СЕКЦИЯ ===== */
 .workers-section {
     background: rgba(168, 85, 247, 0.05);
@@ -141,6 +314,18 @@ html, body {
     margin-bottom: 8px;
 }
 
+.worker-tag {
+    display: inline-block;
+    background: rgba(168, 85, 247, 0.3);
+    color: #00ffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    margin-bottom: 5px;
+}
+
 .worker-name {
     font-size: 18px;
     font-weight: bold;
@@ -186,6 +371,53 @@ html, body {
     box-shadow: 0 0 20px var(--card-color);
 }
 
+/* ===== КЛАСС С ИЗОБРАЖЕНИЕМ ===== */
+.worker-class-with-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.class-image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+    border: 2px solid var(--card-color);
+}
+
+.class-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.class-level-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(168, 85, 247, 0.5);
+    z-index: 10;
+}
+
+.worker-job {
+    font-size: 12px;
+    color: var(--card-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* ===== КЛАСС ОБЫЧНЫЙ ===== */
 .worker-class {
     font-size: 14px;
     margin-bottom: 15px;
@@ -195,6 +427,7 @@ html, body {
     color: var(--card-color);
 }
 
+/* ===== XP СИСТЕМА ===== */
 .xp-container {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
@@ -244,7 +477,7 @@ html, body {
 .xp-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--card-color), #a855f7);
-    transition: width 0.3s;
+    transition: width 0.8s ease-out;
     border-radius: 11px;
 }
 
@@ -347,5 +580,27 @@ html, body {
     .xp-stage {
         font-size: 10px;
         padding: 1px 4px;
+    }
+
+    .levels-modal-container {
+        grid-template-columns: 1fr;
+    }
+
+    .level-details {
+        max-height: 400px;
+    }
+
+    .levels-modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .class-image-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .class-level-text {
+        font-size: 28px;
     }
 }
