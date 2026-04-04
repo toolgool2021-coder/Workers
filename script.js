@@ -101,6 +101,7 @@ function initLevelsModal() {
 
 function showLevelDetails(index) {
     const level = levelsData[index];
+    const prevLevel = index > 0 ? levelsData[index - 1] : null;
     const levelDetails = document.getElementById('levelDetails');
     const levelsList = document.getElementById('levelsList');
     
@@ -112,6 +113,45 @@ function showLevelDetails(index) {
     // Добавляем активный класс текущему
     levelsList.children[index].classList.add('active');
     
+    // Анализируем преимущества
+    let advantagesHTML = '';
+    
+    if (level.advantages && level.advantages.length > 0) {
+        const prevAdvantages = prevLevel ? prevLevel.advantages : [];
+        
+        advantagesHTML = '<ul>';
+        
+        level.advantages.forEach(adv => {
+            const isNew = !prevAdvantages.includes(adv);
+            
+            let advClass = '';
+            let newBadge = '';
+            
+            if (isNew) {
+                advClass = 'new-advantage';
+                newBadge = '<span class="new-badge">[NEW]</span>';
+            }
+            
+            advantagesHTML += `
+                <li class="${advClass}">
+                    <span>${adv}</span>
+                    ${newBadge}
+                </li>
+            `;
+        });
+        
+        // Добавляем убранные преимущества
+        if (prevAdvantages.length > level.advantages.length) {
+            prevAdvantages.forEach(prevAdv => {
+                if (!level.advantages.includes(prevAdv)) {
+                    advantagesHTML += `<li class="removed-advantage"><span>${prevAdv}</span></li>`;
+                }
+            });
+        }
+        
+        advantagesHTML += '</ul>';
+    }
+    
     // Показываем детали
     levelDetails.innerHTML = `
         <div class="level-details-content">
@@ -121,9 +161,7 @@ function showLevelDetails(index) {
             <p class="level-teg"><strong>Тег:</strong> ${level.teg}</p>
             <div class="level-advantages">
                 <h4>Преимущества:</h4>
-                <ul>
-                    ${level.advantages.map(adv => `<li>${adv}</li>`).join('')}
-                </ul>
+                ${advantagesHTML}
             </div>
         </div>
     `;
