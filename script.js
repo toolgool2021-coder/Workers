@@ -172,7 +172,7 @@ function parseWorkers(text) {
     return workers;
 }
 
-// Парсинг XP с поддержкой больших значений
+// Парсинг XP значений с поддержкой k, m и обычных чисел
 function parseXPValue(xpString) {
     if (!xpString) return 0;
     
@@ -195,37 +195,47 @@ function parseXPValue(xpString) {
     return isNaN(num) ? 0 : num;
 }
 
+// ИСПРАВЛЕННАЯ функция парсинга XP
 function parseXP(xpString) {
-    // Формат: "0/15 2" - 0(начало), 15(конец), 2(прогресс пользователя)
+    // Формат: "0/40000 30000" - 0(начало), 40000(конец), 30000(текущий прогресс пользователя)
     const parts = xpString.trim().split(/\s+/);
     
-    let xpValue = parts[0]; // "0/15"
-    let stage = parts[1] || null; // "2"
+    let xpValue = parts[0]; // "0/40000"
+    let xpProgress = parts[1] || null; // "30000" - текущий прогресс пользователя
     
     let isCompleted = false;
     let xpCurrent = null;
     let xpMax = null;
     let xpPercent = 0;
+    let stage = null;
     
-    // Проверяем, содержит ли значение "/"
     if (xpValue.includes('/')) {
-        // В процессе: "0/15"
+        // В процессе: "0/40000"
         const progressParts = xpValue.split('/');
-        xpCurrent = parseXPValue(progressParts[0]);
+        const xpStart = parseXPValue(progressParts[0]);
         xpMax = parseXPValue(progressParts[1]);
         
-        if (xpCurrent !== null && xpMax !== null && xpMax > 0) {
-            xpPercent = (xpCurrent / xpMax) * 100;
-            isCompleted = false;
-        } else {
-            isCompleted = true;
-            stage = xpValue;
+        // Если есть прогресс пользователя, используем его
+        if (xpProgress) {
+            const userProgress = parseXPValue(xpProgress);
+            xpCurrent = userProgress;
+            if (xpMax > 0) {
+                xpPercent = (userProgress / xpMax) * 100;
+                // Ограничиваем до 100%
+                if (xpPercent > 100) xpPercent = 100;
+            }
+            stage = null;
+        } else if (xpStart !== null && xpMax !== null && xpMax > 0) {
+            xpCurrent = xpStart;
+            xpPercent = (xpStart / xpMax) * 100;
         }
+        
+        isCompleted = false;
     } else {
         // Пройден полностью
         isCompleted = true;
         xpPercent = 100;
-        stage = stage || xpValue;
+        stage = xpValue;
     }
     
     return {
@@ -275,6 +285,35 @@ function getRangerImage(classValue) {
     return null;
 }
 
+// Проверка является ли строка HEX цветом
+function isHexColor(str) {
+    return /^#[0-9A-F]{6}$/i.test(str);
+}
+
+// Функция для создания RGB из HEX
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+// Создание CSS переменных для кастомного цвета
+function createCustomColorStyle(hexColor) {
+    if (!isHexColor(hexColor)) return null;
+    
+    const rgb = hexToRgb(hexColor);
+    if (!rgb) return null;
+    
+    return {
+        hex: hexColor,
+        bg: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`,
+        bg2: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`
+    };
+}
+
 function createWorkerCard(worker) {
     const card = document.createElement('div');
     card.className = 'worker-card';
@@ -309,7 +348,7 @@ function createWorkerCard(worker) {
         profileLink = `https://github.com/${worker.user}`;
     }
 
-    // Применяем цвет из TXT файла
+    // Применяем цвет из TXT файла (поддержка HEX и названий)
     applyColorToCard(card, worker.color);
 
     // Строим XP секцию с анимацией
@@ -332,7 +371,6 @@ function createWorkerCard(worker) {
                     <span class="xp-start">${xpData.xpCurrent}</span>
                     <div class="xp-bar">
                         <div class="xp-fill xp-animate" style="width: 0%" data-target="${xpData.xpPercent}"></div>
-                        ${xpData.stage ? `<span class="xp-stage">${xpData.stage}</span>` : ''}
                     </div>
                     <span class="xp-end">${xpData.xpMax}</span>
                 </div>
@@ -452,9 +490,17 @@ function renderWorkers(workers) {
     });
 }
 
-// Применяем цвет к карточке через CSS переменные
-function applyColorToCard(card, colorName) {
-    const color = colorMap[colorName] || colorMap.cyan;
+// Применяем цвет к карточке через CSS переменные (поддержка HEX и названий)
+function applyColorToCard(card, colorValue) {
+    let color;
+    
+    // Проверяем, это HEX цвет или название
+    if (isHexColor(colorValue)) {
+        color = createCustomColorStyle(colorValue);
+    } else {
+        color = colorMap[colorValue] || colorMap.cyan;
+    }
+    
     if (color) {
         card.style.setProperty('--card-color', color.hex);
         card.style.setProperty('--card-bg', color.bg);
