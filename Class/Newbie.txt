@@ -1,4 +1,0 @@
-Name:Новичек
-oil:0 - 40000
-color:green
-advantages:7 муней/1 масло,1 бейджи,1 сайт
