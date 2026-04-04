@@ -452,7 +452,7 @@ html, body {
     font-size: 12px;
     color: var(--card-color);
     font-weight: bold;
-    min-width: 25px;
+    min-width: 40px;
     text-align: center;
 }
 
@@ -466,12 +466,14 @@ html, body {
 
 .xp-bar {
     flex: 1;
-    height: 24px;
+    height: 28px;
     background: #1a1a2e;
     border-radius: 12px;
-    overflow: visible;
+    overflow: hidden;
     border: 1px solid var(--card-color);
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .xp-fill {
@@ -479,6 +481,21 @@ html, body {
     background: linear-gradient(90deg, var(--card-color), #a855f7);
     transition: width 0.8s ease-out;
     border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.xp-progress-text {
+    position: absolute;
+    font-size: 11px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .xp-stage {
@@ -570,11 +587,15 @@ html, body {
     .xp-start,
     .xp-end {
         font-size: 11px;
-        min-width: 20px;
+        min-width: 35px;
     }
 
     .xp-bar {
-        height: 20px;
+        height: 24px;
+    }
+
+    .xp-progress-text {
+        font-size: 10px;
     }
 
     .xp-stage {
