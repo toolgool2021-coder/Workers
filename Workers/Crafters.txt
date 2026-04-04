@@ -1,7 +1,7 @@
 #ID:CLASS:JOB:XP:NAME:USER:PHOTO:BADGE:BADGE_2:BADGE_3:COLOR:TEG:NAME_COLOR
 
-1:∞:Owner:10:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:Badges/badges_2.png:Badges/badges_3.png:legend:[#OWN]:#ffd700
-2:∞:Owner:10:❦ Брак ❦:@Ok_si112:Image/icon_3.jpeg:Badges/badges_7.png:Badges/badges_5.webm:Badges/badges_6.webm:gold:[#OWN]:#ffd700
+1:10:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:Badges/badges_2.png:Badges/badges_3.png:legend:[#OWN]:#ffd700
+2:10:Owner:♡:❦ Брак ❦:@Ok_si112:Image/icon_3.jpeg:Badges/badges_7.png:Badges/badges_5.webm:Badges/badges_6.webm:gold:[#OWN]:#ffd700
 3:1:Crafter/Farmer:0/40000 30000:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓𝒅𝒂🕸:@werdochka:Image/icon_2.jpg:Badges/badges_4.png:::cyan:[#FARM]:#00ffff
 3:1:Crafter:0/40000 0:Ñ1ŻÉŁ1X:@N1Z3LIX:Image/icon_4.jpg::::green:[#CRF1]:#00ff88
 4:1:crafter:0/40000 1000:сушка 🐮:@dn012_z:Image/icon_5.jpg::::green:[#CRF2]:#00ff88
