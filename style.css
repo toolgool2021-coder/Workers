@@ -1,611 +1,627 @@
-// Таблица цветов для быстрого доступа
-const colorMap = {
-    cyan: { hex: '#00ffff', bg: 'rgba(0, 255, 255, 0.2)', bg2: 'rgba(168, 85, 247, 0.1)' },
-    purple: { hex: '#a855f7', bg: 'rgba(168, 85, 247, 0.2)', bg2: 'rgba(0, 255, 200, 0.05)' },
-    gold: { hex: '#ffd700', bg: 'rgba(255, 215, 0, 0.2)', bg2: 'rgba(255, 165, 0, 0.1)' },
-    green: { hex: '#00ff88', bg: 'rgba(0, 255, 136, 0.2)', bg2: 'rgba(0, 200, 100, 0.1)' },
-    pink: { hex: '#ff69b4', bg: 'rgba(255, 105, 180, 0.2)', bg2: 'rgba(255, 20, 147, 0.1)' },
-    orange: { hex: '#ff8c00', bg: 'rgba(255, 140, 0, 0.2)', bg2: 'rgba(255, 100, 0, 0.1)' },
-    red: { hex: '#ff4545', bg: 'rgba(255, 69, 69, 0.2)', bg2: 'rgba(255, 0, 0, 0.1)' },
-    blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' },
-    yellow: { hex: '#ffff00', bg: 'rgba(255, 255, 0, 0.2)', bg2: 'rgba(255, 215, 0, 0.1)' },
-    legend: { hex: '#ff8c42', bg: 'rgba(255, 140, 66, 0.2)', bg2: 'rgba(184, 134, 11, 0.1)' }
-};
-
-// Таблица уровней с преимуществами
-let levelsData = [];
-
-// Загрузка уровней из Class/List.txt
-async function loadLevels() {
-    try {
-        const response = await fetch('./Class/List.txt');
-        const text = await response.text();
-        levelsData = parseLevels(text);
-        initLevelsModal();
-    } catch (error) {
-        console.error('Ошибка загрузки уровней:', error);
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-function parseLevels(text) {
-    const levels = [];
-    const blocks = text.split('{').filter(block => block.trim());
-    
-    blocks.forEach(block => {
-        const lines = block.split('\n').filter(line => line.trim());
-        const level = {};
-        
-        lines.forEach(line => {
-            const [key, value] = line.split(':').map(s => s.trim());
-            if (key && value) {
-                if (key.toLowerCase() === 'name') {
-                    level.name = value;
-                } else if (key.toLowerCase() === 'oil') {
-                    level.oil = value;
-                } else if (key.toLowerCase() === 'color') {
-                    level.color = value;
-                } else if (key.toLowerCase() === 'teg') {
-                    level.teg = value;
-                } else if (key.toLowerCase() === 'advantages') {
-                    level.advantages = value.split(',').map(a => a.trim());
-                }
-            }
-        });
-        
-        if (level.name) {
-            levels.push(level);
-        }
-    });
-    
-    return levels;
+html, body {
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    overflow-x: hidden;
 }
 
-function initLevelsModal() {
-    const levelsBtn = document.getElementById('levelsBtn');
-    const levelsModal = document.getElementById('levelsModal');
-    const closeBtn = document.querySelector('.close-levels-modal');
-    const levelsList = document.getElementById('levelsList');
-    const levelDetails = document.getElementById('levelDetails');
-    
-    if (!levelsBtn) return;
-    
-    // Заполняем список уровней
-    levelsList.innerHTML = '';
-    levelsData.forEach((level, index) => {
-        const levelItem = document.createElement('div');
-        levelItem.className = 'level-item';
-        levelItem.innerHTML = `<span>${level.name}</span>`;
-        levelItem.onclick = () => showLevelDetails(index);
-        levelsList.appendChild(levelItem);
-    });
-    
-    // Открытие модала
-    levelsBtn.onclick = () => {
-        levelsModal.style.display = 'flex';
-        if (levelsData.length > 0) {
-            showLevelDetails(0);
-        }
-    };
-    
-    // Закрытие модала
-    closeBtn.onclick = () => {
-        levelsModal.style.display = 'none';
-    };
-    
-    window.onclick = (event) => {
-        if (event.target === levelsModal) {
-            levelsModal.style.display = 'none';
-        }
-    };
+/* ===== СНЕГ ===== */
+#snowCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
 }
 
-function showLevelDetails(index) {
-    const level = levelsData[index];
-    const prevLevel = index > 0 ? levelsData[index - 1] : null;
-    const levelDetails = document.getElementById('levelDetails');
-    const levelsList = document.getElementById('levelsList');
-    
-    // Убираем активный класс со всех
-    document.querySelectorAll('.level-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Добавляем активный класс текущему
-    levelsList.children[index].classList.add('active');
-    
-    // Анализируем преимущества
-    let advantagesHTML = '';
-    
-    if (level.advantages && level.advantages.length > 0) {
-        const prevAdvantages = prevLevel ? prevLevel.advantages : [];
-        
-        advantagesHTML = '<ul>';
-        
-        level.advantages.forEach(adv => {
-            const isNew = !prevAdvantages.includes(adv);
-            
-            let advClass = '';
-            let newBadge = '';
-            
-            if (isNew) {
-                advClass = 'new-advantage';
-                newBadge = '<span class="new-badge">[NEW]</span>';
-            }
-            
-            advantagesHTML += `
-                <li class="${advClass}">
-                    <span>${adv}</span>
-                    ${newBadge}
-                </li>
-            `;
-        });
-        
-        // Добавляем убранные преимущества
-        if (prevAdvantages.length > level.advantages.length) {
-            prevAdvantages.forEach(prevAdv => {
-                if (!level.advantages.includes(prevAdv)) {
-                    advantagesHTML += `<li class="removed-advantage"><span>${prevAdv}</span></li>`;
-                }
-            });
-        }
-        
-        advantagesHTML += '</ul>';
-    }
-    
-    // Показываем детали
-    levelDetails.innerHTML = `
-        <div class="level-details-content">
-            <h3>${level.name}</h3>
-            <p class="level-oil"><strong>Диапазон:</strong> ${level.oil}</p>
-            <p class="level-color"><strong>Цвет:</strong> ${level.color}</p>
-            <p class="level-teg"><strong>Тег:</strong> ${level.teg}</p>
-            <div class="level-advantages">
-                <h4>Преимущества:</h4>
-                ${advantagesHTML}
-            </div>
-        </div>
-    `;
+/* ===== КОНТЕЙНЕР ===== */
+.container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
-// Загрузка рабочих из TXT
-async function loadWorkers() {
-    try {
-        const response = await fetch('./Workers/Crafters.txt');
-        const text = await response.text();
-        const workers = parseWorkers(text);
-        renderWorkers(workers);
-    } catch (error) {
-        console.error('Ошибка загрузки файла:', error);
-        document.getElementById('workersList').innerHTML = '<p style="text-align: center; color: #ff6b6b;">Ошибка загрузки данных</p>';
-    }
+/* ===== ЗАГОЛОВОК ===== */
+.project-header {
+    text-align: center;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-function parseWorkers(text) {
-    const lines = text.trim().split('\n').filter(line => line && !line.startsWith('#'));
-    const workers = [];
-
-    lines.forEach(line => {
-        const parts = line.split(':');
-        if (parts.length >= 7) {
-            workers.push({
-                id: parseInt(parts[0]),
-                class: parts[1],
-                job: parts[2],
-                xp: parts[3],
-                name: parts[4],
-                user: parts[5],
-                photo: parts[6],
-                badge: parts[7] || '',
-                badge_2: parts[8] || '',
-                badge_3: parts[9] || '',
-                color: parts[10] || 'cyan',
-                teg: parts[11] || '',
-                nameColor: parts[12] || ''
-            });
-        }
-    });
-
-    // Сортировка по ID
-    workers.sort((a, b) => a.id - b.id);
-    return workers;
+.project-title {
+    font-size: 32px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #a855f7 0%, #00ffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.2));
 }
 
-// Парсинг XP значений с поддержкой k, m и обычных чисел
-function parseXPValue(xpString) {
-    if (!xpString) return 0;
-    
-    const str = xpString.toString().trim().toLowerCase();
-    
-    // Проверяем на k (тысячи)
-    if (str.includes('k')) {
-        const num = parseFloat(str.replace('k', ''));
-        return isNaN(num) ? 0 : num * 1000;
-    }
-    
-    // Проверяем на m (миллионы)
-    if (str.includes('m')) {
-        const num = parseFloat(str.replace('m', ''));
-        return isNaN(num) ? 0 : num * 1000000;
-    }
-    
-    // Обычное число
-    const num = parseInt(str);
-    return isNaN(num) ? 0 : num;
+.project-subtitle {
+    font-size: 14px;
+    color: #00ffff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+    letter-spacing: 1px;
+    margin: 0;
 }
 
-// ИСПРАВЛЕННАЯ функция парсинга XP с тремя показателями
-function parseXP(xpString) {
-    // Формат: "0/40000 30000" - 0(начало), 40000(конец), 30000(текущий прогресс пользователя)
-    const parts = xpString.trim().split(/\s+/);
+/* ===== КНОПКА УРОВНЕЙ ===== */
+.levels-button-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.levels-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 30px;
+    border: 2px solid #a855f7;
+    border-radius: 10px;
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+.levels-btn:hover {
+    background: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.8);
+    transform: translateY(-3px);
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО УРОВНЕЙ ===== */
+.levels-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.levels-modal-content {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 255, 255, 0.05));
+    border: 2px solid rgba(168, 85, 247, 0.5);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 900px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 50px rgba(168, 85, 247, 0.5);
+}
+
+.close-levels-modal {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #a855f7;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-levels-modal:hover {
+    color: #00ffff;
+    transform: scale(1.2);
+}
+
+.levels-modal-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+}
+
+.levels-list-side h2 {
+    color: #00ffff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.levels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.level-item {
+    padding: 12px 15px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 8px;
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.level-item:hover {
+    background: rgba(168, 85, 247, 0.2);
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+.level-item.active {
+    background: rgba(168, 85, 247, 0.3);
+    border-color: #a855f7;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    color: #ffffff;
+}
+
+.level-details {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.level-details-content h3 {
+    color: #00ffff;
+    margin-bottom: 15px;
+    font-size: 20px;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.level-details-content p {
+    color: #aaa;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.level-oil, .level-color, .level-teg {
+    color: #a855f7;
+}
+
+.level-advantages {
+    margin-top: 20px;
+}
+
+.level-advantages h4 {
+    color: #00ffff;
+    margin-bottom: 10px;
+}
+
+.level-advantages ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.level-advantages li {
+    color: #aaa;
+    padding: 8px;
+    margin: 5px 0;
+    background: rgba(168, 85, 247, 0.1);
+    border-left: 3px solid #a855f7;
+    padding-left: 12px;
+    border-radius: 4px;
+}
+
+/* ===== РАБОЧИЕ СЕКЦИЯ ===== */
+.workers-section {
+    background: rgba(168, 85, 247, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid rgba(168, 85, 247, 0.3);
+    margin-bottom: 60px;
+}
+
+.workers-section h2 {
+    color: #00ffff;
+    margin-bottom: 25px;
+    font-size: 24px;
+    text-shadow: 0 0 10px #00ffff;
+    text-align: center;
+}
+
+.workers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.worker-card {
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 2px solid;
+    position: relative;
+}
+
+.worker-card {
+    --card-color: #00ffff;
+    --card-bg: rgba(0, 255, 255, 0.2);
+    --card-bg-2: rgba(168, 85, 247, 0.1);
     
-    let xpValue = parts[0]; // "0/40000"
-    let xpProgress = parts[1] || null; // "30000" - текущий прогресс пользователя
-    
-    let isCompleted = false;
-    let xpStart = null;
-    let xpCurrent = null;
-    let xpMax = null;
-    let xpPercent = 0;
-    let stage = null;
-    
-    if (xpValue.includes('/')) {
-        // В процессе: "0/40000"
-        const progressParts = xpValue.split('/');
-        xpStart = parseXPValue(progressParts[0]);
-        xpMax = parseXPValue(progressParts[1]);
-        
-        // Если есть прогресс пользователя, используем его
-        if (xpProgress) {
-            const userProgress = parseXPValue(xpProgress);
-            xpCurrent = userProgress;
-            if (xpMax > 0) {
-                xpPercent = (userProgress / xpMax) * 100;
-                // Ограничиваем до 100%
-                if (xpPercent > 100) xpPercent = 100;
-            }
-            stage = null;
-        } else if (xpStart !== null && xpMax !== null && xpMax > 0) {
-            xpCurrent = xpStart;
-            xpPercent = (xpStart / xpMax) * 100;
-        }
-        
-        isCompleted = false;
-    } else {
-        // Пройден полностью
-        isCompleted = true;
-        xpPercent = 100;
-        stage = xpValue;
-    }
-    
-    return {
-        xpStart,
-        xpCurrent,
-        xpMax,
-        xpPercent,
-        isCompleted,
-        stage,
-        xpValue
-    };
+    background: linear-gradient(135deg, var(--card-bg), var(--card-bg-2));
+    border-color: var(--card-color);
 }
 
-function isVideoMedia(path) {
-    if (!path) return false;
-    const ext = path.split('.').pop().toLowerCase();
-    return ['mp4', 'webm', 'mov', 'avi', 'gif'].includes(ext);
+.worker-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
 }
 
-function createMediaElement(mediaPath, className = '', attributes = '') {
-    if (!mediaPath) return '';
-    
-    if (isVideoMedia(mediaPath)) {
-        return `<video class="${className}" autoplay muted loop playsinline ${attributes}>
-            <source src="./${mediaPath}">
-            Ваш браузер не поддерживает видео
-        </video>`;
-    } else {
-        return `<img src="./${mediaPath}" alt="media" class="${className}" ${attributes}>`;
-    }
+.avatar-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid;
+    border-color: var(--card-color);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-// Проверка, содержит ли строка только цифры
-function isNumeric(str) {
-    return /^\d+$/.test(str.trim());
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
 }
 
-// Получение изображения уровня
-function getRangerImage(classValue) {
-    if (!isNumeric(classValue)) return null;
-    
-    const num = parseInt(classValue);
-    if (num >= 1 && num <= 9) {
-        return `./Rangers/${num} LVL.jpg.png`;
-    } else if (num >= 10) {
-        return './Rangers/10+ LVL.jpg.png';
-    }
-    return null;
+.worker-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
-// Проверка является ли строка HEX цветом
-function isHexColor(str) {
-    return /^#[0-9A-F]{6}$/i.test(str);
+.worker-tag {
+    display: inline-block;
+    background: rgba(168, 85, 247, 0.3);
+    color: #00ffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    margin-bottom: 5px;
 }
 
-// Функция для создания RGB из HEX
-function hexToRgb(hex) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
+.worker-name {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: var(--card-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
-// Создание CSS переменных для кастомного цвета
-function createCustomColorStyle(hexColor) {
-    if (!isHexColor(hexColor)) return null;
-    
-    const rgb = hexToRgb(hexColor);
-    if (!rgb) return null;
-    
-    return {
-        hex: hexColor,
-        bg: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`,
-        bg2: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`
-    };
+.worker-name:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
 }
 
-function createWorkerCard(worker) {
-    const card = document.createElement('div');
-    card.className = 'worker-card';
-    card.dataset.workerId = worker.id;
-    
-    const xpData = parseXP(worker.xp);
-
-    // Создаём HTML для бейджей (только если они указаны)
-    let badgesHTML = '';
-    if (worker.badge) {
-        badgesHTML += createMediaElement(worker.badge, 'badge', 'title="Badge 1"');
-    }
-    if (worker.badge_2) {
-        badgesHTML += createMediaElement(worker.badge_2, 'badge', 'title="Badge 2"');
-    }
-    if (worker.badge_3) {
-        badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
-    }
-
-    // Определяем ссылку в зависимости от формата user
-    let profileLink = '';
-    let userDisplay = worker.name;
-    
-    if (worker.user.includes('@')) {
-        const telegramHandle = worker.user.startsWith('@') ? worker.user.substring(1) : worker.user;
-        profileLink = `https://t.me/${telegramHandle}`;
-    } 
-    else if (worker.user.includes('http')) {
-        profileLink = worker.user;
-    } 
-    else {
-        profileLink = `https://github.com/${worker.user}`;
-    }
-
-    // Применяем цвет из TXT файла (поддержка HEX и названий)
-    applyColorToCard(card, worker.color);
-
-    // Строим XP секцию с анимацией
-    let xpHTML = '';
-    if (xpData.isCompleted) {
-        xpHTML = `
-            <div class="xp-container">
-                <div class="xp-label">ЭТАП ПРОЙДЕН</div>
-                <div class="xp-bar">
-                    <div class="xp-fill xp-animate" style="width: 100%"></div>
-                    ${xpData.stage ? `<span class="xp-stage">${xpData.stage}</span>` : ''}
-                </div>
-            </div>
-        `;
-    } else {
-        xpHTML = `
-            <div class="xp-container">
-                <div class="xp-label">XP ДО СЛЕДУЮЩЕГО УРОВНЯ</div>
-                <div class="xp-bar-wrapper">
-                    <span class="xp-start">${xpData.xpStart}</span>
-                    <div class="xp-bar">
-                        <div class="xp-fill xp-animate" style="width: 0%" data-target="${xpData.xpPercent}">
-                            <span class="xp-progress-text">${xpData.xpCurrent}</span>
-                        </div>
-                    </div>
-                    <span class="xp-end">${xpData.xpMax}</span>
-                </div>
-            </div>
-        `;
-    }
-
-    // Класс с изображением или текстом
-    let classHTML = '';
-    const rangerImage = getRangerImage(worker.class);
-    
-    if (rangerImage) {
-        classHTML = `
-            <div class="worker-class-with-image">
-                <div class="class-image-container">
-                    <img src="${rangerImage}" alt="Level" class="class-image">
-                    <div class="class-level-text">${worker.class}</div>
-                </div>
-                <div class="worker-job">${worker.job}</div>
-            </div>
-        `;
-    } else {
-        // Логика для текстовых классов
-        const classDisplay = /^\d+$/.test(worker.class) ? `Уровень ${worker.class}` : `${worker.class}`;
-        classHTML = `<div class="worker-class">${classDisplay} • ${worker.job}</div>`;
-    }
-
-    // Тег перед именем
-    let tagHTML = '';
-    if (worker.teg) {
-        tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
-    }
-
-    // Аватар
-    let avatarHTML = `
-        <div class="avatar-container">
-            ${createMediaElement(worker.photo, 'avatar')}
-        </div>
-    `;
-
-    // Применяем кастомный цвет имени если есть
-    const nameStyle = worker.nameColor ? `style="color: ${worker.nameColor}"` : '';
-
-    card.innerHTML = `
-        ${avatarHTML}
-        
-        <div class="worker-info">
-            ${tagHTML}
-            <a href="${profileLink}" target="_blank" class="worker-name" ${nameStyle}>
-                ${userDisplay}
-            </a>
-            ${badgesHTML ? `<div class="badges-container">${badgesHTML}</div>` : ''}
-        </div>
-
-        ${classHTML}
-
-        ${xpHTML}
-    `;
-
-    // Запускаем Intersection Observer для видео
-    const videos = card.querySelectorAll('video');
-    videos.forEach(video => {
-        observeMediaElement(video);
-    });
-
-    // Запускаем анимацию XP когда карточка появляется на экране
-    const xpFill = card.querySelector('.xp-animate');
-    if (xpFill && xpFill.dataset.target) {
-        observeXPAnimation(xpFill);
-    }
-
-    return card;
+.badges-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-height: 58px;
+    align-items: center;
 }
 
-// Intersection Observer для анимации XP
-function observeXPAnimation(element) {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !element.classList.contains('animated')) {
-                const targetPercent = parseFloat(element.dataset.target);
-                element.style.width = targetPercent + '%';
-                element.classList.add('animated');
-            }
-        });
-    }, { threshold: 0.1 });
-
-    observer.observe(element);
+.badge {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: contain;
+    display: inline-block;
+    border: 2px solid var(--card-color);
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
 }
 
-// Intersection Observer для остановки видео за пределами экрана
-function observeMediaElement(mediaElement) {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                mediaElement.play().catch(() => {});
-            } else {
-                mediaElement.pause();
-            }
-        });
-    }, { threshold: 0.1 });
-
-    observer.observe(mediaElement);
+.badge:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px var(--card-color);
 }
 
-function renderWorkers(workers) {
-    const workersList = document.getElementById('workersList');
-    workersList.innerHTML = '';
-
-    if (workers.length === 0) {
-        workersList.innerHTML = '<p style="text-align: center; color: #a855f7; grid-column: 1/-1;">Нет данных о рабочих</p>';
-        return;
-    }
-
-    workers.forEach(worker => {
-        const card = createWorkerCard(worker);
-        workersList.appendChild(card);
-    });
+/* ===== КЛАСС С ИЗОБРАЖЕНИЕМ ===== */
+.worker-class-with-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
-// Применяем цвет к карточке через CSS переменные (поддержка HEX и названий)
-function applyColorToCard(card, colorValue) {
-    let color;
-    
-    // Проверяем, это HEX цвет или название
-    if (isHexColor(colorValue)) {
-        color = createCustomColorStyle(colorValue);
-    } else {
-        color = colorMap[colorValue] || colorMap.cyan;
-    }
-    
-    if (color) {
-        card.style.setProperty('--card-color', color.hex);
-        card.style.setProperty('--card-bg', color.bg);
-        card.style.setProperty('--card-bg-2', color.bg2);
-    }
+.class-image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+    border: 2px solid var(--card-color);
 }
 
-// ===== СНЕЖНАЯ АНИМАЦИЯ =====
-const canvas = document.getElementById('snowCanvas');
-const ctx = canvas.getContext('2d');
-
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-
-window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-});
-
-const snowflakes = [];
-const maxFlakes = 150;
-
-for (let i = 0; i < maxFlakes; i++) {
-    snowflakes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 3 + 1,
-        speed: Math.random() * 1 + 0.5,
-        opacity: Math.random() * 0.5 + 0.3
-    });
+.class-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-function drawSnow() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
-    ctx.beginPath();
+.class-level-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(168, 85, 247, 0.5);
+    z-index: 10;
+}
 
-    for (let f of snowflakes) {
-        ctx.moveTo(f.x, f.y);
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+.worker-job {
+    font-size: 12px;
+    color: var(--card-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* ===== КЛАСС ОБЫЧНЫЙ ===== */
+.worker-class {
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: var(--card-color);
+}
+
+/* ===== XP СИСТЕМА ===== */
+.xp-container {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.xp-label {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.xp-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.xp-start,
+.xp-end {
+    font-size: 12px;
+    color: var(--card-color);
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+.xp-start {
+    text-align: right;
+}
+
+.xp-end {
+    text-align: left;
+}
+
+.xp-bar {
+    flex: 1;
+    height: 28px;
+    background: #1a1a2e;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-color);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--card-color), #a855f7);
+    transition: width 0.8s ease-out;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.xp-progress-text {
+    position: absolute;
+    font-size: 11px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.xp-stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--card-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    border: 1px solid var(--card-color);
+    z-index: 10;
+}
+
+/* ===== КОНТАКТЫ ===== */
+.contact-section {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 60px;
+}
+
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 30px;
+    border: 2px solid;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.telegram-link {
+    border-color: #0088cc;
+    background: rgba(0, 136, 204, 0.1);
+    box-shadow: 0 0 20px rgba(0, 136, 204, 0.3);
+}
+
+.telegram-link:hover {
+    border-color: #00c8ff;
+    background: rgba(0, 136, 204, 0.3);
+    box-shadow: 0 0 40px rgba(0, 136, 204, 0.8);
+    transform: translateY(-3px);
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media (max-width: 768px) {
+    .project-title {
+        font-size: 24px;
     }
 
-    ctx.fill();
-    updateSnow();
-}
-
-function updateSnow() {
-    for (let f of snowflakes) {
-        f.y += f.speed;
-        f.x += Math.sin(f.y / height * Math.PI * 2) * 0.5;
-
-        if (f.y > height) f.y = 0;
-        if (f.x > width) f.x = 0;
-        if (f.x < 0) f.x = width;
+    .workers-list {
+        grid-template-columns: 1fr;
     }
 
-    requestAnimationFrame(drawSnow);
+    .avatar-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .worker-name {
+        font-size: 16px;
+    }
+
+    .badge {
+        width: 42px;
+        height: 42px;
+        padding: 3px;
+    }
+
+    .badges-container {
+        min-height: 50px;
+        gap: 10px;
+    }
+
+    .xp-start,
+    .xp-end {
+        font-size: 11px;
+        min-width: 35px;
+    }
+
+    .xp-bar {
+        height: 24px;
+    }
+
+    .xp-progress-text {
+        font-size: 10px;
+    }
+
+    .xp-stage {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+
+    .levels-modal-container {
+        grid-template-columns: 1fr;
+    }
+
+    .level-details {
+        max-height: 400px;
+    }
+
+    .levels-modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .class-image-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .class-level-text {
+        font-size: 28px;
+    }
 }
-
-drawSnow();
-
-// Загружаем при загрузке страницы
-window.addEventListener('load', () => {
-    loadWorkers();
-    loadLevels();
-});
