@@ -444,7 +444,7 @@ html, body {
     100% { left: 100%; }
 }
 
-/* УРОВЕНЬ 3 - Пульсиру��щее сияние */
+/* УРОВЕНЬ 3 - Пульсирующее сияние */
 .badge-3 {
     position: relative;
     animation: pulse-glow-3 2s ease-in-out infinite;
@@ -834,10 +834,14 @@ html, body {
     font-size: 11px;
     font-weight: bold;
     color: #ffffff;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    text-shadow: none;
     white-space: nowrap;
     left: 50%;
     transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2px 6px;
+    border-radius: 3px;
+    z-index: 20;
 }
 
 .xp-stage {
@@ -928,4 +932,56 @@ html, body {
 
     .xp-start,
     .xp-end {
-        font-size: 
+        font-size: 11px;
+        min-width: 35px;
+    }
+
+    .xp-bar {
+        height: 24px;
+    }
+
+    .xp-progress-text {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+
+    .xp-stage {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+
+    .levels-modal-container {
+        grid-template-columns: 1fr;
+    }
+
+    .level-details {
+        max-height: 400px;
+    }
+
+    .levels-modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .class-image-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .class-level-text {
+        font-size: 28px;
+    }
+}
+
+/* ===== ОТКЛЮЧЕНИЕ АНИМАЦИЙ ДЛЯ ЭКОНОМИИ БАТАРЕИ ===== */
+@media (prefers-reduced-motion: reduce) {
+    .badge-1, .badge-2, .badge-3, .badge-4, .badge-5,
+    .badge-6, .badge-7, .badge-8, .badge-9, .badge-10 {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .badge-1:hover {
+        box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    }
+}
