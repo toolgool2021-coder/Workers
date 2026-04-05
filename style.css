@@ -212,6 +212,50 @@ html, body {
     color: #a855f7;
 }
 
+/* ✅ НОВОЕ: Бейджи для outline и range в модальном окне */
+.level-outline-range-badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.level-outline-badge,
+.level-range-badge {
+    display: inline-block;
+    background: rgba(0, 255, 255, 0.15);
+    color: #00ffff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    word-break: break-word;
+}
+
+.level-outline-badge {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+    border-color: rgba(168, 85, 247, 0.4);
+}
+
+.level-range-badge {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+.level-outline-badge:hover,
+.level-range-badge:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
 .level-advantages {
     margin-top: 20px;
 }
@@ -736,5 +780,16 @@ html, body {
     .range-badge {
         padding: 2px 6px;
         font-size: 9px;
+    }
+
+    .level-outline-range-badges {
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+
+    .level-outline-badge,
+    .level-range-badge {
+        padding: 4px 8px;
+        font-size: 10px;
     }
 }
