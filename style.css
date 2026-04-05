@@ -727,9 +727,9 @@ html, body {
     width: 120px;
     height: 120px;
     border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+    overflow: visible;
     border: 2px solid var(--card-color);
+    animation: ranger-pulse 1.5s ease-in-out infinite;
 }
 
 .class-image {
@@ -737,6 +737,7 @@ html, body {
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 6px;
 }
 
 .class-level-text {
@@ -757,6 +758,250 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: bold;
+}
+
+/* ===== ЭФФЕКТЫ RANGERS (УРОВНИ) ===== */
+
+/* Ранг 1 */
+.worker-card[data-worker-id="1"] .class-image-container,
+.worker-card[data-worker-id="2"] .class-image-container {
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.6),
+                0 0 25px rgba(0, 255, 255, 0.3);
+}
+
+/* Ранг 2 */
+.worker-card[data-worker-id="3"] .class-image-container {
+    box-shadow: 0 0 15px rgba(100, 200, 255, 0.6),
+                0 0 30px rgba(100, 200, 255, 0.3);
+    animation: ranger-shimmer 3s infinite;
+}
+
+.worker-card[data-worker-id="3"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    animation: shine-2 3s infinite;
+    border-radius: 6px;
+}
+
+/* Ранг 3 */
+.worker-card[data-worker-id="4"] .class-image-container {
+    animation: ranger-pulse-glow 2s ease-in-out infinite;
+}
+
+/* Ранг 4 */
+.worker-card[data-worker-id="5"] .class-image-container {
+    background: linear-gradient(135deg,
+        #ffd700 0%,
+        #ffed4e 25%,
+        #ffd700 50%,
+        #ffed4e 75%,
+        #ffd700 100%) !important;
+    background-size: 200% 200%;
+    animation: metallic-flow-ranger 4s linear infinite;
+    border-radius: 8px;
+}
+
+/* Ранг 5 */
+.worker-card[data-worker-id="6"] .class-image-container {
+    animation: ranger-flicker 3s ease-in-out infinite;
+}
+
+/* Ранг 6 */
+.worker-card[data-worker-id="7"] .class-image-container {
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 165, 0, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(255, 100, 0, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.2) 0%, transparent 40%) !important;
+    background-size: 200% 200%;
+    animation: particle-drift-ranger 5s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+/* Ранг 7 */
+.worker-card[data-worker-id="8"] .class-image-container {
+    animation: ranger-hue 4s linear infinite;
+}
+
+/* Ранг 8 */
+.worker-card[data-worker-id="9"] .class-image-container {
+    animation: ranger-combo 2.5s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="9"] .class-image-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        transparent 70%);
+    animation: sparkle-orbit-ranger 3s linear infinite;
+}
+
+.worker-card[data-worker-id="9"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.5), 
+        transparent);
+    animation: shimmer-sweep-ranger 2s infinite;
+    border-radius: 6px;
+}
+
+/* Ранг 9 */
+.worker-card[data-worker-id="10"] .class-image-container {
+    animation: ranger-aura 3s ease-in-out infinite;
+}
+
+/* Ранг 10 */
+.worker-card[data-worker-id="11"] .class-image-container {
+    animation: ranger-legendary 1.5s ease-in-out infinite;
+}
+
+/* ===== АНИМАЦИИ RANGERS ===== */
+
+@keyframes ranger-pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+    }
+}
+
+@keyframes ranger-shimmer {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(100, 200, 255, 0.6),
+                    0 0 30px rgba(100, 200, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(100, 200, 255, 0.9),
+                    0 0 50px rgba(100, 200, 255, 0.5);
+    }
+}
+
+@keyframes ranger-pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 8px rgba(0, 255, 136, 0.4),
+                    0 0 15px rgba(0, 255, 136, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.8),
+                    0 0 30px rgba(0, 255, 136, 0.4);
+    }
+}
+
+@keyframes metallic-flow-ranger {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+@keyframes ranger-flicker {
+    0%, 100% {
+        filter: brightness(1);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+    50% {
+        filter: brightness(1.15);
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+    }
+}
+
+@keyframes particle-drift-ranger {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+@keyframes ranger-hue {
+    0% {
+        filter: hue-rotate(0deg);
+        box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
+    }
+    25% {
+        filter: hue-rotate(60deg);
+        box-shadow: 0 0 15px rgba(255, 100, 200, 0.6);
+    }
+    50% {
+        filter: hue-rotate(120deg);
+        box-shadow: 0 0 15px rgba(100, 200, 255, 0.6);
+    }
+    75% {
+        filter: hue-rotate(180deg);
+        box-shadow: 0 0 15px rgba(255, 150, 100, 0.6);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+        box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
+    }
+}
+
+@keyframes ranger-combo {
+    0%, 100% {
+        box-shadow: 0 0 12px rgba(255, 100, 200, 0.5),
+                    0 0 25px rgba(100, 200, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 100, 200, 0.8),
+                    0 0 40px rgba(100, 200, 255, 0.5);
+    }
+}
+
+@keyframes sparkle-orbit-ranger {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer-sweep-ranger {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes ranger-aura {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(50, 20, 100, 0.6))
+                drop-shadow(0 0 12px rgba(0, 100, 200, 0.3));
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3),
+                    0 0 20px rgba(168, 85, 247, 0.5);
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(100, 50, 200, 0.8))
+                drop-shadow(0 0 25px rgba(0, 150, 255, 0.5));
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4),
+                    0 0 35px rgba(168, 85, 247, 0.8);
+    }
+}
+
+@keyframes ranger-legendary {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6),
+                    0 0 30px rgba(255, 165, 0, 0.3),
+                    0 0 50px rgba(255, 100, 0, 0.1),
+                    inset 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.9),
+                    0 0 50px rgba(255, 165, 0, 0.6),
+                    0 0 80px rgba(255, 100, 0, 0.3),
+                    inset 0 0 15px rgba(255, 255, 255, 0.4);
+    }
 }
 
 /* ===== КЛАСС ОБЫЧНЫЙ ===== */
