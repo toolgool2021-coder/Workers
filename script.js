@@ -32,6 +32,9 @@ function parseLevels(text) {
     const blocks = text.split('{').filter(block => block.trim());
     
     blocks.forEach(block => {
+        // Удаляем закрывающую скобку в конце
+        block = block.replace(/}\s*$/, '').trim();
+        
         const lines = block.split('\n').filter(line => line.trim());
         const level = {};
         
