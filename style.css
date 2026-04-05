@@ -234,6 +234,39 @@ html, body {
     border-left: 3px solid #a855f7;
     padding-left: 12px;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.level-advantages li.new-advantage {
+    background: rgba(0, 255, 136, 0.2);
+    border-left-color: #00ff88;
+    color: #00ff88;
+}
+
+.level-advantages li.removed-advantage {
+    background: rgba(255, 69, 69, 0.1);
+    border-left-color: #ff4545;
+    color: #888;
+}
+
+.level-advantages li.removed-advantage span {
+    text-decoration: line-through;
+}
+
+.new-badge {
+    display: inline-block;
+    background: rgba(0, 255, 136, 0.3);
+    color: #00ff88;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    border: 1px solid #00ff88;
+    margin-left: 8px;
+    white-space: nowrap;
 }
 
 /* ===== РАБОЧИЕ СЕКЦИЯ ===== */
@@ -369,6 +402,315 @@ html, body {
 .badge:hover {
     transform: scale(1.2);
     box-shadow: 0 0 20px var(--card-color);
+}
+
+/* ===== СИСТЕМА РАНГОВЫХ БЕЙДЖЕЙ ===== */
+
+/* УРОВЕНЬ 1 - Базовый */
+.badge-1 {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.badge-1:hover {
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.6),
+                0 0 25px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* УРОВЕНЬ 2 - Светящийся блеск */
+.badge-2 {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.badge-2::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    animation: shine-2 3s infinite;
+}
+
+@keyframes shine-2 {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+/* УРОВЕНЬ 3 - Пульсиру��щее сияние */
+.badge-3 {
+    position: relative;
+    animation: pulse-glow-3 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow-3 {
+    0%, 100% {
+        box-shadow: 0 0 8px rgba(0, 255, 136, 0.4),
+                    0 0 15px rgba(0, 255, 136, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.8),
+                    0 0 30px rgba(0, 255, 136, 0.4);
+    }
+}
+
+/* УРОВЕНЬ 4 - Металлический градиент */
+.badge-4 {
+    position: relative;
+    background: linear-gradient(135deg,
+        #ffd700 0%,
+        #ffed4e 25%,
+        #ffd700 50%,
+        #ffed4e 75%,
+        #ffd700 100%) !important;
+    background-size: 200% 200%;
+    animation: metallic-flow-4 4s linear infinite;
+}
+
+@keyframes metallic-flow-4 {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* УРОВЕНЬ 5 - Мерцание яркости */
+.badge-5 {
+    position: relative;
+    animation: subtle-flicker-5 3s ease-in-out infinite;
+}
+
+@keyframes subtle-flicker-5 {
+    0%, 100% {
+        filter: brightness(1);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+    50% {
+        filter: brightness(1.15);
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+    }
+}
+
+/* УРОВЕНЬ 6 - Эффект частиц (радиальный градиент) */
+.badge-6 {
+    position: relative;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 165, 0, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(255, 100, 0, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.2) 0%, transparent 40%) !important;
+    background-size: 200% 200%;
+    animation: particle-drift-6 5s ease-in-out infinite;
+}
+
+@keyframes particle-drift-6 {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+/* УРОВЕНЬ 7 - Энергетический эффект (цветовой сдвиг) */
+.badge-7 {
+    position: relative;
+    animation: energy-hue-7 4s linear infinite;
+}
+
+@keyframes energy-hue-7 {
+    0% {
+        filter: hue-rotate(0deg);
+        box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
+    }
+    25% {
+        filter: hue-rotate(60deg);
+        box-shadow: 0 0 15px rgba(255, 100, 200, 0.6);
+    }
+    50% {
+        filter: hue-rotate(120deg);
+        box-shadow: 0 0 15px rgba(100, 200, 255, 0.6);
+    }
+    75% {
+        filter: hue-rotate(180deg);
+        box-shadow: 0 0 15px rgba(255, 150, 100, 0.6);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+        box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
+    }
+}
+
+/* УРОВЕНЬ 8 - Комбо: Сияние + Мерцание */
+.badge-8 {
+    position: relative;
+    overflow: hidden;
+    animation: combo-glow-shimmer-8 2.5s ease-in-out infinite;
+}
+
+.badge-8::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        transparent 70%);
+    animation: sparkle-orbit-8 3s linear infinite;
+}
+
+.badge-8::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.5), 
+        transparent);
+    animation: shimmer-sweep-8 2s infinite;
+}
+
+@keyframes combo-glow-shimmer-8 {
+    0%, 100% {
+        box-shadow: 0 0 12px rgba(255, 100, 200, 0.5),
+                    0 0 25px rgba(100, 200, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 100, 200, 0.8),
+                    0 0 40px rgba(100, 200, 255, 0.5);
+    }
+}
+
+@keyframes sparkle-orbit-8 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer-sweep-8 {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* УРОВЕНЬ 9 - Тёмная аура */
+.badge-9 {
+    position: relative;
+    animation: dark-aura-9 3s ease-in-out infinite;
+}
+
+@keyframes dark-aura-9 {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(50, 20, 100, 0.6))
+                drop-shadow(0 0 12px rgba(0, 100, 200, 0.3));
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3),
+                    0 0 20px rgba(168, 85, 247, 0.5);
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(100, 50, 200, 0.8))
+                drop-shadow(0 0 25px rgba(0, 150, 255, 0.5));
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4),
+                    0 0 35px rgba(168, 85, 247, 0.8);
+    }
+}
+
+/* УРОВЕНЬ 10 - ЛЕГЕНДАРНЫЙ */
+.badge-10 {
+    position: relative;
+    overflow: visible;
+    animation: legendary-pulse-10 1.5s ease-in-out infinite;
+    will-change: transform, box-shadow;
+}
+
+@keyframes legendary-pulse-10 {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6),
+                    0 0 30px rgba(255, 165, 0, 0.3),
+                    0 0 50px rgba(255, 100, 0, 0.1),
+                    inset 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.9),
+                    0 0 50px rgba(255, 165, 0, 0.6),
+                    0 0 80px rgba(255, 100, 0, 0.3),
+                    inset 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+}
+
+/* ===== ЧАСТИЦЫ ДЛЯ УРОВНЯ 10 ===== */
+.badge-10-particle {
+    position: absolute;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+.particle {
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.8), rgba(255, 165, 0, 0.3));
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes particle-float-1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-40px, -40px) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particle-float-2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(40px, -40px) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particle-float-3 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(40px, 40px) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particle-float-4 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-40px, 40px) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particle-float-5 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(0, -50px) scale(0);
+        opacity: 0;
+    }
 }
 
 /* ===== КЛАСС С ИЗОБРАЖЕНИЕМ ===== */
@@ -554,7 +896,7 @@ html, body {
     transform: translateY(-3px);
 }
 
-/* ===== АДАПТИВНОСТЬ ===== */
+/* ===== ОПТИМИЗАЦИЯ ДЛЯ МОБИЛЬНЫХ ===== */
 @media (max-width: 768px) {
     .project-title {
         font-size: 24px;
@@ -586,42 +928,4 @@ html, body {
 
     .xp-start,
     .xp-end {
-        font-size: 11px;
-        min-width: 35px;
-    }
-
-    .xp-bar {
-        height: 24px;
-    }
-
-    .xp-progress-text {
-        font-size: 10px;
-    }
-
-    .xp-stage {
-        font-size: 10px;
-        padding: 1px 4px;
-    }
-
-    .levels-modal-container {
-        grid-template-columns: 1fr;
-    }
-
-    .level-details {
-        max-height: 400px;
-    }
-
-    .levels-modal-content {
-        width: 95%;
-        padding: 20px;
-    }
-
-    .class-image-container {
-        width: 100px;
-        height: 100px;
-    }
-
-    .class-level-text {
-        font-size: 28px;
-    }
-}
+        font-size: 
