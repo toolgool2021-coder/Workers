@@ -1,17 +1,69 @@
-{Name:Новичек
-oil:0 - 40000
-color:green
-Teg:#NWC
-advantages:1 масло / 7 муни,1 сайт }
+{
+  name: Новичок
+  Rang:
+  outline:
+  oil: 0–40 000
+  color: green
+  teg: #NWC
+  advantages:1 🧈 / 5 муни,1 Макс.отдых
+}
 
-{Name:Ученик
-oil:40000-80000
-Color:blue
-teg:#APP
-advantages:1 масло / 8 муни,1 бейджи,1 сайт }
+{
+  name: Ученик
+  Rang:
+  outline:
+  oil: 40 001–80 000
+  color: blue
+  teg: #APP
+  advantages:1 🧈 / 6 муни,2 Макс.отдых,1 бейджи
+}
 
-{name:
-oil:
-color:
-teg:
-advantages:
+{
+  name: Рабочий
+  Rang:
+  outline:
+  oil: 80 001–120 000
+  color: yellow
+  teg: #WRK
+  advantages:1 🧈 / 7 муни,2 Макс.отдых,1 бейджи,come soon...
+}
+
+{
+  name: Мастер
+  Rang:
+  outline:
+  oil: 120 001–160 000
+  color: Orange
+  teg: #MST
+  advantages:1 🧈 / 8 муни,3 Макс.отдых,2 бейджи,come soon...
+}
+
+{
+  name: Профи
+  Rang:
+  outline:
+  oil: 160 001–200 000
+  color: Violet
+  teg: #PRO
+  advantages:1 🧈 / 9 муни,3 Макс.отдых,2 бейджи,come soon...
+}
+
+{
+  name: Элитный
+  Rang:
+  outline:
+  oil: 200 001–300 000
+  color: red
+  teg: #ELT
+  advantages:1 🧈 / 10 муни,4 Макс.отдых,3 бейджи,come soon...
+}
+
+{
+  name: Легенда
+  Rang:
+  outline:
+  oil: 300 001+
+  color: legend
+  teg: #LGD
+  advantages:1 🧈 / 11 муни,5 Макс.отдых,3 бейджи,come soon...
+}
