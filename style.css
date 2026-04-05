@@ -659,6 +659,7 @@ html, body {
 }
 
 .xp-fill {
+    position: relative;
     height: 100%;
     background: linear-gradient(90deg, var(--card-color), #a855f7);
     transition: width 0.8s ease-out;
@@ -666,7 +667,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    overflow: hidden;
 }
 
 .xp-progress-text {
@@ -698,6 +699,241 @@ html, body {
     white-space: nowrap;
     border: 1px solid var(--card-color);
     z-index: 10;
+}
+
+/* ===== СИСТЕМА ЭФФЕКТОВ ДЛЯ RANGE (УРОВНИ) ===== */
+
+/* Базовые стили для всех range */
+.xp-fill {
+    position: relative;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+/* ===== УРОВЕНЬ 1 - Статичный ===== */
+.worker-card[data-worker-id="1"] .xp-fill,
+.worker-card[data-worker-id="2"] .xp-fill {
+    background: linear-gradient(90deg, #00ffff, #a855f7) !important;
+}
+
+/* ===== УРОВЕНЬ 3 - Блик ===== */
+.worker-card[data-worker-id="3"] .xp-fill {
+    background: linear-gradient(90deg, #00ffff, #a855f7) !important;
+}
+
+.worker-card[data-worker-id="3"] .xp-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    animation: range-shine-2 3s infinite;
+    border-radius: inherit;
+}
+
+@keyframes range-shine-2 {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== УРОВЕНЬ 4 - Мягкое сияние ===== */
+.worker-card[data-worker-id="4"] .xp-fill {
+    background: linear-gradient(90deg, #00ff88, #00ffcc) !important;
+    box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.4);
+    animation: range-glow-3 2s ease-in-out infinite;
+}
+
+@keyframes range-glow-3 {
+    0%, 100% {
+        box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.4);
+    }
+    50% {
+        box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.6);
+    }
+}
+
+/* ===== УРОВЕНЬ 5 - Движущийся градиент ===== */
+.worker-card[data-worker-id="5"] .xp-fill {
+    background: linear-gradient(90deg, 
+        #ffd700 0%,
+        #ffed4e 25%,
+        #ffd700 50%,
+        #ffed4e 75%,
+        #ffd700 100%) !important;
+    background-size: 200% 100%;
+    animation: range-flow-4 4s linear infinite;
+}
+
+@keyframes range-flow-4 {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* ===== УРОВЕНЬ 6 - Мерцание яркости ===== */
+.worker-card[data-worker-id="6"] .xp-fill {
+    background: linear-gradient(90deg, #a855f7, #d946ef) !important;
+    animation: range-flicker-5 3s ease-in-out infinite;
+}
+
+@keyframes range-flicker-5 {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.2);
+    }
+}
+
+/* ===== УРОВЕНЬ 7 - Частицы внутри ===== */
+.worker-card[data-worker-id="7"] .xp-fill {
+    background: linear-gradient(90deg, #ff8c00, #ff6b35) !important;
+}
+
+.worker-card[data-worker-id="7"] .xp-fill::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
+    background-size: 15px 15px, 23px 23px;
+    background-position: 0 0, 8px 8px;
+    animation: range-particles-6 6s linear infinite;
+    border-radius: inherit;
+}
+
+@keyframes range-particles-6 {
+    0% { background-position: 0 0, 8px 8px; }
+    100% { background-position: 15px 0, 23px 8px; }
+}
+
+/* ===== УРОВЕНЬ 8 - Энергетический эффект ===== */
+.worker-card[data-worker-id="8"] .xp-fill {
+    background: linear-gradient(90deg, #1e90ff, #00bfff, #1e90ff) !important;
+    animation: range-hue-7 4s linear infinite;
+}
+
+@keyframes range-hue-7 {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    50% {
+        filter: hue-rotate(30deg);
+    }
+    100% {
+        filter: hue-rotate(0deg);
+    }
+}
+
+/* ===== УРОВЕНЬ 9 - Комбо: Сияние + Свечение ===== */
+.worker-card[data-worker-id="9"] .xp-fill {
+    background: linear-gradient(90deg, #ff69b4, #ff1493) !important;
+    box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.5);
+    animation: range-combo-8 2.5s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="9"] .xp-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    animation: range-shimmer-8 2s infinite;
+    border-radius: inherit;
+}
+
+@keyframes range-combo-8 {
+    0%, 100% {
+        box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.5);
+    }
+    50% {
+        box-shadow: inset 0 0 15px rgba(255, 105, 180, 0.7);
+    }
+}
+
+@keyframes range-shimmer-8 {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== УРОВЕНЬ 10 - Темная аура ===== */
+.worker-card[data-worker-id="10"] .xp-fill {
+    background: linear-gradient(90deg, #667eea, #764ba2) !important;
+    box-shadow: inset 0 0 12px rgba(50, 20, 100, 0.6);
+    animation: range-aura-9 3s ease-in-out infinite;
+}
+
+@keyframes range-aura-9 {
+    0%, 100% {
+        box-shadow: inset 0 0 12px rgba(50, 20, 100, 0.6),
+                    inset 0 0 8px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        box-shadow: inset 0 0 20px rgba(50, 20, 100, 0.8),
+                    inset 0 0 12px rgba(102, 126, 234, 0.5);
+    }
+}
+
+/* ===== УРОВЕНЬ 11 - ПРЕМИУМ ===== */
+.worker-card[data-worker-id="11"] .xp-fill {
+    background: linear-gradient(90deg, 
+        #ffd700 0%,
+        #ffed4e 25%,
+        #ff8c00 50%,
+        #ffed4e 75%,
+        #ffd700 100%) !important;
+    background-size: 200% 100%;
+    box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.5);
+    animation: range-legendary-10 2s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="11"] .xp-fill::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    animation: range-shine-10 1.5s infinite;
+    border-radius: inherit;
+}
+
+.worker-card[data-worker-id="11"] .xp-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: range-sparkles-10 4s linear infinite;
+    border-radius: inherit;
+    opacity: 0.6;
+}
+
+@keyframes range-legendary-10 {
+    0%, 100% {
+        background-position: 0% 0%;
+        box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        background-position: 200% 0%;
+        box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.8);
+    }
+}
+
+@keyframes range-shine-10 {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes range-sparkles-10 {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 0; }
 }
 
 /* ===== КОНТАКТЫ ===== */
@@ -816,7 +1052,8 @@ html, body {
 /* ===== ОТКЛЮЧЕНИЕ АНИМАЦИЙ ДЛЯ ЭКОНОМИИ БАТАРЕИ ===== */
 @media (prefers-reduced-motion: reduce) {
     .badge-1, .badge-2, .badge-3, .badge-4, .badge-5,
-    .badge-6, .badge-7, .badge-8, .badge-9, .badge-10 {
+    .badge-6, .badge-7, .badge-8, .badge-9, .badge-10,
+    .xp-fill {
         animation: none !important;
         transition: none !important;
     }
