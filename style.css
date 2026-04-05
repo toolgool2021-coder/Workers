@@ -457,148 +457,6 @@ html, body {
     font-weight: bold;
 }
 
-/* ===== ЭФФЕКТЫ RANGERS (УРОВНИ) - ЛОКАЛИЗОВАННЫЕ ===== */
-
-/* Ранг 1-2 - Базовый голубой блик */
-.worker-card[data-worker-id="1"] .class-image-container,
-.worker-card[data-worker-id="2"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.3);
-}
-
-/* Ранг 3 - Синий блеск */
-.worker-card[data-worker-id="3"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(100, 200, 255, 0.4);
-    animation: ranger-shine-3 3s infinite;
-}
-
-/* Ранг 4 - Зеленый пульс */
-.worker-card[data-worker-id="4"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.3);
-    animation: ranger-pulse-4 2s ease-in-out infinite;
-}
-
-/* Ранг 5 - Золотой металлик */
-.worker-card[data-worker-id="5"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
-    animation: ranger-gold-5 4s linear infinite;
-}
-
-/* Ранг 6 - Оранжевое мерцание */
-.worker-card[data-worker-id="6"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(255, 140, 0, 0.3);
-    animation: ranger-flicker-6 3s ease-in-out infinite;
-}
-
-/* Ранг 7 - Фиолетовая аура */
-.worker-card[data-worker-id="7"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.4);
-    animation: ranger-purple-7 4s linear infinite;
-}
-
-/* Ранг 8 - Розовое комбо */
-.worker-card[data-worker-id="8"] .class-image-container {
-    box-shadow: inset 0 0 15px rgba(255, 105, 180, 0.3);
-    animation: ranger-pink-8 2.5s ease-in-out infinite;
-}
-
-/* Ранг 9 - Темная синяя аура */
-.worker-card[data-worker-id="9"] .class-image-container {
-    box-shadow: inset 0 0 20px rgba(30, 144, 255, 0.4);
-    animation: ranger-dark-9 3s ease-in-out infinite;
-}
-
-/* Ранг 10 - Легендарное золото */
-.worker-card[data-worker-id="10"] .class-image-container {
-    box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.5);
-    animation: ranger-legendary-10 1.5s ease-in-out infinite;
-}
-
-/* ===== АНИМАЦИИ RANGERS (ЛОКАЛИЗОВАННЫЕ) ===== */
-
-@keyframes ranger-shine-3 {
-    0%, 100% {
-        box-shadow: inset 0 0 15px rgba(100, 200, 255, 0.4);
-    }
-    50% {
-        box-shadow: inset 0 0 25px rgba(100, 200, 255, 0.6);
-    }
-}
-
-@keyframes ranger-pulse-4 {
-    0%, 100% {
-        box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.3);
-    }
-    50% {
-        box-shadow: inset 0 0 25px rgba(0, 255, 136, 0.5);
-    }
-}
-
-@keyframes ranger-gold-5 {
-    0% {
-        box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
-    }
-    50% {
-        box-shadow: inset 0 0 20px rgba(255, 165, 0, 0.5);
-    }
-    100% {
-        box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
-    }
-}
-
-@keyframes ranger-flicker-6 {
-    0%, 100% {
-        box-shadow: inset 0 0 15px rgba(255, 140, 0, 0.3);
-    }
-    50% {
-        box-shadow: inset 0 0 20px rgba(255, 140, 0, 0.5);
-    }
-}
-
-@keyframes ranger-purple-7 {
-    0% {
-        box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.4);
-    }
-    25% {
-        box-shadow: inset 0 0 15px rgba(200, 100, 255, 0.4);
-    }
-    50% {
-        box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.5);
-    }
-    75% {
-        box-shadow: inset 0 0 15px rgba(200, 100, 255, 0.4);
-    }
-    100% {
-        box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.4);
-    }
-}
-
-@keyframes ranger-pink-8 {
-    0%, 100% {
-        box-shadow: inset 0 0 15px rgba(255, 105, 180, 0.3);
-    }
-    50% {
-        box-shadow: inset 0 0 25px rgba(255, 105, 180, 0.5);
-    }
-}
-
-@keyframes ranger-dark-9 {
-    0%, 100% {
-        box-shadow: inset 0 0 20px rgba(30, 144, 255, 0.4);
-    }
-    50% {
-        box-shadow: inset 0 0 30px rgba(30, 144, 255, 0.6);
-    }
-}
-
-@keyframes ranger-legendary-10 {
-    0%, 100% {
-        box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.5);
-    }
-    50% {
-        box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.7);
-    }
-}
-
 /* ===== КЛАСС ОБЫЧНЫЙ ===== */
 .worker-class {
     font-size: 14px;
@@ -701,16 +559,22 @@ html, body {
     z-index: 10;
 }
 
-/* ===== СИСТЕМА ЭФФЕКТОВ ДЛЯ RANGE (УРОВНИ) ===== */
+/* ===== СИСТЕМА ЭФФЕКТОВ ДЛЯ RANGE (PROGRESS BAR) ===== */
 
-/* Базовые стили для всех range */
+/* Базовое правило для всех range */
+.xp-bar {
+    position: relative;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
 .xp-fill {
     position: relative;
     overflow: hidden;
     border-radius: inherit;
 }
 
-/* ===== УРОВЕНЬ 1 - Статичный ===== */
+/* ===== УРОВЕНЬ 1 - Статичный (без анимации) ===== */
 .worker-card[data-worker-id="1"] .xp-fill,
 .worker-card[data-worker-id="2"] .xp-fill {
     background: linear-gradient(90deg, #00ffff, #a855f7) !important;
@@ -729,11 +593,11 @@ html, body {
         transparent, 
         rgba(255, 255, 255, 0.4), 
         transparent);
-    animation: range-shine-2 3s infinite;
+    animation: shine-effect 3s infinite;
     border-radius: inherit;
 }
 
-@keyframes range-shine-2 {
+@keyframes shine-effect {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
@@ -742,10 +606,10 @@ html, body {
 .worker-card[data-worker-id="4"] .xp-fill {
     background: linear-gradient(90deg, #00ff88, #00ffcc) !important;
     box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.4);
-    animation: range-glow-3 2s ease-in-out infinite;
+    animation: glow-pulse 2s ease-in-out infinite;
 }
 
-@keyframes range-glow-3 {
+@keyframes glow-pulse {
     0%, 100% {
         box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.4);
     }
@@ -763,10 +627,10 @@ html, body {
         #ffed4e 75%,
         #ffd700 100%) !important;
     background-size: 200% 100%;
-    animation: range-flow-4 4s linear infinite;
+    animation: gradient-flow 4s linear infinite;
 }
 
-@keyframes range-flow-4 {
+@keyframes gradient-flow {
     0% { background-position: 0% 0%; }
     100% { background-position: 200% 0%; }
 }
@@ -774,10 +638,10 @@ html, body {
 /* ===== УРОВЕНЬ 6 - Мерцание яркости ===== */
 .worker-card[data-worker-id="6"] .xp-fill {
     background: linear-gradient(90deg, #a855f7, #d946ef) !important;
-    animation: range-flicker-5 3s ease-in-out infinite;
+    animation: brightness-flicker 3s ease-in-out infinite;
 }
 
-@keyframes range-flicker-5 {
+@keyframes brightness-flicker {
     0%, 100% {
         filter: brightness(1);
     }
@@ -800,11 +664,11 @@ html, body {
         radial-gradient(circle, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
     background-size: 15px 15px, 23px 23px;
     background-position: 0 0, 8px 8px;
-    animation: range-particles-6 6s linear infinite;
+    animation: particles-flow 6s linear infinite;
     border-radius: inherit;
 }
 
-@keyframes range-particles-6 {
+@keyframes particles-flow {
     0% { background-position: 0 0, 8px 8px; }
     100% { background-position: 15px 0, 23px 8px; }
 }
@@ -812,10 +676,10 @@ html, body {
 /* ===== УРОВЕНЬ 8 - Энергетический эффект ===== */
 .worker-card[data-worker-id="8"] .xp-fill {
     background: linear-gradient(90deg, #1e90ff, #00bfff, #1e90ff) !important;
-    animation: range-hue-7 4s linear infinite;
+    animation: energy-hue 4s linear infinite;
 }
 
-@keyframes range-hue-7 {
+@keyframes energy-hue {
     0% {
         filter: hue-rotate(0deg);
     }
@@ -831,7 +695,7 @@ html, body {
 .worker-card[data-worker-id="9"] .xp-fill {
     background: linear-gradient(90deg, #ff69b4, #ff1493) !important;
     box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.5);
-    animation: range-combo-8 2.5s ease-in-out infinite;
+    animation: combo-glow 2.5s ease-in-out infinite;
 }
 
 .worker-card[data-worker-id="9"] .xp-fill::after {
@@ -842,11 +706,11 @@ html, body {
         transparent, 
         rgba(255, 255, 255, 0.3), 
         transparent);
-    animation: range-shimmer-8 2s infinite;
+    animation: shine-effect 2s infinite;
     border-radius: inherit;
 }
 
-@keyframes range-combo-8 {
+@keyframes combo-glow {
     0%, 100% {
         box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.5);
     }
@@ -855,19 +719,14 @@ html, body {
     }
 }
 
-@keyframes range-shimmer-8 {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
 /* ===== УРОВЕНЬ 10 - Темная аура ===== */
 .worker-card[data-worker-id="10"] .xp-fill {
     background: linear-gradient(90deg, #667eea, #764ba2) !important;
     box-shadow: inset 0 0 12px rgba(50, 20, 100, 0.6);
-    animation: range-aura-9 3s ease-in-out infinite;
+    animation: dark-aura 3s ease-in-out infinite;
 }
 
-@keyframes range-aura-9 {
+@keyframes dark-aura {
     0%, 100% {
         box-shadow: inset 0 0 12px rgba(50, 20, 100, 0.6),
                     inset 0 0 8px rgba(102, 126, 234, 0.3);
@@ -888,7 +747,7 @@ html, body {
         #ffd700 100%) !important;
     background-size: 200% 100%;
     box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.5);
-    animation: range-legendary-10 2s ease-in-out infinite;
+    animation: premium-flow 2s ease-in-out infinite;
 }
 
 .worker-card[data-worker-id="11"] .xp-fill::before {
@@ -899,7 +758,7 @@ html, body {
         transparent, 
         rgba(255, 255, 255, 0.4), 
         transparent);
-    animation: range-shine-10 1.5s infinite;
+    animation: shine-effect 1.5s infinite;
     border-radius: inherit;
 }
 
@@ -910,12 +769,12 @@ html, body {
     background-image: 
         radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
     background-size: 20px 20px;
-    animation: range-sparkles-10 4s linear infinite;
+    animation: sparkles-flow 4s linear infinite;
     border-radius: inherit;
     opacity: 0.6;
 }
 
-@keyframes range-legendary-10 {
+@keyframes premium-flow {
     0%, 100% {
         background-position: 0% 0%;
         box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.5);
@@ -926,14 +785,305 @@ html, body {
     }
 }
 
-@keyframes range-shine-10 {
+@keyframes sparkles-flow {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 0; }
+}
+
+/* ===== СИСТЕМА Э��ФЕКТОВ ДЛЯ RANGERS (ИЗОБРАЖЕНИЯ УРОВНЕЙ) ===== */
+
+/* Базовое правило для всех ranger images */
+.class-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+.class-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 6px;
+}
+
+/* ===== УРОВЕНЬ 1-2 - Базовый голубой блик ===== */
+.worker-card[data-worker-id="1"] .class-image-container,
+.worker-card[data-worker-id="2"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+/* ===== УРОВЕНЬ 3 - Синий блеск ===== */
+.worker-card[data-worker-id="3"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(100, 200, 255, 0.4);
+}
+
+.worker-card[data-worker-id="3"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    animation: ranger-shine-3 3s infinite;
+    border-radius: inherit;
+}
+
+@keyframes ranger-shine-3 {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
 
-@keyframes range-sparkles-10 {
-    0% { background-position: 0 0; }
-    100% { background-position: 20px 0; }
+/* ===== УРОВЕНЬ 4 - Зеленый пульс ===== */
+.worker-card[data-worker-id="4"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.3);
+    animation: ranger-pulse-4 2s ease-in-out infinite;
+}
+
+@keyframes ranger-pulse-4 {
+    0%, 100% {
+        box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.3);
+    }
+    50% {
+        box-shadow: inset 0 0 25px rgba(0, 255, 136, 0.5);
+    }
+}
+
+/* ===== УРОВЕНЬ 5 - Золотой металлик ===== */
+.worker-card[data-worker-id="5"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.worker-card[data-worker-id="5"] .class-image-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+        rgba(255, 215, 0, 0.2),
+        rgba(255, 165, 0, 0.1),
+        rgba(255, 215, 0, 0.2));
+    background-size: 200% 100%;
+    animation: ranger-gold-5 4s linear infinite;
+    border-radius: inherit;
+}
+
+@keyframes ranger-gold-5 {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* ===== УРОВЕНЬ 6 - Оранжевое мерцание ===== */
+.worker-card[data-worker-id="6"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(255, 140, 0, 0.3);
+    animation: ranger-flicker-6 3s ease-in-out infinite;
+}
+
+@keyframes ranger-flicker-6 {
+    0%, 100% {
+        box-shadow: inset 0 0 15px rgba(255, 140, 0, 0.3);
+    }
+    50% {
+        box-shadow: inset 0 0 20px rgba(255, 140, 0, 0.5);
+    }
+}
+
+/* ===== УРОВЕНЬ 7 - Фиолетовая аура ===== */
+.worker-card[data-worker-id="7"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+.worker-card[data-worker-id="7"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, 
+        rgba(168, 85, 247, 0.2) 0%, 
+        transparent 70%);
+    animation: ranger-purple-7 4s ease-in-out infinite;
+    border-radius: inherit;
+}
+
+@keyframes ranger-purple-7 {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ===== УРОВЕНЬ 8 - Розовое комбо ===== */
+.worker-card[data-worker-id="8"] .class-image-container {
+    box-shadow: inset 0 0 15px rgba(255, 105, 180, 0.3);
+    animation: ranger-pink-8 2.5s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="8"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent, 
+        rgba(255, 105, 180, 0.2), 
+        transparent);
+    animation: ranger-shine-8 2s infinite;
+    border-radius: inherit;
+}
+
+@keyframes ranger-pink-8 {
+    0%, 100% {
+        box-shadow: inset 0 0 15px rgba(255, 105, 180, 0.3);
+    }
+    50% {
+        box-shadow: inset 0 0 25px rgba(255, 105, 180, 0.5);
+    }
+}
+
+@keyframes ranger-shine-8 {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== УРОВЕНЬ 9 - Темная синяя аура ===== */
+.worker-card[data-worker-id="9"] .class-image-container {
+    box-shadow: inset 0 0 20px rgba(30, 144, 255, 0.4);
+    animation: ranger-dark-9 3s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="9"] .class-image-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(30, 144, 255, 0.2) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(0, 150, 255, 0.2) 0%, transparent 30%);
+    animation: ranger-particles-9 5s ease-in-out infinite;
+    border-radius: inherit;
+}
+
+@keyframes ranger-dark-9 {
+    0%, 100% {
+        box-shadow: inset 0 0 20px rgba(30, 144, 255, 0.4);
+    }
+    50% {
+        box-shadow: inset 0 0 30px rgba(30, 144, 255, 0.6);
+    }
+}
+
+@keyframes ranger-particles-9 {
+    0%, 100% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+}
+
+/* ===== УРОВЕНЬ 10 - Легендарное золото ===== */
+.worker-card[data-worker-id="10"] .class-image-container {
+    box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.5);
+    animation: ranger-legendary-10 1.5s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="10"] .class-image-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+        rgba(255, 215, 0, 0.3),
+        rgba(255, 165, 0, 0.2),
+        rgba(255, 215, 0, 0.3));
+    background-size: 200% 100%;
+    animation: ranger-gold-flow-10 3s linear infinite;
+    border-radius: inherit;
+}
+
+.worker-card[data-worker-id="10"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    animation: ranger-shine-10 1.5s infinite;
+    border-radius: inherit;
+}
+
+@keyframes ranger-legendary-10 {
+    0%, 100% {
+        box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.7);
+    }
+}
+
+@keyframes ranger-gold-flow-10 {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+@keyframes ranger-shine-10 {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== УРОВЕНЬ 11 - ПРЕМИУМ (все эффекты) ===== */
+.worker-card[data-worker-id="11"] .class-image-container {
+    box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.6);
+    animation: ranger-premium-11 1.2s ease-in-out infinite;
+}
+
+.worker-card[data-worker-id="11"] .class-image-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(90deg, 
+            rgba(255, 215, 0, 0.3),
+            rgba(255, 165, 0, 0.2),
+            rgba(255, 215, 0, 0.3)),
+        radial-gradient(circle at 50% 50%, 
+            rgba(255, 255, 255, 0.2) 0%, 
+            transparent 50%);
+    background-size: 200% 100%, 100% 100%;
+    animation: ranger-premium-glow-11 2s linear infinite;
+    border-radius: inherit;
+}
+
+.worker-card[data-worker-id="11"] .class-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.5), 
+        transparent);
+    animation: ranger-premium-shine-11 1.5s infinite;
+    border-radius: inherit;
+    box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes ranger-premium-11 {
+    0%, 100% {
+        box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.6);
+    }
+    50% {
+        box-shadow: inset 0 0 35px rgba(255, 215, 0, 0.8);
+    }
+}
+
+@keyframes ranger-premium-glow-11 {
+    0% { background-position: 0% 0%, 0% 0%; }
+    100% { background-position: 200% 0%, 100% 100%; }
+}
+
+@keyframes ranger-premium-shine-11 {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 /* ===== КОНТАКТЫ ===== */
@@ -1047,14 +1197,23 @@ html, body {
     .class-level-text {
         font-size: 28px;
     }
+
+    .xp-fill::before,
+    .xp-fill::after,
+    .class-image-container::before,
+    .class-image-container::after {
+        animation-duration: 4s !important;
+    }
 }
 
-/* ===== ОТКЛЮЧЕНИЕ АНИМАЦИЙ ДЛЯ ЭКОНОМИИ БАТАРЕИ ===== */
+/* ===== ПОДДЕРЖКА prefers-reduced-motion ===== */
 @media (prefers-reduced-motion: reduce) {
-    .badge-1, .badge-2, .badge-3, .badge-4, .badge-5,
-    .badge-6, .badge-7, .badge-8, .badge-9, .badge-10,
-    .xp-fill {
+    .xp-fill,
+    .xp-fill::before,
+    .xp-fill::after,
+    .class-image-container,
+    .class-image-container::before,
+    .class-image-container::after {
         animation: none !important;
-        transition: none !important;
     }
 }
