@@ -2,13 +2,13 @@
 oil:0 - 40000
 color:green
 Teg:#NWC
-advantages:1 масло / 7 муни,1 сайт
+advantages:1 масло / 7 муни,1 сайт }
 
 {Name:Ученик
 oil:40000-80000
 Color:blue
 teg:#APP
-advantages:1 масло / 8 муни,1 бейджи,1 сайт
+advantages:1 масло / 8 муни,1 бейджи,1 сайт }
 
 {name:
 oil:
