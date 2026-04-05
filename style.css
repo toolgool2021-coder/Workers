@@ -283,7 +283,7 @@ html, body {
     box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
 }
 
-/* ✅ ИЗМЕНЕНО: avatar-container */
+/* ✅ ИСПРАВЛЕНО: avatar-container - обводка СНАРУЖИ */
 .avatar-container {
     position: relative;
     width: 150px;
@@ -300,7 +300,7 @@ html, body {
     background: rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ ИЗМЕНЕНО: avatar */
+/* ✅ avatar */
 .avatar {
     width: 100%;
     height: 100%;
@@ -311,17 +311,18 @@ html, body {
     z-index: 2;
 }
 
-/* ✅ НОВОЕ: avatar-outline */
+/* ✅ НОВОЕ: avatar-outline - СНАРУЖИ */
 .avatar-outline {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 180px;
+    height: 180px;
     object-fit: contain;
     border-radius: 50%;
-    z-index: 3;
+    z-index: 1;
     pointer-events: none;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .worker-info {
