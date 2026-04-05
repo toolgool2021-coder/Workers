@@ -201,8 +201,8 @@ function parseWorkers(text) {
                 color: parts[10] || 'cyan',
                 teg: parts[11] || '',
                 nameColor: parts[12] || '',
-                outline: parts[13] || '',  // ✅ НОВОЕ
-                range: parts[14] || ''      // ✅ НОВОЕ
+                outline: parts[13] || '',
+                range: parts[14] || ''
             });
         }
     });
@@ -327,7 +327,7 @@ function getRangerImage(classValue) {
     return null;
 }
 
-// ✅ НОВАЯ ФУНКЦИЯ: Получение изображения обводки (ранга)
+// Получение изображения обводки (ранга)
 function getOutlineImage(classValue, customOutline) {
     // Если задана кастомная обводка, используем её
     if (customOutline && customOutline.trim()) {
@@ -373,6 +373,34 @@ function createCustomColorStyle(hexColor) {
         bg: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`,
         bg2: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`
     };
+}
+
+// ✅ НОВОЕ: Создание партиклей для уровня 10+
+function createParticles(cardElement, colorValue) {
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'particles-container';
+    
+    // Определяем цвет для партиклей
+    let particleColor = '#00ffff';
+    if (isHexColor(colorValue)) {
+        particleColor = colorValue;
+    } else if (colorMap[colorValue]) {
+        particleColor = colorMap[colorValue].hex;
+    }
+    
+    // Создаём 10-15 партиклей
+    const particleCount = Math.floor(Math.random() * 6) + 10;
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.backgroundColor = particleColor;
+        particle.style.animationDelay = Math.random() * 0.5 + 's';
+        particlesContainer.appendChild(particle);
+    }
+    
+    cardElement.appendChild(particlesContainer);
 }
 
 function createWorkerCard(worker) {
@@ -467,10 +495,25 @@ function createWorkerCard(worker) {
         tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
     }
 
-    // ✅ НОВОЕ: Получаем обводку
+    // ✅ НОВОЕ: Бейджи для outline и range
+    let outlineRangeHTML = '';
+    if (worker.outline || worker.range) {
+        outlineRangeHTML = '<div class="outline-range-badges">';
+        
+        if (worker.outline) {
+            outlineRangeHTML += `<span class="outline-badge">📦 Outline</span>`;
+        }
+        if (worker.range) {
+            outlineRangeHTML += `<span class="range-badge">⭐ Range</span>`;
+        }
+        
+        outlineRangeHTML += '</div>';
+    }
+
+    // Получаем обводку
     const outlineImage = getOutlineImage(worker.class, worker.outline);
 
-    // ✅ НОВОЕ: Аватар с обводкой
+    // Аватар с обводкой
     let avatarHTML = `
         <div class="avatar-container">
             ${createMediaElement(worker.photo, 'avatar')}
@@ -489,6 +532,7 @@ function createWorkerCard(worker) {
             <a href="${profileLink}" target="_blank" class="worker-name" ${nameStyle}>
                 ${userDisplay}
             </a>
+            ${outlineRangeHTML}
             ${badgesHTML ? `<div class="badges-container">${badgesHTML}</div>` : ''}
         </div>
 
@@ -496,6 +540,12 @@ function createWorkerCard(worker) {
 
         ${xpHTML}
     `;
+
+    // ✅ НОВОЕ: Добавляем партикли если уровень >= 10
+    const classNum = isNumeric(worker.class) ? parseInt(worker.class) : 0;
+    if (classNum >= 10) {
+        createParticles(card, worker.color);
+    }
 
     // Запускаем Intersection Observer для видео
     const videos = card.querySelectorAll('video');
