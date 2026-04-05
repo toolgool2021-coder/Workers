@@ -32,9 +32,6 @@ function parseLevels(text) {
     const blocks = text.split('{').filter(block => block.trim());
     
     blocks.forEach(block => {
-        // Удаляем закрывающую скобку в конце
-        block = block.replace(/}\s*$/, '').trim();
-        
         const lines = block.split('\n').filter(line => line.trim());
         const level = {};
         
@@ -367,13 +364,13 @@ function createWorkerCard(worker) {
     // Создаём HTML для бейджей (только если они указаны)
     let badgesHTML = '';
     if (worker.badge) {
-        badgesHTML += createMediaElement(worker.badge, 'badge badge-1', 'title="Badge 1"');
+        badgesHTML += createMediaElement(worker.badge, 'badge', 'title="Badge 1"');
     }
     if (worker.badge_2) {
-        badgesHTML += createMediaElement(worker.badge_2, 'badge badge-2', 'title="Badge 2"');
+        badgesHTML += createMediaElement(worker.badge_2, 'badge', 'title="Badge 2"');
     }
     if (worker.badge_3) {
-        badgesHTML += createMediaElement(worker.badge_3, 'badge badge-3', 'title="Badge 3"');
+        badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
     }
 
     // Определяем ссылку в зависимости от формата user
@@ -607,76 +604,8 @@ function updateSnow() {
 
 drawSnow();
 
-// ===== СИСТЕМА РАНГОВЫХ ЧАСТИЦ (УРОВЕНЬ 10) =====
-
-const PARTICLE_ANIMATION_DURATION = 1.2;
-
-function createBadgeParticles(badgeElement) {
-    if (badgeElement.querySelector('.badge-10-particle')) {
-        return;
-    }
-
-    const particleContainer = document.createElement('div');
-    particleContainer.className = 'badge-10-particles-container';
-    particleContainer.style.position = 'absolute';
-    particleContainer.style.top = '0';
-    particleContainer.style.left = '0';
-    particleContainer.style.width = '100%';
-    particleContainer.style.height = '100%';
-    particleContainer.style.pointerEvents = 'none';
-    
-    badgeElement.style.position = 'relative';
-    badgeElement.appendChild(particleContainer);
-
-    function spawnParticle() {
-        const particle = document.createElement('div');
-        particle.className = 'badge-10-particle particle';
-        
-        const angle = Math.random() * Math.PI * 2;
-        const distance = 30 + Math.random() * 20;
-        
-        const offsetX = Math.cos(angle) * distance;
-        const offsetY = Math.sin(angle) * distance;
-        
-        particle.style.left = '50%';
-        particle.style.top = '50%';
-        particle.style.transform = 'translate(-50%, -50%)';
-        
-        const animationIndex = Math.floor(Math.random() * 5) + 1;
-        const animationName = `particle-float-${animationIndex}`;
-        
-        particle.style.animation = `${animationName} ${PARTICLE_ANIMATION_DURATION}s ease-out forwards`;
-        
-        particleContainer.appendChild(particle);
-        
-        setTimeout(() => {
-            particle.remove();
-        }, PARTICLE_ANIMATION_DURATION * 1000);
-    }
-
-    const spawnInterval = setInterval(() => {
-        if (!badgeElement.parentElement) {
-            clearInterval(spawnInterval);
-            return;
-        }
-
-        for (let i = 0; i < 2; i++) {
-            spawnParticle();
-        }
-    }, 300);
-
-    badgeElement.dataset.particleInterval = spawnInterval;
-}
-
 // Загружаем при загрузке страницы
 window.addEventListener('load', () => {
     loadWorkers();
     loadLevels();
-    
-    // Инициализируем эффекты бейджей
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReducedMotion) {
-        const badges = document.querySelectorAll('.badge-10');
-        badges.forEach(badge => createBadgeParticles(badge));
-    }
 });
