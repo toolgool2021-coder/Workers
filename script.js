@@ -200,7 +200,9 @@ function parseWorkers(text) {
                 badge_3: parts[9] || '',
                 color: parts[10] || 'cyan',
                 teg: parts[11] || '',
-                nameColor: parts[12] || ''
+                nameColor: parts[12] || '',
+                outline: parts[13] || '',  // ✅ НОВОЕ
+                range: parts[14] || ''      // ✅ НОВОЕ
             });
         }
     });
@@ -321,6 +323,25 @@ function getRangerImage(classValue) {
         return `./Rangers/${num} LVL.jpg.png`;
     } else if (num >= 10) {
         return './Rangers/10+ LVL.jpg.png';
+    }
+    return null;
+}
+
+// ✅ НОВАЯ ФУНКЦИЯ: Получение изображения обводки (ранга)
+function getOutlineImage(classValue, customOutline) {
+    // Если задана кастомная обводка, используем её
+    if (customOutline && customOutline.trim()) {
+        return `./${customOutline}`;
+    }
+    
+    // Иначе используем обводку по уровню
+    if (!isNumeric(classValue)) return null;
+    
+    const num = parseInt(classValue);
+    if (num >= 1 && num <= 9) {
+        return `./Outline/${num} LVL.jpg.png`;
+    } else if (num >= 10) {
+        return './Outline/10 LVL.jpg.png';
     }
     return null;
 }
@@ -446,10 +467,14 @@ function createWorkerCard(worker) {
         tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
     }
 
-    // Аватар
+    // ✅ НОВОЕ: Получаем обводку
+    const outlineImage = getOutlineImage(worker.class, worker.outline);
+
+    // ✅ НОВОЕ: Аватар с обводкой
     let avatarHTML = `
         <div class="avatar-container">
             ${createMediaElement(worker.photo, 'avatar')}
+            ${outlineImage ? `<img src="${outlineImage}" alt="Outline" class="avatar-outline">` : ''}
         </div>
     `;
 
