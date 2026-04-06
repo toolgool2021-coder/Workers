@@ -1,7 +1,7 @@
 {
   name: Рекрут
   Rang:Ranges/1 LVL.jpg.png
-  outline:-
+  outline:Outline/1 LVL.jpg.png
   oil: 0–20 000
   color: grey
   teg: #RCT
@@ -11,7 +11,7 @@
 {
   name: Новичок
   Rang:Ranges/2 LVL.jpg.png
-  outline:-
+  outline:Outline/2 LVL.jpg.png
   oil: 20 001–40 000
   color: green
   teg: #NWC
@@ -21,7 +21,7 @@
 {
   name: Ученик
   Rang:Ranges/3 LVL.jpg.png
-  outline:-
+  outline:Outline/3 LVL.jpg.png
   oil: 40 001–80 000
   color: blue
   teg: #APP
@@ -31,7 +31,7 @@
 {
   name: Рабочий
   Rang:Ranges/4 LVL.jpg.png
-  outline:-
+  outline:Outline/4 LVL.jpg.png
   oil: 80 001–120 000
   color: yellow
   teg: #WRK
@@ -41,7 +41,7 @@
 {
   name: Старший рабочий
   Rang:Ranges/5 LVL.jpg.png
-  outline:-
+  outline:Outline/5 LVL.jpg.png
   oil: 120 001–160 000
   color: orange
   teg: #SWR
@@ -51,7 +51,7 @@
 {
   name: Мастер
   Rang:Ranges/6 LVL.jpg.png
-  outline:-
+  outline:Outline/6 LVL.jpg.png
   oil: 160 001–180 000
   color: violet
   teg: #MST
@@ -61,7 +61,7 @@
 {
   name: Профи
   Rang:Ranges/7 LVL.jpg.png
-  outline:-
+  outline:Outline/7 LVL.jpg.png
   oil: 180 001–200 000
   color: violet-dark
   teg: #PRO
@@ -71,7 +71,7 @@
 {
   name: Элитный
   Rang:Ranges/8 LVL.jpg.png
-  outline:-
+  outline:Outline/8 LVL.jpg.png
   oil: 200 001–250 000
   color: red
   teg: #ELT
@@ -81,7 +81,7 @@
 {
   name: Супер Элитный
   Rang:Ranges/9 LVL.jpg.png
-  outline:-
+  outline:Outline/9 LVL.jpg.png
   oil: 250 001–300 000
   color: dark-red
   teg: #SEL
@@ -91,7 +91,7 @@
 {
   name: Легенда
   Rang:Ranges/10+ LVL.jpg.png
-  outline:Outline/10 LVL.jpg.png
+  outline:Outline/10+ LVL.jpg.png
   oil: 300 001+
   color: legend
   teg: #LGD
