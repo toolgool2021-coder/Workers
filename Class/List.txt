@@ -1,7 +1,7 @@
 {
   name: Новичок
   Rang:Ranges/1 LVL.jpg.png
-  outline:
+  outline:-
   oil: 0–40 000
   color: green
   teg: #NWC
@@ -11,7 +11,7 @@
 {
   name: Ученик
   Rang:Ranges/2 LVL.jpg.png
-  outline:
+  outline:-
   oil: 40 001–80 000
   color: blue
   teg: #APP
@@ -21,7 +21,7 @@
 {
   name: Рабочий
   Rang:Ranges/3 LVL.jpg.png
-  outline:
+  outline:-
   oil: 80 001–120 000
   color: yellow
   teg: #WRK
@@ -31,7 +31,7 @@
 {
   name: Мастер
   Rang: Ranges/4 LVL.jpg.png
-  outline:
+  outline:-
   oil: 120 001–160 000
   color: Orange
   teg: #MST
@@ -41,7 +41,7 @@
 {
   name: Профи
   Rang: Ranges/5 LVL.jpg.png
-  outline:
+  outline:-
   oil: 160 001–200 000
   color: Violet
   teg: #PRO
@@ -51,7 +51,7 @@
 {
   name: Элитный
   Rang: Ranges/9 LVL.jpg.png
-  outline:
+  outline:-
   oil: 200 001–300 000
   color: red
   teg: #ELT
