@@ -212,6 +212,88 @@ html, body {
     color: #a855f7;
 }
 
+/* ===== БЕЙДЖИ В МОДАЛЬНОМ ОКНЕ УРОВНЕЙ ===== */
+.level-outline-range-badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.level-outline-mini-badge-wrapper,
+.level-range-mini-badge-wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.level-mini-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 8px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.level-mini-badge-img {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    opacity: 0.6;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.level-mini-badge:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    background: rgba(168, 85, 247, 0.3);
+}
+
+.level-mini-badge:hover .level-mini-badge-img {
+    opacity: 1;
+}
+
+/* Превью при наведении в модальном окне */
+.level-badge-preview {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+    margin-bottom: 8px;
+}
+
+.level-badge-preview-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(168, 85, 247, 0.6);
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.level-outline-mini-badge-wrapper:hover .level-badge-preview,
+.level-range-mini-badge-wrapper:hover .level-badge-preview {
+    opacity: 1;
+    visibility: visible;
+}
+
 .level-advantages {
     margin-top: 20px;
 }
@@ -362,101 +444,9 @@ html, body {
     transform: scale(1.05);
 }
 
-/* ✅ НОВОЕ: Бейджи для outline и range */
+/* ===== БЕЙДЖИ В СПИСКЕ КРАФТЕРОВ УДАЛЕНЫ ===== */
 .outline-range-badges {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 6px;
-    margin-bottom: 8px;
-}
-
-/* ✅ НОВОЕ: Мини бейджи с превью для крафтеров */
-.outline-mini-badge-wrapper,
-.range-mini-badge-wrapper {
-    position: relative;
-    display: inline-flex;
-}
-
-.outline-mini-badge,
-.range-mini-badge {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px;
-    height: 35px;
-    background: rgba(168, 85, 247, 0.2);
-    border: 1px solid rgba(168, 85, 247, 0.5);
-    border-radius: 6px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.outline-mini-badge-img,
-.range-mini-badge-img {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
-    opacity: 0.6;
-    z-index: 1;
-    transition: opacity 0.3s ease;
-}
-
-.outline-mini-badge:hover,
-.range-mini-badge:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
-    background: rgba(168, 85, 247, 0.3);
-}
-
-.outline-mini-badge:hover .outline-mini-badge-img,
-.range-mini-badge:hover .range-mini-badge-img {
-    opacity: 1;
-}
-
-.range-mini-badge {
-    background: rgba(255, 215, 0, 0.15);
-    border-color: rgba(255, 215, 0, 0.5);
-}
-
-.range-mini-badge:hover {
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
-    background: rgba(255, 215, 0, 0.25);
-}
-
-/* ✅ НОВОЕ: Превью при наведении */
-.badge-preview {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    z-index: 100;
-    margin-bottom: 8px;
-}
-
-.badge-preview-img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(168, 85, 247, 0.6);
-    border-radius: 8px;
-    padding: 4px;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-}
-
-.outline-mini-badge-wrapper:hover .badge-preview,
-.range-mini-badge-wrapper:hover .badge-preview {
-    opacity: 1;
-    visibility: visible;
+    display: none;
 }
 
 .badges-container {
@@ -781,25 +771,22 @@ html, body {
         font-size: 28px;
     }
 
-    .outline-range-badges {
-        margin-top: 4px;
-        margin-bottom: 6px;
+    .level-outline-range-badges {
+        gap: 6px;
     }
 
-    .outline-mini-badge,
-    .range-mini-badge {
+    .level-mini-badge {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .level-mini-badge-img {
         width: 30px;
         height: 30px;
-        font-size: 14px;
     }
 
-    .outline-mini-badge-img,
-    .range-mini-badge-img {
-        width: 25px;
-        height: 25px;
-    }
-
-    .badge-preview-img {
+    .level-badge-preview-img {
         width: 60px;
         height: 60px;
     }
