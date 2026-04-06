@@ -152,54 +152,10 @@ function showLevelDetails(index) {
         advantagesHTML += '</ul>';
     }
     
-    // ✅ НОВОЕ: Мини бейджи с изображениями
-    let outlineRangeBadgesHTML = '';
-    const levelNum = index + 1;
-    
-    // Определяем обводку по уровню
-    let outlineImage = null;
-    if (levelNum >= 1 && levelNum <= 9) {
-        outlineImage = `./Outline/${levelNum} LVL.jpg.png`;
-    } else if (levelNum >= 10) {
-        outlineImage = './Outline/10 LVL.jpg.png';
-    }
-    
-    // Определяем ранг (если есть) - по папке Rangers
-    let rangeImage = null;
-    if (levelNum >= 1 && levelNum <= 9) {
-        rangeImage = `./Rangers/${levelNum} LVL.jpg.png`;
-    } else if (levelNum >= 10) {
-        rangeImage = './Rangers/10+ LVL.jpg.png';
-    }
-    
-    if (outlineImage || rangeImage) {
-        outlineRangeBadgesHTML = '<div class="level-outline-range-badges">';
-        
-        if (outlineImage) {
-            outlineRangeBadgesHTML += `
-                <span class="level-mini-badge">
-                    <img src="${outlineImage}" alt="Outline" class="level-mini-badge-img">
-                    📦
-                </span>
-            `;
-        }
-        if (rangeImage) {
-            outlineRangeBadgesHTML += `
-                <span class="level-mini-badge">
-                    <img src="${rangeImage}" alt="Range" class="level-mini-badge-img">
-                    ⭐
-                </span>
-            `;
-        }
-        
-        outlineRangeBadgesHTML += '</div>';
-    }
-    
-    // Показываем детали
+    // Показываем детали БЕЗ бейджей
     levelDetails.innerHTML = `
         <div class="level-details-content">
             <h3>${level.name}</h3>
-            ${outlineRangeBadgesHTML}
             <p class="level-oil"><strong>Диапазон:</strong> ${level.oil}</p>
             <p class="level-color"><strong>Цвет:</strong> ${level.color}</p>
             <p class="level-teg"><strong>Тег:</strong> ${level.teg}</p>
