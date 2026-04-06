@@ -639,8 +639,8 @@ html, body {
 
 .particle {
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     pointer-events: none;
     animation: float 3s infinite ease-in-out;
