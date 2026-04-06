@@ -3,7 +3,7 @@
 1:200:Owner:⛩:Toolgool:@Toolgool:Image/icon_1.jpg:Badges/badges_1.png:Badges/badges_2.png:Badges/badges_3.png:legend:[#OWN]:#ffd700:Outline/10+ LVL.jpg.png:Ranges/10 LVL.png
 2:10:Owner:♡:❦ Брак ❦:@Ok_si112:Image/icon_3.jpeg:Badges/badges_7.png:Badges/badges_5.webm:Badges/badges_6.webm:gold:[#OWN]:#ffd700::
 3:2:Crafter/Farmer:20000/40000 30000:|𝙈𝘾𝙨|🕸𝒘𝒆𝒓𝒅𝒂🕸:@werdochka:Image/icon_2.jpg:Badges/badges_4.png:::green:[#NWC]:#00ffff::
-4:1:Crafter:0/20000 0:Ñ1ŻÉŁ1X:@N1Z3LIX:Image/icon_4.jpg::::grey:[#RCT]:#00ff88::
+4:1:Crafter:5000/20000 0:Ñ1ŻÉŁ1X:@N1Z3LIX:Image/icon_4.jpg::::grey:[#RCT]:#00ff88::
 5:1:crafter:0/20000 1000:сушка 🐮:@dn012_z:Image/icon_5.jpg::::grey:[#RCT]:#00ff88::
-6:1:crafter:0/20000 0:𝒟𝒾𝒶𝓃𝒶🐮:@dishka1909:Image/ocon_6.jpg::::grey:[#RCT]:#00ff88::
+6:1:crafter:5000/20000 0:𝒟𝒾𝒶𝓃𝒶🐮:@dishka1909:Image/ocon_6.jpg::::grey:[#RCT]:#00ff88::
 7:1:crafter:0/20000 0:𝐊𝐨𝐭𝐞𝐧𝐨𝐤 ❤ 🐮:@KotenokShuzuka:Image/icon_7.jpg::::grey:[#RCT]:#00ff88::
