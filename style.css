@@ -212,58 +212,44 @@ html, body {
     color: #a855f7;
 }
 
-/* ===== БЕЙДЖИ В МОДАЛЬНОМ ОКНЕ УРОВНЕЙ ===== */
-.level-outline-range-badges {
+/* ===== БЕЙДЖИ В МОДАЛЬНОМ ОКНЕ УРОВНЕЙ (как badges) ===== */
+.level-badges-container {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+    min-height: 58px;
+    align-items: center;
     margin-top: 10px;
     margin-bottom: 15px;
 }
 
-.level-outline-mini-badge-wrapper,
-.level-range-mini-badge-wrapper {
+.level-badge-wrapper {
     position: relative;
     display: inline-flex;
 }
 
-.level-mini-badge {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: rgba(168, 85, 247, 0.2);
-    border: 1px solid rgba(168, 85, 247, 0.5);
-    border-radius: 8px;
-    font-size: 18px;
-    transition: all 0.3s ease;
+.level-badge {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: contain;
+    display: inline-block;
+    border: 2px solid rgba(168, 85, 247, 0.6);
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
     cursor: pointer;
 }
 
-.level-mini-badge-img {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    object-fit: contain;
-    opacity: 0.6;
-    z-index: 1;
-    transition: opacity 0.3s ease;
+.level-badge:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
 }
 
-.level-mini-badge:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
-    background: rgba(168, 85, 247, 0.3);
-}
-
-.level-mini-badge:hover .level-mini-badge-img {
-    opacity: 1;
-}
-
-/* Превью при наведении в модальном окне */
+/* Превью при наведении */
 .level-badge-preview {
     position: absolute;
     bottom: 100%;
@@ -278,18 +264,17 @@ html, body {
 }
 
 .level-badge-preview-img {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     border: 2px solid rgba(168, 85, 247, 0.6);
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
 }
 
-.level-outline-mini-badge-wrapper:hover .level-badge-preview,
-.level-range-mini-badge-wrapper:hover .level-badge-preview {
+.level-badge-wrapper:hover .level-badge-preview {
     opacity: 1;
     visibility: visible;
 }
@@ -771,23 +756,18 @@ html, body {
         font-size: 28px;
     }
 
-    .level-outline-range-badges {
-        gap: 6px;
+    .level-badges-container {
+        gap: 8px;
+        min-height: 50px;
     }
 
-    .level-mini-badge {
-        width: 35px;
-        height: 35px;
-        font-size: 16px;
-    }
-
-    .level-mini-badge-img {
-        width: 30px;
-        height: 30px;
+    .level-badge {
+        width: 42px;
+        height: 42px;
     }
 
     .level-badge-preview-img {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
     }
 }
