@@ -152,7 +152,7 @@ function showLevelDetails(index) {
         advantagesHTML += '</ul>';
     }
     
-    // ✅ НОВОЕ: Мини бейджи с изображениями в модальном окне
+    // ✅ НОВОЕ: Мини бейджи как badges (50x50) с превью
     let outlineRangeBadgesHTML = '';
     const levelNum = index + 1;
     
@@ -173,15 +173,12 @@ function showLevelDetails(index) {
     }
     
     if (outlineImage || rangeImage) {
-        outlineRangeBadgesHTML = '<div class="level-outline-range-badges">';
+        outlineRangeBadgesHTML = '<div class="level-badges-container">';
         
         if (outlineImage) {
             outlineRangeBadgesHTML += `
-                <div class="level-outline-mini-badge-wrapper">
-                    <span class="level-mini-badge">
-                        <img src="${outlineImage}" alt="Outline" class="level-mini-badge-img">
-                        📦
-                    </span>
+                <div class="level-badge-wrapper">
+                    <img src="${outlineImage}" alt="Outline" class="level-badge">
                     <div class="level-badge-preview">
                         <img src="${outlineImage}" alt="Outline Preview" class="level-badge-preview-img">
                     </div>
@@ -190,11 +187,8 @@ function showLevelDetails(index) {
         }
         if (rangeImage) {
             outlineRangeBadgesHTML += `
-                <div class="level-range-mini-badge-wrapper">
-                    <span class="level-mini-badge">
-                        <img src="${rangeImage}" alt="Range" class="level-mini-badge-img">
-                        ⭐
-                    </span>
+                <div class="level-badge-wrapper">
+                    <img src="${rangeImage}" alt="Range" class="level-badge">
                     <div class="level-badge-preview">
                         <img src="${rangeImage}" alt="Range Preview" class="level-badge-preview-img">
                     </div>
