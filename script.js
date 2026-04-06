@@ -172,7 +172,7 @@ function showLevelDetails(index) {
         if (levelNum >= 1 && levelNum <= 9) {
             outlineImage = `./Outline/${levelNum} LVL.jpg.png`;
         } else if (levelNum >= 10) {
-            outlineImage = './Outline/10 LVL.jpg.png';
+            outlineImage = './Outline/10+ LVL.jpg.png';
         }
     }
     
