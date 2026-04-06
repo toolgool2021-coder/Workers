@@ -539,16 +539,41 @@ function createWorkerCard(worker) {
         tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
     }
 
-    // ✅ НОВОЕ: Бейджи для outline и range
+    // ✅ НОВОЕ: Бейджи для outline и range с превью
     let outlineRangeHTML = '';
     if (worker.outline || worker.range) {
         outlineRangeHTML = '<div class="outline-range-badges">';
         
         if (worker.outline) {
-            outlineRangeHTML += `<span class="outline-badge">📦 Outline</span>`;
+            const outlineImg = getOutlineImage(worker.class, worker.outline);
+            if (outlineImg) {
+                outlineRangeHTML += `
+                    <div class="outline-mini-badge-wrapper">
+                        <span class="outline-mini-badge">
+                            <img src="${outlineImg}" alt="Outline" class="outline-mini-badge-img">
+                            📦
+                        </span>
+                        <div class="badge-preview">
+                            <img src="${outlineImg}" alt="Outline Preview" class="badge-preview-img">
+                        </div>
+                    </div>
+                `;
+            }
         }
         if (worker.range) {
-            outlineRangeHTML += `<span class="range-badge">⭐ Range</span>`;
+            if (worker.range.trim()) {
+                outlineRangeHTML += `
+                    <div class="range-mini-badge-wrapper">
+                        <span class="range-mini-badge">
+                            <img src="./${worker.range}" alt="Range" class="range-mini-badge-img">
+                            ⭐
+                        </span>
+                        <div class="badge-preview">
+                            <img src="./${worker.range}" alt="Range Preview" class="badge-preview-img">
+                        </div>
+                    </div>
+                `;
+            }
         }
         
         outlineRangeHTML += '</div>';
