@@ -152,10 +152,64 @@ function showLevelDetails(index) {
         advantagesHTML += '</ul>';
     }
     
-    // Показываем детали БЕЗ бейджей
+    // ✅ НОВОЕ: Мини бейджи с изображениями в модальном окне
+    let outlineRangeBadgesHTML = '';
+    const levelNum = index + 1;
+    
+    // Определяем обводку по уровню
+    let outlineImage = null;
+    if (levelNum >= 1 && levelNum <= 9) {
+        outlineImage = `./Outline/${levelNum} LVL.jpg.png`;
+    } else if (levelNum >= 10) {
+        outlineImage = './Outline/10 LVL.jpg.png';
+    }
+    
+    // Определяем ранг (если есть) - по папке Rangers
+    let rangeImage = null;
+    if (levelNum >= 1 && levelNum <= 9) {
+        rangeImage = `./Rangers/${levelNum} LVL.jpg.png`;
+    } else if (levelNum >= 10) {
+        rangeImage = './Rangers/10+ LVL.jpg.png';
+    }
+    
+    if (outlineImage || rangeImage) {
+        outlineRangeBadgesHTML = '<div class="level-outline-range-badges">';
+        
+        if (outlineImage) {
+            outlineRangeBadgesHTML += `
+                <div class="level-outline-mini-badge-wrapper">
+                    <span class="level-mini-badge">
+                        <img src="${outlineImage}" alt="Outline" class="level-mini-badge-img">
+                        📦
+                    </span>
+                    <div class="level-badge-preview">
+                        <img src="${outlineImage}" alt="Outline Preview" class="level-badge-preview-img">
+                    </div>
+                </div>
+            `;
+        }
+        if (rangeImage) {
+            outlineRangeBadgesHTML += `
+                <div class="level-range-mini-badge-wrapper">
+                    <span class="level-mini-badge">
+                        <img src="${rangeImage}" alt="Range" class="level-mini-badge-img">
+                        ⭐
+                    </span>
+                    <div class="level-badge-preview">
+                        <img src="${rangeImage}" alt="Range Preview" class="level-badge-preview-img">
+                    </div>
+                </div>
+            `;
+        }
+        
+        outlineRangeBadgesHTML += '</div>';
+    }
+    
+    // Показываем детали
     levelDetails.innerHTML = `
         <div class="level-details-content">
             <h3>${level.name}</h3>
+            ${outlineRangeBadgesHTML}
             <p class="level-oil"><strong>Диапазон:</strong> ${level.oil}</p>
             <p class="level-color"><strong>Цвет:</strong> ${level.color}</p>
             <p class="level-teg"><strong>Тег:</strong> ${level.teg}</p>
@@ -495,46 +549,6 @@ function createWorkerCard(worker) {
         tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
     }
 
-    // ✅ НОВОЕ: Бейджи для outline и range с превью
-    let outlineRangeHTML = '';
-    if (worker.outline || worker.range) {
-        outlineRangeHTML = '<div class="outline-range-badges">';
-        
-        if (worker.outline) {
-            const outlineImg = getOutlineImage(worker.class, worker.outline);
-            if (outlineImg) {
-                outlineRangeHTML += `
-                    <div class="outline-mini-badge-wrapper">
-                        <span class="outline-mini-badge">
-                            <img src="${outlineImg}" alt="Outline" class="outline-mini-badge-img">
-                            📦
-                        </span>
-                        <div class="badge-preview">
-                            <img src="${outlineImg}" alt="Outline Preview" class="badge-preview-img">
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        if (worker.range) {
-            if (worker.range.trim()) {
-                outlineRangeHTML += `
-                    <div class="range-mini-badge-wrapper">
-                        <span class="range-mini-badge">
-                            <img src="./${worker.range}" alt="Range" class="range-mini-badge-img">
-                            ⭐
-                        </span>
-                        <div class="badge-preview">
-                            <img src="./${worker.range}" alt="Range Preview" class="badge-preview-img">
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        outlineRangeHTML += '</div>';
-    }
-
     // Получаем обводку
     const outlineImage = getOutlineImage(worker.class, worker.outline);
 
@@ -557,7 +571,6 @@ function createWorkerCard(worker) {
             <a href="${profileLink}" target="_blank" class="worker-name" ${nameStyle}>
                 ${userDisplay}
             </a>
-            ${outlineRangeHTML}
             ${badgesHTML ? `<div class="badges-container">${badgesHTML}</div>` : ''}
         </div>
 
