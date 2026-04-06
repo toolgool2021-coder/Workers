@@ -425,7 +425,7 @@ function getOutlineImage(classValue, customOutline) {
     if (num >= 1 && num <= 9) {
         return `./Outline/${num} LVL.jpg.png`;
     } else if (num >= 10) {
-        return './Outline/10 LVL.jpg.png';
+        return './Outline/10+ LVL.jpg.png';
     }
     return null;
 }
