@@ -448,6 +448,93 @@ html, body {
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
+/* ✅ НОВОЕ: Мини бейджи с превью для крафтеров */
+.outline-mini-badge-wrapper,
+.range-mini-badge-wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.outline-mini-badge,
+.range-mini-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.outline-mini-badge-img,
+.range-mini-badge-img {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    opacity: 0.6;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.outline-mini-badge:hover,
+.range-mini-badge:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    background: rgba(168, 85, 247, 0.3);
+}
+
+.outline-mini-badge:hover .outline-mini-badge-img,
+.range-mini-badge:hover .range-mini-badge-img {
+    opacity: 1;
+}
+
+.range-mini-badge {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: rgba(255, 215, 0, 0.5);
+}
+
+.range-mini-badge:hover {
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+    background: rgba(255, 215, 0, 0.25);
+}
+
+/* ✅ НОВОЕ: Превью при наведении */
+.badge-preview {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+    margin-bottom: 8px;
+}
+
+.badge-preview-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(168, 85, 247, 0.6);
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.outline-mini-badge-wrapper:hover .badge-preview,
+.range-mini-badge-wrapper:hover .badge-preview {
+    opacity: 1;
+    visibility: visible;
+}
+
 .badges-container {
     display: flex;
     gap: 12px;
@@ -638,8 +725,8 @@ html, body {
 
 .particle {
     position: absolute;
-    width: 4px;
-    height: 4px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     pointer-events: none;
     animation: float 3s infinite ease-in-out;
@@ -775,10 +862,22 @@ html, body {
         margin-bottom: 6px;
     }
 
-    .outline-badge,
-    .range-badge {
-        padding: 2px 6px;
-        font-size: 9px;
+    .outline-mini-badge,
+    .range-mini-badge {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    .outline-mini-badge-img,
+    .range-mini-badge-img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .badge-preview-img {
+        width: 60px;
+        height: 60px;
     }
 
     .level-outline-range-badges {
