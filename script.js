@@ -172,10 +172,14 @@ function showLevelDetails(index) {
         rangeImage = './Rangers/10+ LVL.jpg.png';
     }
     
-    if (outlineImage || rangeImage) {
+    // ✅ НОВОЕ: Если в Crafters.txt стоит "-" или пусто, не показываем
+    const hasOutline = outlineImage && !outlineImage.includes('-');
+    const hasRange = rangeImage && !rangeImage.includes('-');
+    
+    if (hasOutline || hasRange) {
         outlineRangeBadgesHTML = '<div class="level-badges-container">';
         
-        if (outlineImage) {
+        if (hasOutline) {
             outlineRangeBadgesHTML += `
                 <div class="level-badge-wrapper">
                     <img src="${outlineImage}" alt="Outline" class="level-badge">
@@ -185,7 +189,7 @@ function showLevelDetails(index) {
                 </div>
             `;
         }
-        if (rangeImage) {
+        if (hasRange) {
             outlineRangeBadgesHTML += `
                 <div class="level-badge-wrapper">
                     <img src="${rangeImage}" alt="Range" class="level-badge">
@@ -378,7 +382,7 @@ function getRangerImage(classValue) {
 // Получение изображения обводки (ранга)
 function getOutlineImage(classValue, customOutline) {
     // Если задана кастомная обводка, используем её
-    if (customOutline && customOutline.trim()) {
+    if (customOutline && customOutline.trim() && customOutline.trim() !== '-') {
         return `./${customOutline}`;
     }
     
