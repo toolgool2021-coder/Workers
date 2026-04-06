@@ -152,7 +152,7 @@ function showLevelDetails(index) {
         advantagesHTML += '</ul>';
     }
     
-    // ✅ НОВОЕ: Получаем обводку и ранг по уровню
+    // ✅ НОВОЕ: Мини бейджи с изображениями
     let outlineRangeBadgesHTML = '';
     const levelNum = index + 1;
     
@@ -176,10 +176,20 @@ function showLevelDetails(index) {
         outlineRangeBadgesHTML = '<div class="level-outline-range-badges">';
         
         if (outlineImage) {
-            outlineRangeBadgesHTML += `<span class="level-outline-badge">📦 Outline: Outline/${levelNum} LVL.jpg.png</span>`;
+            outlineRangeBadgesHTML += `
+                <span class="level-mini-badge">
+                    <img src="${outlineImage}" alt="Outline" class="level-mini-badge-img">
+                    📦
+                </span>
+            `;
         }
         if (rangeImage) {
-            outlineRangeBadgesHTML += `<span class="level-range-badge">⭐ Range: Rangers/${levelNum} LVL.jpg.png</span>`;
+            outlineRangeBadgesHTML += `
+                <span class="level-mini-badge">
+                    <img src="${rangeImage}" alt="Range" class="level-mini-badge-img">
+                    ⭐
+                </span>
+            `;
         }
         
         outlineRangeBadgesHTML += '</div>';
