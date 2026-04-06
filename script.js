@@ -153,33 +153,43 @@ function showLevelDetails(index) {
     }
     
     // ✅ НОВОЕ: Мини бейджи как badges (50x50) с превью
+    // Но ТОЛЬКО если они не отключены в Crafters.txt!
     let outlineRangeBadgesHTML = '';
     const levelNum = index + 1;
     
+    // ✅ ВАЖНО: Проверяем, не стоит ли "-" в Crafters.txt для этого уровня
+    const hasOutlineDisabled = levelNum >= 1 && levelNum <= 9 
+        ? localStorage.getItem(`outline_${levelNum}_disabled`) === 'true'
+        : localStorage.getItem('outline_10_disabled') === 'true';
+    
+    const hasRangeDisabled = levelNum >= 1 && levelNum <= 9 
+        ? localStorage.getItem(`range_${levelNum}_disabled`) === 'true'
+        : localStorage.getItem('range_10_disabled') === 'true';
+    
     // Определяем обводку по уровню
     let outlineImage = null;
-    if (levelNum >= 1 && levelNum <= 9) {
-        outlineImage = `./Outline/${levelNum} LVL.jpg.png`;
-    } else if (levelNum >= 10) {
-        outlineImage = './Outline/10 LVL.jpg.png';
+    if (!hasOutlineDisabled) {
+        if (levelNum >= 1 && levelNum <= 9) {
+            outlineImage = `./Outline/${levelNum} LVL.jpg.png`;
+        } else if (levelNum >= 10) {
+            outlineImage = './Outline/10 LVL.jpg.png';
+        }
     }
     
     // Определяем ранг (если есть) - по папке Rangers
     let rangeImage = null;
-    if (levelNum >= 1 && levelNum <= 9) {
-        rangeImage = `./Rangers/${levelNum} LVL.jpg.png`;
-    } else if (levelNum >= 10) {
-        rangeImage = './Rangers/10+ LVL.jpg.png';
+    if (!hasRangeDisabled) {
+        if (levelNum >= 1 && levelNum <= 9) {
+            rangeImage = `./Rangers/${levelNum} LVL.jpg.png`;
+        } else if (levelNum >= 10) {
+            rangeImage = './Rangers/10+ LVL.jpg.png';
+        }
     }
     
-    // ✅ НОВОЕ: Если в Crafters.txt стоит "-" или пусто, не показываем
-    const hasOutline = outlineImage && !outlineImage.includes('-');
-    const hasRange = rangeImage && !rangeImage.includes('-');
-    
-    if (hasOutline || hasRange) {
+    if (outlineImage || rangeImage) {
         outlineRangeBadgesHTML = '<div class="level-badges-container">';
         
-        if (hasOutline) {
+        if (outlineImage) {
             outlineRangeBadgesHTML += `
                 <div class="level-badge-wrapper">
                     <img src="${outlineImage}" alt="Outline" class="level-badge">
@@ -189,7 +199,7 @@ function showLevelDetails(index) {
                 </div>
             `;
         }
-        if (hasRange) {
+        if (rangeImage) {
             outlineRangeBadgesHTML += `
                 <div class="level-badge-wrapper">
                     <img src="${rangeImage}" alt="Range" class="level-badge">
@@ -239,6 +249,23 @@ function parseWorkers(text) {
     lines.forEach(line => {
         const parts = line.split(':');
         if (parts.length >= 7) {
+            const outline = parts[13] || '';
+            const range = parts[14] || '';
+            const classNum = parseInt(parts[1]);
+            
+            // ✅ НОВОЕ: Отслеживаем "-" в Crafters.txt
+            if (outline.trim() === '-') {
+                localStorage.setItem(`outline_${classNum}_disabled`, 'true');
+            } else {
+                localStorage.removeItem(`outline_${classNum}_disabled`);
+            }
+            
+            if (range.trim() === '-') {
+                localStorage.setItem(`range_${classNum}_disabled`, 'true');
+            } else {
+                localStorage.removeItem(`range_${classNum}_disabled`);
+            }
+            
             workers.push({
                 id: parseInt(parts[0]),
                 class: parts[1],
@@ -253,8 +280,8 @@ function parseWorkers(text) {
                 color: parts[10] || 'cyan',
                 teg: parts[11] || '',
                 nameColor: parts[12] || '',
-                outline: parts[13] || '',
-                range: parts[14] || ''
+                outline: outline,
+                range: range
             });
         }
     });
@@ -386,7 +413,7 @@ function getOutlineImage(classValue, customOutline) {
         return null;
     }
     
-    // Если задана кастомная обводка, используем её
+    // Если задана кастомная обводк��, используем её
     if (customOutline && customOutline.trim()) {
         return `./${customOutline}`;
     }
