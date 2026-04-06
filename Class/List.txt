@@ -1,8 +1,18 @@
 {
-  name: Новичок
+  name: Рекрут
   Rang:Ranges/1 LVL.jpg.png
   outline:-
-  oil: 0–40 000
+  oil: 0–20 000
+  color: grey
+  teg: #RCT
+  advantages:1 🧈 / 4 муни,1 Макс.отдых
+}
+
+{
+  name: Новичок
+  Rang:Ranges/2 LVL.jpg.png
+  outline:-
+  oil: 20 001–40 000
   color: green
   teg: #NWC
   advantages:1 🧈 / 5 муни,1 Макс.отдых
@@ -10,17 +20,17 @@
 
 {
   name: Ученик
-  Rang:Ranges/2 LVL.jpg.png
+  Rang:Ranges/3 LVL.jpg.png
   outline:-
   oil: 40 001–80 000
   color: blue
   teg: #APP
-  advantages:1 🧈 / 6 муни,2 Макс.отдых,1 бейджи
+  advantages:1 🧈 / 6 муни,2 Макс.отдых,1 бейдж
 }
 
 {
   name: Рабочий
-  Rang:Ranges/3 LVL.jpg.png
+  Rang:Ranges/4 LVL.jpg.png
   outline:-
   oil: 80 001–120 000
   color: yellow
@@ -29,33 +39,53 @@
 }
 
 {
-  name: Мастер
-  Rang: Ranges/4 LVL.jpg.png
+  name: Старший рабочий
+  Rang:Ranges/5 LVL.jpg.png
   outline:-
   oil: 120 001–160 000
-  color: Orange
-  teg: #MST
+  color: orange
+  teg: #SWR
   advantages:1 🧈 / 8 муни,3 Макс.отдых,2 бейджи,come soon...
 }
 
 {
-  name: Профи
-  Rang: Ranges/5 LVL.jpg.png
+  name: Мастер
+  Rang:Ranges/6 LVL.jpg.png
   outline:-
-  oil: 160 001–200 000
-  color: Violet
+  oil: 160 001–180 000
+  color: violet
+  teg: #MST
+  advantages:1 🧈 / 9 муни,3 Макс.отдых,2 бейджи,come soon...
+}
+
+{
+  name: Профи
+  Rang:Ranges/7 LVL.jpg.png
+  outline:-
+  oil: 180 001–200 000
+  color: violet-dark
   teg: #PRO
   advantages:1 🧈 / 9 муни,3 Макс.отдых,2 бейджи,come soon...
 }
 
 {
   name: Элитный
-  Rang: Ranges/9 LVL.jpg.png
+  Rang:Ranges/8 LVL.jpg.png
   outline:-
-  oil: 200 001–300 000
+  oil: 200 001–250 000
   color: red
   teg: #ELT
   advantages:1 🧈 / 10 муни,4 Макс.отдых,3 бейджи,come soon...
+}
+
+{
+  name: Супер Элитный
+  Rang:Ranges/9 LVL.jpg.png
+  outline:-
+  oil: 250 001–300 000
+  color: dark-red
+  teg: #SEL
+  advantages:1 🧈 / 11 муни,4 Макс.отдых,3 бейджи,come soon...
 }
 
 {
