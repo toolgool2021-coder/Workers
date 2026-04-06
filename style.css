@@ -212,46 +212,47 @@ html, body {
     color: #a855f7;
 }
 
-/* ✅ НОВОЕ: Мини изображения для outline и range в модальном окне */
+/* ✅ НОВОЕ: Мини бейджи с изображениями */
 .level-outline-range-badges {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 10px;
     margin-bottom: 15px;
 }
 
-.level-badge-item {
-    display: flex;
-    flex-direction: column;
+.level-mini-badge {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
-}
-
-.level-badge-image {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(168, 85, 247, 0.2);
     border: 1px solid rgba(168, 85, 247, 0.5);
-    border-radius: 6px;
-    padding: 3px;
-    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 18px;
     transition: all 0.3s ease;
 }
 
-.level-badge-image:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-    border-color: rgba(168, 85, 247, 0.8);
+.level-mini-badge-img {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    opacity: 0.6;
+    z-index: 1;
 }
 
-.level-badge-label {
-    font-size: 10px;
-    font-weight: bold;
-    color: #a855f7;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.level-mini-badge:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    background: rgba(168, 85, 247, 0.3);
+}
+
+.level-mini-badge:hover .level-mini-badge-img {
+    opacity: 1;
 }
 
 .level-advantages {
@@ -781,17 +782,17 @@ html, body {
     }
 
     .level-outline-range-badges {
-        gap: 8px;
-        margin-top: 8px;
-        margin-bottom: 12px;
+        gap: 6px;
     }
 
-    .level-badge-image {
-        width: 40px;
-        height: 40px;
+    .level-mini-badge {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
     }
 
-    .level-badge-label {
-        font-size: 9px;
+    .level-mini-badge-img {
+        width: 30px;
+        height: 30px;
     }
 }
