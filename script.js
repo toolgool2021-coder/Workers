@@ -381,8 +381,13 @@ function getRangerImage(classValue) {
 
 // Получение изображения обводки (ранга)
 function getOutlineImage(classValue, customOutline) {
+    // ✅ НОВОЕ: Если стоит "-" или пусто, не показываем
+    if (customOutline && (customOutline.trim() === '-' || customOutline.trim() === '')) {
+        return null;
+    }
+    
     // Если задана кастомная обводка, используем её
-    if (customOutline && customOutline.trim() && customOutline.trim() !== '-') {
+    if (customOutline && customOutline.trim()) {
         return `./${customOutline}`;
     }
     
@@ -464,13 +469,13 @@ function createWorkerCard(worker) {
 
     // Создаём HTML для бейджей (только если они указаны)
     let badgesHTML = '';
-    if (worker.badge) {
+    if (worker.badge && worker.badge.trim() !== '-' && worker.badge.trim() !== '') {
         badgesHTML += createMediaElement(worker.badge, 'badge', 'title="Badge 1"');
     }
-    if (worker.badge_2) {
+    if (worker.badge_2 && worker.badge_2.trim() !== '-' && worker.badge_2.trim() !== '') {
         badgesHTML += createMediaElement(worker.badge_2, 'badge', 'title="Badge 2"');
     }
-    if (worker.badge_3) {
+    if (worker.badge_3 && worker.badge_3.trim() !== '-' && worker.badge_3.trim() !== '') {
         badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
     }
 
@@ -543,7 +548,7 @@ function createWorkerCard(worker) {
 
     // Тег перед именем
     let tagHTML = '';
-    if (worker.teg) {
+    if (worker.teg && worker.teg.trim() !== '-' && worker.teg.trim() !== '') {
         tagHTML = `<span class="worker-tag">${worker.teg}</span>`;
     }
 
