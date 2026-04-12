@@ -1,181 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toolgool - Developer Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Мои Рабочие</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Background Elements -->
-<div class="bg-gradient"></div>
-<div class="floating-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-</div>
+<canvas id="snowCanvas"></canvas>
 
-<!-- Navigation -->
-<nav class="navbar">
-    <div class="container">
-        <div class="navbar-content">
-            <div class="logo">
-                <span class="logo-bracket">&lt;</span>
-                <span class="logo-text">Works</span>
-                <span class="logo-bracket">/&gt;</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+<div class="container">
+
+    <!-- ЗАГОЛОВОК ПРОЕКТА -->
+    <div class="project-header">
+        <h1 class="project-title">⚡ Мои Рабочие</h1>
+        <p class="project-subtitle">Список команды разработчиков и специалистов</p>
     </div>
-</nav>
 
-<!-- Hero Section -->
-<section id="hero" class="hero">
-    <div class="container">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">
-                    <span class="text-gradient">Toolgool</span>
-                </h1>
-                <p class="hero-subtitle">Developer / Creator / Builder</p>
-                <p class="hero-description">
-                    Crafting digital experiences with code, creativity, and precision. 
-                    Passionate about building tools that make a difference.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">
-                        <span>View My Works</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <a href="#contact" class="btn btn-secondary">
-                        <span>Get In Touch</span>
-                        <i class="fas fa-paper-plane"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-dot red"></span>
-                        <span class="code-dot yellow"></span>
-                        <span class="code-dot green"></span>
+    <!-- КНОПКА УРОВНЕЙ -->
+    <div class="levels-button-section">
+        <button id="levelsBtn" class="levels-btn">
+            <i class="fas fa-layer-group"></i>
+            <span>📊 Уровни Крафтеров</span>
+        </button>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО УРОВНЕЙ -->
+    <div id="levelsModal" class="levels-modal">
+        <div class="levels-modal-content">
+            <span class="close-levels-modal">&times;</span>
+            <div class="levels-modal-container">
+                <div class="levels-list-side">
+                    <h2>Уровни</h2>
+                    <div id="levelsList" class="levels-list">
+                        <!-- Заполняется JavaScript -->
                     </div>
-                    <pre><code>const developer = {
-  name: "Toolgool",
-  passion: "∞",
-  skills: ["Web", "Design", "Code"],
-  status: "Building..."
-};</code></pre>
+                </div>
+                <div class="levels-details-side">
+                    <div id="levelDetails" class="level-details">
+                        <!-- Заполняется JavaScript -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- About Section -->
-<section id="about" class="about">
-    <div class="container">
-        <h2 class="section-title">About Me</h2>
-        <div class="about-grid">
-            <div class="about-card glass-card">
-                <div class="card-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <h3>Developer</h3>
-                <p>Passionate about writing clean, efficient code and building scalable applications with modern technologies.</p>
-            </div>
-            <div class="about-card glass-card">
-                <div class="card-icon">
-                    <i class="fas fa-palette"></i>
-                </div>
-                <h3>Designer</h3>
-                <p>Creating beautiful, user-centric interfaces with attention to detail and modern design principles.</p>
-            </div>
-            <div class="about-card glass-card">
-                <div class="card-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <h3>Builder</h3>
-                <p>Bringing ideas to life with full-stack development, from concept to production deployment.</p>
-            </div>
-        </div>
-
-        <div class="skills-section">
-            <h3>Tech Stack</h3>
-            <div class="skills-grid">
-                <div class="skill-tag">HTML5</div>
-                <div class="skill-tag">CSS3</div>
-                <div class="skill-tag">JavaScript</div>
-                <div class="skill-tag">Responsive Design</div>
-                <div class="skill-tag">Web Performance</div>
-                <div class="skill-tag">Modern UI/UX</div>
-                <div class="skill-tag">Git</div>
-                <div class="skill-tag">GitHub Pages</div>
-            </div>
+    <!-- РАБОЧИЕ СПИСОК -->
+    <div class="workers-section">
+        <h2>👥 Команда</h2>
+        <div class="workers-list" id="workersList">
+            <!-- Заполняется JavaScript -->
         </div>
     </div>
-</section>
 
-<!-- Projects Section -->
-<section id="projects" class="projects">
-    <div class="container">
-        <h2 class="section-title">Featured Works</h2>
-        <div class="projects-grid" id="projectsGrid">
-            <!-- Projects will be loaded here -->
-        </div>
+    <!-- КОНТАКТЫ -->
+    <div class="contact-section">
+        <a href="https://t.me/Toolgool" target="_blank" class="contact-link telegram-link">
+            <i class="fab fa-telegram"></i>
+            <span>My Telegram</span>
+        </a>
     </div>
-</section>
 
-<!-- Contact Section -->
-<section id="contact" class="contact">
-    <div class="container">
-        <h2 class="section-title">Get In Touch</h2>
-        <p class="contact-subtitle">Let's create something amazing together</p>
-        
-        <div class="contact-content">
-            <div class="contact-info glass-card">
-                <h3>Connect With Me</h3>
-                <p>Reach out through any of these channels. I'm always open to new opportunities and collaborations.</p>
-                <div class="social-links">
-                    <a href="https://t.me/Toolgool" target="_blank" class="social-btn" title="Telegram">
-                        <i class="fab fa-telegram"></i>
-                        <span>Telegram</span>
-                    </a>
-                    <a href="https://github.com/toolgool2021-coder" target="_blank" class="social-btn" title="GitHub">
-                        <i class="fab fa-github"></i>
-                        <span>GitHub</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <p>&copy; 2024 Toolgool. All rights reserved.</p>
-            <p class="footer-text">Crafted with <span class="heart">❤️</span> and code</p>
-        </div>
-    </div>
-</footer>
+</div>
 
 <script src="script.js"></script>
 </body>
-</html>
+        </html>
+    
