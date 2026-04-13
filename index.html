@@ -67,5 +67,31 @@
 
 <script src="script.js"></script>
 </body>
+
+    <script>
+  // 👉 ВКЛ / ВЫКЛ тех перерыва
+  const maintenanceMode = true; // true = ВКЛ, false = ВЫКЛ
+
+  if (maintenanceMode) {
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        background:#0f0f0f;
+        color:white;
+        font-family:sans-serif;
+        text-align:center;
+      ">
+        <h1 style="font-size:40px;">⚙️ Технический перерыв</h1>
+        <p style="font-size:18px; opacity:0.7;">
+          Сайт временно недоступен, ведутся работы
+        </p>
+      </div>
+    `;
+  }
+    </script>
         </html>
     
