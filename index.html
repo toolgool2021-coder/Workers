@@ -3,88 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои Рабочие</title>
+    <title>Toolgool - Interactive Bio Profile</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<canvas id="snowCanvas"></canvas>
-
-<div class="container">
-    <!-- ЗАГОЛОВОК ПРОЕКТА -->
-    <div class="project-header">
-        <h1 class="project-title">⚡ Мои Рабочие</h1>
-        <p class="project-subtitle">Список команды разработчиков и специалистов</p>
+    <!-- ===== BACKGROUND ===== -->
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
     </div>
 
-    <!-- КНОПКА УРОВНЕЙ -->
-    <div class="levels-button-section">
-        <button id="levelsBtn" class="levels-btn">
-            <i class="fas fa-layer-group"></i>
-            <span>📊 Уровни Крафтеров</span>
-        </button>
+    <!-- ===== LOGIN MODAL ===== -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-content">
+            <button class="login-close">&times;</button>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary">Enter</button>
+            </form>
+        </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО УРОВНЕЙ -->
-    <div id="levelsModal" class="levels-modal">
-        <div class="levels-modal-content">
-            <span class="close-levels-modal">&times;</span>
-            <div class="levels-modal-container">
-                <div class="levels-list-side">
-                    <h2>Уровни</h2>
-                    <div id="levelsList" class="levels-list"></div>
-                </div>
-                <div class="levels-details-side">
-                    <div id="levelDetails" class="level-details"></div>
-                </div>
+    <!-- ===== RANK ANIMATION OVERLAY ===== -->
+    <div id="rankOverlay" class="rank-overlay hidden">
+        <div class="rank-container">
+            <div class="rank-avatar">
+                <img id="rankAvatarImg" src="" alt="Avatar">
+            </div>
+            <div class="rank-display">
+                <div id="rankNumber" class="rank-number">1</div>
+                <div id="rankType" class="rank-type">NOVICE</div>
+            </div>
+            <div class="rank-bar">
+                <div id="rankBar" class="rank-bar-fill"></div>
             </div>
         </div>
     </div>
 
-    <!-- РАБОЧИЕ СПИСОК -->
-    <div class="workers-section">
-        <h2>👥 Команда</h2>
-        <div class="workers-list" id="workersList"></div>
-    </div>
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">⚡ Toolgool</div>
+            <button id="loginBtn" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </div>
+    </header>
 
-    <!-- КОНТАКТЫ -->
-    <div class="contact-section">
-        <a href="https://t.me/Toolgool" target="_blank" class="contact-link telegram-link">
-            <i class="fab fa-telegram"></i>
-            <span>My Telegram</span>
-        </a>
-    </div>
-</div>
+    <!-- ===== MAIN SECTION ===== -->
+    <main class="main-container">
+        
+        <!-- PROFILES SECTION -->
+        <section class="profiles-section">
+            <div class="profiles-wrapper">
+                
+                <!-- LEFT ARROW -->
+                <button class="arrow arrow-left" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
 
-<script src="script.js"></script>
+                <!-- CARDS CAROUSEL -->
+                <div class="carousel-container">
+                    <div class="cards-track" id="cardsTrack">
+                        <!-- Cards будут добавлены JS -->
+                    </div>
+                </div>
 
-<!-- ⚙️ ТЕХ ПЕРЕРЫВ -->
-<script>
-const maintenanceMode = true; // 👉 true = ВКЛ, false = ВЫКЛ
+                <!-- RIGHT ARROW -->
+                <button class="arrow arrow-right" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
 
-if (maintenanceMode) {
-    document.body.innerHTML = `
-    <div style="
-        height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        background:#0f0f0f;
-        color:white;
-        font-family:sans-serif;
-        text-align:center;
-    ">
-        <h1 style="font-size:40px;">⚙️ Технический перерыв</h1>
-        <p style="font-size:18px; opacity:0.7;">
-            Сайт временно недоступен, ведутся работы
-        </p>
-    </div>
-    `;
-}
-</script>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="users.js"></script>
+    <script src="badges.js"></script>
+    <script src="accounts.js"></script>
+    <script src="effects.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
