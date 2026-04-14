@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <canvas id="snowCanvas"></canvas>
 
 <div class="container">
-
     <!-- ЗАГОЛОВОК ПРОЕКТА -->
     <div class="project-header">
         <h1 class="project-title">⚡ Мои Рабочие</h1>
@@ -34,14 +34,10 @@
             <div class="levels-modal-container">
                 <div class="levels-list-side">
                     <h2>Уровни</h2>
-                    <div id="levelsList" class="levels-list">
-                        <!-- Заполняется JavaScript -->
-                    </div>
+                    <div id="levelsList" class="levels-list"></div>
                 </div>
                 <div class="levels-details-side">
-                    <div id="levelDetails" class="level-details">
-                        <!-- Заполняется JavaScript -->
-                    </div>
+                    <div id="levelDetails" class="level-details"></div>
                 </div>
             </div>
         </div>
@@ -50,9 +46,7 @@
     <!-- РАБОЧИЕ СПИСОК -->
     <div class="workers-section">
         <h2>👥 Команда</h2>
-        <div class="workers-list" id="workersList">
-            <!-- Заполняется JavaScript -->
-        </div>
+        <div class="workers-list" id="workersList"></div>
     </div>
 
     <!-- КОНТАКТЫ -->
@@ -62,9 +56,35 @@
             <span>My Telegram</span>
         </a>
     </div>
-
 </div>
 
 <script src="script.js"></script>
+
+<!-- ⚙️ ТЕХ ПЕРЕРЫВ -->
+<script>
+const maintenanceMode = true; // 👉 true = ВКЛ, false = ВЫКЛ
+
+if (maintenanceMode) {
+    document.body.innerHTML = `
+    <div style="
+        height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        background:#0f0f0f;
+        color:white;
+        font-family:sans-serif;
+        text-align:center;
+    ">
+        <h1 style="font-size:40px;">⚙️ Технический перерыв</h1>
+        <p style="font-size:18px; opacity:0.7;">
+            Сайт временно недоступен, ведутся работы
+        </p>
+    </div>
+    `;
+}
+</script>
+
 </body>
 </html>
