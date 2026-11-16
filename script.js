@@ -104,6 +104,9 @@ function initLevelsModal() {
         }
     };
     
+    const heroLevelsBtn = document.getElementById("heroLevelsBtn");
+    if (heroLevelsBtn) heroLevelsBtn.onclick = () => levelsBtn.click();
+
     // Закрытие модала
     closeBtn.onclick = () => {
         levelsModal.style.display = 'none';
@@ -598,6 +601,7 @@ function renderWorkers(workers) {
   );
   list.replaceChildren();
   document.getElementById("workersCount").textContent = String(allWorkers.length);
+  const overview = document.getElementById("overviewMembers"); if (overview) overview.textContent = String(allWorkers.length);
   if (!filtered.length) {
     const p = document.createElement("p");
     p.textContent = allWorkers.length ? "Ничего не найдено" : "Участников пока нет";
@@ -609,14 +613,14 @@ function renderWorkers(workers) {
 }
 let firestoreWorkersLoaded = false;
 window.applyFirestoreWorkers = data => { firestoreWorkersLoaded = true; renderWorkers(data); };
-window.applyFirestoreLevels = data => { levelsData = data; initLevelsModal(); };
+window.applyFirestoreLevels = data => { levelsData = data; initLevelsModal(); const count=document.getElementById("overviewLevels");if(count)count.textContent=String(data.length); };
 window.loadWorkers = () => { firestoreWorkersLoaded = false; return loadWorkers(); };
 window.loadLevels = loadLevels;
 window.applySiteSettings = settings => {
   const title = document.querySelector(".project-title");
   const subtitle = document.querySelector(".project-subtitle");
-  if (title) title.textContent = settings.title || "⚡ Мои Рабочие";
-  if (subtitle) subtitle.textContent = settings.subtitle || "Список команды разработчиков и специалистов";
+  if (title && settings.title) title.textContent = settings.title;
+  if (subtitle && settings.subtitle) subtitle.textContent = settings.subtitle;
   let overlay = document.getElementById("siteMaintenance");
   if (settings.maintenance) {
     if (!overlay) {

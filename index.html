@@ -12,13 +12,14 @@
 
 <canvas id="snowCanvas"></canvas>
 
-<nav class="workers-nav"><a href="index.html" class="workers-logo">W<span> / WORKERS</span></a><div class="nav-actions"><a href="#leaderboard">Рейтинг</a><a href="#achievements">Достижения</a><a href="account.html" class="nav-login">Личный кабинет</a></div></nav><div class="container">
+<nav class="workers-nav"><a href="index.html" class="workers-logo"><span>WORKERS.</span></a><div class="nav-actions"><a href="#team">Команда</a><a href="#leaderboard">Рейтинг</a><a href="#achievements">Награды</a><a href="account.html" class="nav-login">Войти <i class="fas fa-arrow-up-right-from-square"></i></a></div></nav><div class="container">
     <!-- ЗАГОЛОВОК ПРОЕКТА -->
     <div class="project-header">
-        <h1 class="project-title">Команда нового уровня</h1>
-        <p class="project-subtitle">Люди, проекты и достижения. Единое пространство команды, где каждый вклад имеет значение.</p>
+        <h1 class="project-title">Команда.<br>Прогресс.<br><em>Результат.</em></h1>
+        <p class="project-subtitle">Пространство команды WORKERS. Участники, уровни, достижения и общий рейтинг — в одном месте.</p><div class="hero-actions"><a class="hero-main" href="#team">Исследовать команду <i class="fas fa-arrow-right"></i></a><button id="heroLevelsBtn" type="button" class="levels-btn">Система уровней <i class="fas fa-layer-group"></i></button></div>
     </div>
 
+    <div class="overview-strip"><div class="overview-tile"><strong id="overviewMembers">—</strong><span>УЧАСТНИКОВ</span></div><div class="overview-tile"><strong id="overviewLevels">—</strong><span>УРОВНЕЙ</span></div><div class="overview-tile"><strong class="tile-accent">LIVE</strong><span>ОБНОВЛЕНИЯ FIREBASE</span></div></div>
     <!-- КНОПКА УРОВНЕЙ -->
     <div class="levels-button-section">
         <button id="levelsBtn" class="levels-btn">
@@ -44,19 +45,19 @@
     </div>
 
     <!-- РАБОЧИЕ СПИСОК -->
-    <div class="workers-section">
-        <h2>Участники команды <span id="workersCount" class="count-pill">0</span></h2>
+    <div class="workers-section" id="team">
+        <div class="section-head"><div><span class="section-kicker">THE PEOPLE</span><h2>Наша команда <span id="workersCount" class="count-pill">0</span></h2><p>Каждый участник — часть общего результата.</p></div></div>
         <div class="search-row"><input type="search" id="workerSearch" placeholder="Найти участника по имени, тегу или роли…" aria-label="Поиск участников"></div>
         <div class="workers-list" id="workersList"></div>
     </div>
 
-    <section class="feature-panel" id="leaderboard"><div class="section-heading"><div><p class="eyebrow">HALL OF FAME</p><h2>🏆 Лидерборд</h2><p>Рейтинг по подтверждённым очкам, выданным администрацией</p></div><span class="live-indicator">● LIVE</span></div><div class="rank-list" id="rankList"><p class="empty-message">Загрузка рейтинга…</p></div></section>
-    <section class="feature-panel" id="achievements"><div class="section-heading"><div><p class="eyebrow">MILESTONES</p><h2>✦ Достижения</h2><p>Награды и особые отметки участников команды</p></div></div><div class="achievement-grid" id="achievementGrid"><p class="empty-message">Загрузка достижений…</p></div></section>
+    <section class="feature-panel" id="leaderboard"><div class="section-heading"><div><p class="eyebrow">HALL OF FAME</p><h2>Рейтинг участников</h2><p>Рейтинг по подтверждённым очкам, выданным администрацией</p></div><span class="live-indicator">● LIVE</span></div><div class="rank-list" id="rankList"><p class="empty-message">Загрузка рейтинга…</p></div></section>
+    <section class="feature-panel" id="achievements"><div class="section-heading"><div><p class="eyebrow">MILESTONES</p><h2>Зал достижений</h2><p>Награды и особые отметки участников команды</p></div></div><div class="achievement-grid" id="achievementGrid"><p class="empty-message">Загрузка достижений…</p></div></section>
     <!-- КОНТАКТЫ -->
     <div class="contact-section">
         <a href="https://t.me/Toolgool" target="_blank" class="contact-link telegram-link">
             <i class="fab fa-telegram"></i>
-            <span>My Telegram</span>
+            <span>Связаться с основателем</span>
         </a>
     </div>
 </div>
