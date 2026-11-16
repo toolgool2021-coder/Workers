@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workers · Панель управления</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="top">
+    <a href="index.html" class="back">← На сайт</a>
+    <span class="brand">⚡ WORKERS <span>CONTROL</span></span>
+    <button type="button" class="ghost" id="logout" hidden>Выйти</button>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow">WORKERS / ADMIN</p>
+      <h1>Управление командой</h1>
+      <p>Редактируй участников, уровни и настройки без изменения файлов GitHub. Изменения отображаются на сайте в реальном времени.</p>
+    </section>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <section class="panel auth" id="authBox">
+      <h2>Вход администратора</h2>
+      <p>Используй учётную запись Firebase Authentication. Для редактирования требуется подтверждённая почта и UID владельца в правилах Firestore.</p>
+      <form id="loginForm" class="login">
+        <label>Email<input type="email" id="email" autocomplete="username" required></label>
+        <label>Пароль<input type="password" id="password" autocomplete="current-password" required></label>
+        <button class="primary" type="submit">Войти</button>
+      </form>
+      <div id="accountHelp" hidden>
+        <p id="uidText"></p>
+        <button type="button" class="ghost" id="verifyEmail">Отправить письмо подтверждения</button>
+        <button type="button" class="ghost" id="retryAccess">Проверить доступ</button>
+      </div>
+    </section>
+    <div id="dashboard" hidden>
+      <div class="stats"><div class="stat"><span id="workersCount">0</span>участников</div><div class="stat"><span id="levelsCount">0</span>уровней</div><div class="stat"><span id="syncStatus">●</span>Firestore</div></div>
+      <section class="panel">
+        <div class="toolbar">
+          <div class="tabs" role="group" aria-label="Раздел">
+            <button type="button" class="tab active" data-tab="workers">Участники</button>
+            <button type="button" class="tab" data-tab="levels">Уровни</button>
+            <button type="button" class="tab" data-tab="settings">Настройки</button>
+          </div>
+          <button type="button" class="ghost" id="importData">Импорт TXT</button>
+        </div>
+        <div id="editArea">
+          <div class="listTop"><input type="search" id="search" placeholder="Поиск по имени, ID, роли…"><button type="button" class="primary" id="newItem">+ Добавить</button></div>
+          <div class="layout">
+            <div class="items" id="recordList"></div>
+            <form id="editor" class="editor"><h2 id="editorTitle">Выбери запись</h2><div class="fields" id="fields"></div><div class="editorActions"><button class="primary" type="submit">Сохранить</button><button class="ghost" type="button" id="resetForm">Отмена</button><button class="danger" type="button" id="deleteItem">Удалить</button></div></form>
+          </div>
+        </div>
+        <form id="settingsForm" class="settings" hidden>
+          <h2>Настройки сайта</h2>
+          <label>Название<input name="title" maxlength="100" required></label>
+          <label>Подзаголовок<input name="subtitle" maxlength="200"></label>
+          <label class="check"><input name="maintenance" type="checkbox"> Технический перерыв</label>
+          <label>Текст перерыва<input name="maintenanceText" maxlength="300"></label>
+          <button class="primary" type="submit">Сохранить настройки</button>
+        </form>
+      </section>
+    </div>
+    <footer>Firebase Authentication + Cloud Firestore · Резервные данные из TXT сохраняются в репозитории.</footer>
+  </main>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
