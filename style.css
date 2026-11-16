@@ -799,3 +799,40 @@ html,body{background:radial-gradient(ellipse at 50% -12%,#1a3050 0%,#090e1a 55%,
 .rank-list{display:grid;gap:10px}.rank-entry{display:grid;grid-template-columns:45px 1fr auto;align-items:center;gap:14px;background:#0c1524;border:1px solid #ffffff12;padding:15px 20px;border-radius:14px}.rank-position{color:#93a5c5;font-weight:900;font-size:19px}.rank-entry:nth-child(1) .rank-position{color:#ffd879}.rank-entry:nth-child(2) .rank-position{color:#b7d2e6}.rank-entry:nth-child(3) .rank-position{color:#eab087}.rank-name{font-weight:800}.rank-role{font-size:12px;color:#8d9eb7}.rank-score{font-size:20px;font-weight:900;color:#8ae9ff;font-variant-numeric:tabular-nums}.rank-score small{display:block;color:#8195b0;font-size:10px;text-align:right}
 .achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.achievement-card{display:flex;align-items:flex-start;gap:13px;border:1px solid #ffffff15;border-radius:16px;background:#0c1524;padding:17px}.achievement-symbol{font-size:29px;background:#263450;border-radius:12px;display:grid;place-items:center;width:52px;height:52px;flex-shrink:0}.achievement-card h3{font-size:15px;margin:0 0 4px}.achievement-card p{font-size:12px;color:#91a4bf;line-height:1.5;margin:0}.achievement-card small{display:block;color:#72d9f2;margin-top:8px;font-size:11px}
 @media(max-width:620px){.workers-nav{padding:15px}.workers-logo span{display:none}.nav-actions{gap:10px}.nav-actions a{font-size:11px}.nav-actions .nav-login{padding:9px}.rank-entry{grid-template-columns:25px 1fr auto;padding:12px}.rank-score{font-size:17px}}
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root{--v-bg:#080b12;--v-panel:#111722;--v-elevated:#171e2c;--v-stroke:#ffffff14;--v-text:#f3f6ff;--v-muted:#8794aa;--v-accent:#8c9eff;--v-cyan:#80e3e9;--v-radius:22px}
+html{scroll-behavior:smooth}body{font-family:'Manrope',system-ui,sans-serif!important;color:var(--v-text);background:radial-gradient(ellipse 60% 40% at 50% -10%,#242e50 0%,transparent 90%),#080b12!important}
+h1,h2,h3,.brand,.workers-logo{font-family:'Space Grotesk',system-ui,sans-serif}
+button,a,input,textarea{transition:background .2s,border-color .2s,transform .2s,box-shadow .2s,color .2s}
+button:not(:disabled){cursor:pointer}button:active{transform:scale(.985)}
+:focus-visible{outline:2px solid #a5afff;outline-offset:3px}
+::selection{background:#a4a6ff66;color:#fff}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Workers / 2026 visual system */
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.25;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(#0008,transparent 80%)}
+#snowCanvas{opacity:.24;z-index:0}
+.workers-nav{position:sticky;top:0;z-index:30;max-width:none;padding:15px max(24px,calc((100vw - 1180px)/2));background:#090d16db;backdrop-filter:blur(24px);border-bottom:1px solid #ffffff13}
+.workers-logo{font-size:26px;color:#e7ecff;letter-spacing:-1.6px}.workers-logo span{color:#8896b6;font-size:12px;letter-spacing:2px}
+.nav-actions{gap:30px}.nav-actions a{color:#aab5c9}.nav-actions a:hover{color:#fff}.nav-actions .nav-login{border:1px solid #a1acff6b;background:#9aa8ff;color:#0a1021;padding:12px 19px;border-radius:11px;box-shadow:0 8px 30px #8d9eff2b}
+.container{max-width:1180px;padding-top:0}
+.project-header{position:relative;text-align:left;align-items:flex-start;min-height:370px;justify-content:center;margin:0 0 8px;padding:56px 0 46px;gap:17px}
+.project-header:before{content:"WORKERS / TEAM SPACE";font-size:11px;font-weight:900;letter-spacing:3.5px;color:#9bafff;border:1px solid #889cff4a;background:#889cff11;border-radius:99px;padding:9px 15px}
+.project-header:after{content:"W";position:absolute;right:5%;top:50%;transform:translateY(-50%) rotate(-12deg);font:800 clamp(180px,27vw,340px)/1 'Space Grotesk',sans-serif;letter-spacing:-25px;color:#a8b3ff08;pointer-events:none;text-shadow:0 0 90px #7889ff15}
+.project-title{position:relative;z-index:1;font-size:clamp(46px,7vw,85px);font-weight:700;line-height:1.02;letter-spacing:-4px;background:linear-gradient(125deg,#fff 0%,#c4d2ff 60%,#8798ff 100%);background-clip:text;-webkit-background-clip:text;filter:none;text-shadow:none}
+.project-subtitle{position:relative;z-index:1;font-size:16px;color:#9aa9c1;max-width:510px}
+.levels-button-section{display:flex;justify-content:flex-start;margin:0 0 55px}
+.levels-btn{border:1px solid #8998ff65!important;background:linear-gradient(135deg,#7788ff,#596be0)!important;color:#fff!important;border-radius:14px!important;padding:16px 26px!important;box-shadow:0 14px 42px #657aff2d!important;font-weight:800!important}
+.levels-btn:hover{transform:translateY(-3px);box-shadow:0 20px 55px #657aff4a!important}
+.workers-section{position:relative}.workers-section>h2{font-size:clamp(26px,3.5vw,36px);font-weight:700;letter-spacing:-1px;margin-bottom:24px}
+.count-pill{font-size:13px!important;vertical-align:middle;background:#8a9bff20!important;color:#b4c0ff!important;border:1px solid #8495ff40;border-radius:99px;padding:5px 12px}
+.search-row{margin-bottom:25px}.search-row input{width:100%;max-width:560px;min-height:52px;background:#141b2a!important;border:1px solid #ffffff1d!important;border-radius:14px!important;color:#fff!important;padding:0 19px!important;font:500 14px 'Manrope',sans-serif!important}.search-row input:focus{border-color:#9eafff!important;box-shadow:0 0 0 4px #8d9eff1c}
+.workers-list{gap:20px}
+.feature-panel{background:linear-gradient(150deg,#151d2bd9,#0f1520f2);border:1px solid #ffffff16;border-radius:24px;box-shadow:0 25px 70px #0003;padding:30px;margin:55px 0 28px}
+.section-heading h2{letter-spacing:-1px}.eyebrow{color:#9eafff}
+.rank-entry,.achievement-card{background:#0d131e;border:1px solid #ffffff12;border-radius:15px}.rank-entry{padding:18px 22px}.rank-entry:hover,.achievement-card:hover{background:#151e30;border-color:#8799ff3a;transform:translateY(-2px)}
+.rank-score{color:#a6b4ff}.rank-name{font-size:15px}.rank-role{color:#8795af}
+.achievement-symbol{background:linear-gradient(140deg,#283455,#1a263d)}
+.contact-section{padding:38px 0 55px}
+@media(max-width:700px){.workers-nav{padding:12px 16px}.nav-actions{gap:12px}.nav-actions a{font-size:11px}.project-header{min-height:320px;padding:50px 0 28px}.project-title{letter-spacing:-2px}.project-header:after{right:12%;font-size:170px}.feature-panel{padding:20px}.levels-button-section{margin-bottom:42px}}
