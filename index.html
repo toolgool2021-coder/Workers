@@ -12,7 +12,7 @@
 
 <canvas id="snowCanvas"></canvas>
 
-<div class="container">
+<nav class="workers-nav"><a href="index.html" class="workers-logo">W<span> / WORKERS</span></a><div class="nav-actions"><a href="#leaderboard">Рейтинг</a><a href="#achievements">Достижения</a><a href="account.html" class="nav-login">Личный кабинет</a></div></nav><div class="container">
     <!-- ЗАГОЛОВОК ПРОЕКТА -->
     <div class="project-header">
         <h1 class="project-title">⚡ Мои Рабочие</h1>
@@ -50,6 +50,8 @@
         <div class="workers-list" id="workersList"></div>
     </div>
 
+    <section class="feature-panel" id="leaderboard"><div class="section-heading"><div><p class="eyebrow">HALL OF FAME</p><h2>🏆 Лидерборд</h2><p>Рейтинг по подтверждённым очкам, выданным администрацией</p></div><span class="live-indicator">● LIVE</span></div><div class="rank-list" id="rankList"><p class="empty-message">Загрузка рейтинга…</p></div></section>
+    <section class="feature-panel" id="achievements"><div class="section-heading"><div><p class="eyebrow">MILESTONES</p><h2>✦ Достижения</h2><p>Награды и особые отметки участников команды</p></div></div><div class="achievement-grid" id="achievementGrid"><p class="empty-message">Загрузка достижений…</p></div></section>
     <!-- КОНТАКТЫ -->
     <div class="contact-section">
         <a href="https://t.me/Toolgool" target="_blank" class="contact-link telegram-link">
@@ -61,6 +63,7 @@
 
 <script src="script.js" defer></script>
 <script type="module" src="firebase-public.js"></script>
+<script type="module" src="community-public.js"></script>
 
 
 
