@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
  match /databases/{database}/documents {
   function signedIn(){return request.auth!=null;}
-  function owner(){return signedIn() && request.auth.uid=='PASTE_YOUR_FIREBASE_AUTH_UID_HERE' && request.auth.token.email_verified==true;}
+  function owner(){return signedIn() && request.auth.uid=='5oUqbwq21TYRJDzP68t3KMgS7552' && request.auth.token.email_verified==true;}
   function validProfileEdit(){
    return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName','bio'])
     && request.resource.data.displayName is string
@@ -16,10 +16,10 @@ service cloud.firestore {
   match /meta/site{allow read:if true;allow write:if owner();}
   match /profiles/{uid}{
    allow read:if true;
-   allow create,delete:if false;
-   allow update:if signedIn() && request.auth.uid==uid && validProfileEdit();
+   allow create,delete:if owner();
+   allow update:if owner() || (signedIn() && request.auth.uid==uid && validProfileEdit());
   }
-  match /achievements/{id}{allow read:if true;allow write:if false;}
+  match /achievements/{id}{allow read:if true;allow write:if owner();}
   match /internal/{id}{allow get:if owner();allow list,write:if false;}
   match /{document=**}{allow read,write:if false;}
  }

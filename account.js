@@ -1,5 +1,5 @@
 import {app} from "./firebase-config.js";
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
 import {getFirestore,doc,collection,onSnapshot,updateDoc} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 const auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id);
 let unsubs=[],current=null,profile=null,all=[],achievements=[];
@@ -28,5 +28,4 @@ onAuthStateChanged(auth,user=>{
 });
 $("signin").addEventListener("submit",async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,$("email").value,$("password").value);message("");}catch(err){message("Ошибка входа: "+err.code);}});
 $("signout").addEventListener("click",()=>signOut(auth));
-$("reset").addEventListener("click",async()=>{const email=$("email").value.trim();if(!email){message("Сначала введи email.");return;}try{await sendPasswordResetEmail(auth,email);message("Если адрес зарегистрирован, на него отправлено письмо.");}catch(err){message("Не удалось отправить письмо: "+err.code);}});
 $("profileForm").addEventListener("submit",async e=>{e.preventDefault();if(!current||!profile)return;try{await updateDoc(doc(db,"profiles",current.uid),{displayName:e.target.elements.displayName.value.trim(),bio:e.target.elements.bio.value.trim()});message("Профиль обновлён.");}catch(err){message("Не удалось сохранить: "+err.code);}});

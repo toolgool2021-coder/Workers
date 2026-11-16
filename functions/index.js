@@ -4,7 +4,7 @@ const {getAuth}=require("firebase-admin/auth");
 const {getFirestore,FieldValue}=require("firebase-admin/firestore");
 initializeApp();
 const db=getFirestore();
-const OWNER_UID=process.env.WORKERS_OWNER_UID;
+const OWNER_UID=process.env.WORKERS_OWNER_UID || "5oUqbwq21TYRJDzP68t3KMgS7552";
 function owner(request){
  if(!OWNER_UID || !request.auth || request.auth.uid!==OWNER_UID || request.auth.token.email_verified!==true)
    throw new HttpsError("permission-denied","Доступ только владельцу с подтверждённой почтой.");
