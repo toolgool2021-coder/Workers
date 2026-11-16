@@ -45,7 +45,8 @@
 
     <!-- РАБОЧИЕ СПИСОК -->
     <div class="workers-section">
-        <h2>👥 Команда</h2>
+        <h2>👥 Команда <span id="workersCount" class="count-pill">0</span></h2>
+        <div class="search-row"><input type="search" id="workerSearch" placeholder="Найти участника по имени, тегу или роли…" aria-label="Поиск участников"></div>
         <div class="workers-list" id="workersList"></div>
     </div>
 
@@ -58,33 +59,10 @@
     </div>
 </div>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
+<script type="module" src="firebase-public.js"></script>
 
-<!-- ⚙️ ТЕХ ПЕРЕРЫВ -->
-<script>
-const maintenanceMode = false; // 👉 true = ВКЛ, false = ВЫКЛ
 
-if (maintenanceMode) {
-    document.body.innerHTML = `
-    <div style="
-        height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        background:#0f0f0f;
-        color:white;
-        font-family:sans-serif;
-        text-align:center;
-    ">
-        <h1 style="font-size:40px;">⚙️ Технический перерыв</h1>
-        <p style="font-size:18px; opacity:0.7;">
-            Сайт временно недоступен, ведутся работы
-        </p>
-    </div>
-    `;
-}
-</script>
 
 </body>
 </html>

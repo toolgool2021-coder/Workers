@@ -1,3 +1,28 @@
+// Защита карточек и внешних медиа от HTML/URL-инъекций.
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
+}
+function safeColor(value) {
+  const color = String(value ?? "cyan").trim();
+  return /^#[0-9a-fA-F]{6}$/.test(color) || /^[a-zA-Z-]{1,30}$/.test(color) ? color : "cyan";
+}
+function safeMediaURL(value) {
+  const path = String(value ?? "").trim().replace(/^Ranges\//i,"Rangers/");
+  if (!path || path === "-") return "";
+  if (/^https?:\/\//i.test(path)) {
+    try {
+      const url = new URL(path);
+      if (["https:", "http:"].includes(url.protocol)) return url.href;
+    } catch (_) {}
+    return "";
+  }
+  if (path.startsWith("/") || path.includes("..") || path.includes("\\") || /[<>"'?#]/.test(path)) return "";
+  if (!/^[\w \-./+()а-яёА-ЯЁ]+$/u.test(path)) return "";
+  return "./" + path.replace(/^\.\//,"");
+}
+
 // Таблица цветов для быстрого доступа
 const colorMap = {
     cyan: { hex: '#00ffff', bg: 'rgba(0, 255, 255, 0.2)', bg2: 'rgba(168, 85, 247, 0.1)' },
@@ -16,48 +41,36 @@ const colorMap = {
 let levelsData = [];
 
 // Загрузка уровней из Class/List.txt
-async function loadLevels() {
-    try {
-        const response = await fetch('./Class/List.txt');
-        const text = await response.text();
-        levelsData = parseLevels(text);
-        initLevelsModal();
-    } catch (error) {
-        console.error('Ошибка загрузки уровней:', error);
-    }
+async async function loadLevels() {
+  try {
+    const response = await fetch("./Class/List.txt");
+    if (!response.ok) throw Error("HTTP " + response.status);
+    levelsData = parseLevels(await response.text());
+    initLevelsModal();
+  } catch (error) {
+    console.warn("Ошибка резервной загрузки уровней", error);
+  }
 }
 
 function parseLevels(text) {
-    const levels = [];
-    const blocks = text.split('{').filter(block => block.trim());
-    
-    blocks.forEach(block => {
-        const lines = block.split('\n').filter(line => line.trim());
-        const level = {};
-        
-        lines.forEach(line => {
-            const [key, value] = line.split(':').map(s => s.trim());
-            if (key && value) {
-                if (key.toLowerCase() === 'name') {
-                    level.name = value;
-                } else if (key.toLowerCase() === 'oil') {
-                    level.oil = value;
-                } else if (key.toLowerCase() === 'color') {
-                    level.color = value;
-                } else if (key.toLowerCase() === 'teg') {
-                    level.teg = value;
-                } else if (key.toLowerCase() === 'advantages') {
-                    level.advantages = value.split(',').map(a => a.trim());
-                }
-            }
-        });
-        
-        if (level.name) {
-            levels.push(level);
-        }
-    });
-    
-    return levels;
+  const levels = [];
+  for (const block of text.matchAll(/\{([^}]*)\}/g)) {
+    const level = {};
+    for (const line of block[1].split(/\r?\n/)) {
+      const separator = line.indexOf(":");
+      if (separator === -1) continue;
+      const key = line.slice(0, separator).trim().toLowerCase();
+      const value = line.slice(separator + 1).trim();
+      if (key === "advantages") level.advantages = value.split(",").map(v => v.trim()).filter(Boolean);
+      else if (key === "rang") level.rang = value.replace(/^Ranges\//i, "Rangers/");
+      else if (["name", "oil", "color", "teg", "outline"].includes(key)) level[key] = value;
+    }
+    if (level.name) {
+      level.order = levels.length + 1;
+      levels.push(level);
+    }
+  }
+  return levels;
 }
 
 function initLevelsModal() {
@@ -74,7 +87,7 @@ function initLevelsModal() {
     levelsData.forEach((level, index) => {
         const levelItem = document.createElement('div');
         levelItem.className = 'level-item';
-        levelItem.innerHTML = `<span>${level.name}</span>`;
+        levelItem.textContent = level.name;
         levelItem.onclick = () => showLevelDetails(index);
         levelsList.appendChild(levelItem);
     });
@@ -92,206 +105,114 @@ function initLevelsModal() {
         levelsModal.style.display = 'none';
     };
     
-    window.onclick = (event) => {
-        if (event.target === levelsModal) {
-            levelsModal.style.display = 'none';
-        }
-    };
+    levelsModal.addEventListener('click', (event) => {
+        if (event.target === levelsModal) levelsModal.style.display = 'none';
+    }, { once: true });
 }
 
 function showLevelDetails(index) {
-    const level = levelsData[index];
-    const prevLevel = index > 0 ? levelsData[index - 1] : null;
-    const levelDetails = document.getElementById('levelDetails');
-    const levelsList = document.getElementById('levelsList');
-    
-    // Убираем активный класс со всех
-    document.querySelectorAll('.level-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Добавляем активный класс текущему
-    levelsList.children[index].classList.add('active');
-    
-    // Анализируем преимущества
-    let advantagesHTML = '';
-    
-    if (level.advantages && level.advantages.length > 0) {
-        const prevAdvantages = prevLevel ? prevLevel.advantages : [];
-        
-        advantagesHTML = '<ul>';
-        
-        level.advantages.forEach(adv => {
-            const isNew = !prevAdvantages.includes(adv);
-            
-            let advClass = '';
-            let newBadge = '';
-            
-            if (isNew) {
-                advClass = 'new-advantage';
-                newBadge = '<span class="new-badge">[NEW]</span>';
-            }
-            
-            advantagesHTML += `
-                <li class="${advClass}">
-                    <span>${adv}</span>
-                    ${newBadge}
-                </li>
-            `;
-        });
-        
-        // Добавляем убранные преимущества
-        if (prevAdvantages.length > level.advantages.length) {
-            prevAdvantages.forEach(prevAdv => {
-                if (!level.advantages.includes(prevAdv)) {
-                    advantagesHTML += `<li class="removed-advantage"><span>${prevAdv}</span></li>`;
-                }
-            });
-        }
-        
-        advantagesHTML += '</ul>';
+  const level = levelsData[index];
+  if (!level) return;
+  const previous = index ? levelsData[index - 1] : null;
+  const details = document.getElementById("levelDetails");
+  const list = document.getElementById("levelsList");
+  [...list.children].forEach((item, i) => item.classList.toggle("active", i === index));
+  const box = document.createElement("div");
+  box.className = "level-details-content";
+  const title = document.createElement("h3");
+  title.textContent = level.name || "Уровень";
+  box.append(title);
+
+  const badges = document.createElement("div");
+  badges.className = "level-badges-container";
+  const levelNum = Number(level.order) || index + 1;
+  const fallbackName = levelNum >= 10 ? "10+" : String(levelNum);
+  const images = [
+    level.outline === "-" ? "" : (level.outline || "Outline/" + fallbackName + " LVL.jpg.png"),
+    level.rang === "-" ? "" : (level.rang || "Rangers/" + fallbackName + " LVL.jpg.png")
+  ];
+  images.forEach((value, i) => {
+    const url = safeMediaURL(value);
+    if (!url) return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "level-badge-wrapper";
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = i ? "Ранг" : "Обводка";
+    img.className = "level-badge";
+    img.onerror = () => wrapper.remove();
+    const preview = document.createElement("div");
+    preview.className = "level-badge-preview";
+    const large = img.cloneNode();
+    large.className = "level-badge-preview-img";
+    preview.append(large); wrapper.append(img, preview); badges.append(wrapper);
+  });
+  if (badges.children.length) box.append(badges);
+  [["Диапазон", level.oil], ["Цвет", level.color], ["Тег", level.teg]].forEach(([label, value]) => {
+    const p = document.createElement("p");
+    const strong = document.createElement("strong");
+    strong.textContent = label + ": ";
+    p.append(strong, document.createTextNode(value || "—"));
+    box.append(p);
+  });
+  const section = document.createElement("div");
+  section.className = "level-advantages";
+  const caption = document.createElement("h4");
+  caption.textContent = "Преимущества:";
+  section.append(caption);
+  const ul = document.createElement("ul");
+  const advantages = Array.isArray(level.advantages) ? level.advantages : [];
+  const old = previous && Array.isArray(previous.advantages) ? previous.advantages : [];
+  advantages.forEach(text => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    if (!old.includes(text)) {
+      li.className = "new-advantage";
+      const tag = document.createElement("span");
+      tag.className = "new-badge";
+      tag.textContent = " [NEW]";
+      li.append(tag);
     }
-    
-    // ✅ НОВОЕ: Мини бейджи как badges (50x50) с превью
-    // Но ТОЛЬКО если они не отключены в Crafters.txt!
-    let outlineRangeBadgesHTML = '';
-    const levelNum = index + 1;
-    
-    // ✅ ВАЖНО: Проверяем, не стоит ли "-" в Crafters.txt для этого уровня
-    const hasOutlineDisabled = levelNum >= 1 && levelNum <= 9 
-        ? localStorage.getItem(`outline_${levelNum}_disabled`) === 'true'
-        : localStorage.getItem('outline_10_disabled') === 'true';
-    
-    const hasRangeDisabled = levelNum >= 1 && levelNum <= 9 
-        ? localStorage.getItem(`range_${levelNum}_disabled`) === 'true'
-        : localStorage.getItem('range_10_disabled') === 'true';
-    
-    // Определяем обводку по уровню
-    let outlineImage = null;
-    if (!hasOutlineDisabled) {
-        if (levelNum >= 1 && levelNum <= 9) {
-            outlineImage = `./Outline/${levelNum} LVL.jpg.png`;
-        } else if (levelNum >= 10) {
-            outlineImage = './Outline/10+ LVL.jpg.png';
-        }
-    }
-    
-    // Определяем ранг (если есть) - по папке Rangers
-    let rangeImage = null;
-    if (!hasRangeDisabled) {
-        if (levelNum >= 1 && levelNum <= 9) {
-            rangeImage = `./Rangers/${levelNum} LVL.jpg.png`;
-        } else if (levelNum >= 10) {
-            rangeImage = './Rangers/10+ LVL.jpg.png';
-        }
-    }
-    
-    if (outlineImage || rangeImage) {
-        outlineRangeBadgesHTML = '<div class="level-badges-container">';
-        
-        if (outlineImage) {
-            outlineRangeBadgesHTML += `
-                <div class="level-badge-wrapper">
-                    <img src="${outlineImage}" alt="Outline" class="level-badge">
-                    <div class="level-badge-preview">
-                        <img src="${outlineImage}" alt="Outline Preview" class="level-badge-preview-img">
-                    </div>
-                </div>
-            `;
-        }
-        if (rangeImage) {
-            outlineRangeBadgesHTML += `
-                <div class="level-badge-wrapper">
-                    <img src="${rangeImage}" alt="Range" class="level-badge">
-                    <div class="level-badge-preview">
-                        <img src="${rangeImage}" alt="Range Preview" class="level-badge-preview-img">
-                    </div>
-                </div>
-            `;
-        }
-        
-        outlineRangeBadgesHTML += '</div>';
-    }
-    
-    // Показываем детали
-    levelDetails.innerHTML = `
-        <div class="level-details-content">
-            <h3>${level.name}</h3>
-            ${outlineRangeBadgesHTML}
-            <p class="level-oil"><strong>Диапазон:</strong> ${level.oil}</p>
-            <p class="level-color"><strong>Цвет:</strong> ${level.color}</p>
-            <p class="level-teg"><strong>Тег:</strong> ${level.teg}</p>
-            <div class="level-advantages">
-                <h4>Преимущества:</h4>
-                ${advantagesHTML}
-            </div>
-        </div>
-    `;
+    ul.append(li);
+  });
+  old.filter(text => !advantages.includes(text)).forEach(text => {
+    const li = document.createElement("li");
+    li.className = "removed-advantage";
+    li.textContent = text;
+    ul.append(li);
+  });
+  section.append(ul);box.append(section);details.replaceChildren(box);
 }
 
-// Загрузка рабочих из TXT
-async function loadWorkers() {
-    try {
-        const response = await fetch('./Workers/Crafters.txt');
-        const text = await response.text();
-        const workers = parseWorkers(text);
-        renderWorkers(workers);
-    } catch (error) {
-        console.error('Ошибка загрузки файла:', error);
-        document.getElementById('workersList').innerHTML = '<p style="text-align: center; color: #ff6b6b;">Ошибка загрузки данных</p>';
-    }
+async async function loadWorkers() {
+  try {
+    const response = await fetch("./Workers/Crafters.txt");
+    if (!response.ok) throw Error("HTTP " + response.status);
+    renderWorkers(parseWorkers(await response.text()));
+  } catch (error) {
+    console.warn("Ошибка резервной загрузки команды", error);
+    document.getElementById("workersList").textContent = "Не удалось загрузить резервный список.";
+  }
 }
 
 function parseWorkers(text) {
-    const lines = text.trim().split('\n').filter(line => line && !line.startsWith('#'));
-    const workers = [];
-
-    lines.forEach(line => {
-        const parts = line.split(':');
-        if (parts.length >= 7) {
-            const outline = parts[13] || '';
-            const range = parts[14] || '';
-            const classNum = parseInt(parts[1]);
-            
-            // ✅ НОВОЕ: Отслеживаем "-" в Crafters.txt
-            if (outline.trim() === '-') {
-                localStorage.setItem(`outline_${classNum}_disabled`, 'true');
-            } else {
-                localStorage.removeItem(`outline_${classNum}_disabled`);
-            }
-            
-            if (range.trim() === '-') {
-                localStorage.setItem(`range_${classNum}_disabled`, 'true');
-            } else {
-                localStorage.removeItem(`range_${classNum}_disabled`);
-            }
-            
-            workers.push({
-                id: parseInt(parts[0]),
-                class: parts[1],
-                job: parts[2],
-                xp: parts[3],
-                name: parts[4],
-                user: parts[5],
-                photo: parts[6],
-                badge: parts[7] || '',
-                badge_2: parts[8] || '',
-                badge_3: parts[9] || '',
-                color: parts[10] || 'cyan',
-                teg: parts[11] || '',
-                nameColor: parts[12] || '',
-                outline: outline,
-                range: range
-            });
-        }
+  const workers = [];
+  text.split(/\r?\n/).map(x => x.trim()).filter(x => x && !x.startsWith("#")).forEach(line => {
+    const parts = line.split(":");
+    if (parts.length < 7) return;
+    const id = Number(parts[0]);
+    if (!Number.isSafeInteger(id) || id <= 0) return;
+    workers.push({
+      id, class: parts[1], job: parts[2], xp: parts[3], name: parts[4],
+      user: parts[5], photo: parts[6], badge: parts[7] || "",
+      badge_2: parts[8] || "", badge_3: parts[9] || "",
+      color: parts[10] || "cyan", teg: parts[11] || "",
+      nameColor: parts[12] || "", outline: parts[13] || "", range: parts[14] || ""
     });
-
-    // Сортировка по ID
-    workers.sort((a, b) => a.id - b.id);
-    return workers;
+  });
+  return workers.sort((a, b) => a.id - b.id);
 }
 
-// Парсинг XP значений с поддержкой k, m и обычных чисел
 function parseXPValue(xpString) {
     if (!xpString) return 0;
     
@@ -372,23 +293,19 @@ function parseXP(xpString) {
 function isVideoMedia(path) {
     if (!path) return false;
     const ext = path.split('.').pop().toLowerCase();
-    return ['mp4', 'webm', 'mov', 'avi', 'gif'].includes(ext);
+    return ['mp4', 'webm', 'mov', 'avi'].includes(ext);
 }
 
-function createMediaElement(mediaPath, className = '', attributes = '') {
-    if (!mediaPath) return '';
-    
-    if (isVideoMedia(mediaPath)) {
-        return `<video class="${className}" autoplay muted loop playsinline ${attributes}>
-            <source src="./${mediaPath}">
-            Ваш браузер не поддерживает видео
-        </video>`;
-    } else {
-        return `<img src="./${mediaPath}" alt="media" class="${className}" ${attributes}>`;
-    }
+function createMediaElement(mediaPath, className = "", attributes = "") {
+  const url = safeMediaURL(mediaPath);
+  if (!url) return "";
+  const safe = escapeHTML(url);
+  if (isVideoMedia(url) && !url.toLowerCase().endsWith(".gif")) {
+    return '<video class="' + className + '" autoplay muted loop playsinline preload="none" ' + attributes + '><source src="' + safe + '"></video>';
+  }
+  return '<img src="' + safe + '" alt="Изображение" loading="lazy" class="' + className + '" ' + attributes + '>';
 }
 
-// Проверка, содержит ли строка только цифры
 function isNumeric(str) {
     return /^\d+$/.test(str.trim());
 }
@@ -408,29 +325,14 @@ function getRangerImage(classValue) {
 
 // Получение изображения обводки (ранга)
 function getOutlineImage(classValue, customOutline) {
-    // ✅ НОВОЕ: Если стоит "-" или пусто, не показываем
-    if (customOutline && (customOutline.trim() === '-' || customOutline.trim() === '')) {
-        return null;
-    }
-    
-    // Если задана кастомная обводк��, используем её
-    if (customOutline && customOutline.trim()) {
-        return `./${customOutline}`;
-    }
-    
-    // Иначе используем обводку по уровню
-    if (!isNumeric(classValue)) return null;
-    
-    const num = parseInt(classValue);
-    if (num >= 1 && num <= 9) {
-        return `./Outline/${num} LVL.jpg.png`;
-    } else if (num >= 10) {
-        return './Outline/10+ LVL.jpg.png';
-    }
-    return null;
+  if (customOutline === "-") return null;
+  if (customOutline && String(customOutline).trim()) return safeMediaURL(customOutline);
+  if (!isNumeric(String(classValue))) return null;
+  const num = Number(classValue);
+  if (num < 1) return null;
+  return "./Outline/" + (num >= 10 ? "10+" : num) + " LVL.jpg.png";
 }
 
-// Проверка является ли строка HEX цветом
 function isHexColor(str) {
     return /^#[0-9A-F]{6}$/i.test(str);
 }
@@ -488,6 +390,14 @@ function createParticles(cardElement, colorValue) {
 }
 
 function createWorkerCard(worker) {
+    // Любые поля, поступающие из Firestore, считаются непроверенным вводом.
+    worker = Object.assign({}, worker);
+    ["name","job","class","xp","teg"].forEach(key => worker[key] = escapeHTML(worker[key]));
+    ["photo","badge","badge_2","badge_3","outline","range"].forEach(key => worker[key] = safeMediaURL(worker[key]) || (worker[key] === "-" ? "-" : ""));
+    worker.color = safeColor(worker.color);
+    worker.nameColor = /^#[0-9a-fA-F]{6}$/.test(String(worker.nameColor || "")) ? worker.nameColor : "";
+    worker.user = String(worker.user || "").trim();
+
     const card = document.createElement('div');
     card.className = 'worker-card';
     card.dataset.workerId = worker.id;
@@ -506,19 +416,18 @@ function createWorkerCard(worker) {
         badgesHTML += createMediaElement(worker.badge_3, 'badge', 'title="Badge 3"');
     }
 
-    // Определяем ссылку в зависимости от формата user
-    let profileLink = '';
-    let userDisplay = worker.name;
-    
-    if (worker.user.includes('@')) {
-        const telegramHandle = worker.user.startsWith('@') ? worker.user.substring(1) : worker.user;
-        profileLink = `https://t.me/${telegramHandle}`;
-    } 
-    else if (worker.user.includes('http')) {
-        profileLink = worker.user;
-    } 
-    else {
-        profileLink = `https://github.com/${worker.user}`;
+    // Только разрешённые ссылки — не допускаем javascript: или опасный HTML.
+    let profileLink = "#";
+    const userDisplay = worker.name;
+    if (/^@[A-Za-z0-9_]{3,32}$/.test(worker.user)) {
+      profileLink = "https://t.me/" + worker.user.slice(1);
+    } else if (/^https?:\/\/\S+$/i.test(worker.user)) {
+      try {
+        const url = new URL(worker.user);
+        if (["https:", "http:"].includes(url.protocol)) profileLink = url.href;
+      } catch (_) {}
+    } else if (/^[A-Za-z0-9_-]{1,39}$/.test(worker.user)) {
+      profileLink = "https://github.com/" + worker.user;
     }
 
     // Применяем цвет из TXT файла (поддержка HEX и названий)
@@ -591,14 +500,14 @@ function createWorkerCard(worker) {
     `;
 
     // Применяем кастомный цвет имени если есть
-    const nameStyle = worker.nameColor ? `style="color: ${worker.nameColor}"` : '';
+    const nameStyle = worker.nameColor ? 'style="color: ' + worker.nameColor + '"' : '';
 
     card.innerHTML = `
         ${avatarHTML}
         
         <div class="worker-info">
             ${tagHTML}
-            <a href="${profileLink}" target="_blank" class="worker-name" ${nameStyle}>
+            <a href="${escapeHTML(profileLink)}" target="_blank" rel="noopener noreferrer" class="worker-name" ${nameStyle}>
                 ${userDisplay}
             </a>
             ${badgesHTML ? `<div class="badges-container">${badgesHTML}</div>` : ''}
@@ -660,20 +569,53 @@ function observeMediaElement(mediaElement) {
     observer.observe(mediaElement);
 }
 
+let allWorkers = [];
 function renderWorkers(workers) {
-    const workersList = document.getElementById('workersList');
-    workersList.innerHTML = '';
-
-    if (workers.length === 0) {
-        workersList.innerHTML = '<p style="text-align: center; color: #a855f7; grid-column: 1/-1;">Нет данных о рабочих</p>';
-        return;
-    }
-
-    workers.forEach(worker => {
-        const card = createWorkerCard(worker);
-        workersList.appendChild(card);
-    });
+  allWorkers = Array.isArray(workers) ? workers : [];
+  const list = document.getElementById("workersList");
+  const query = (document.getElementById("workerSearch")?.value || "").toLocaleLowerCase().trim();
+  const filtered = allWorkers.filter(worker =>
+    [worker.name,worker.user,worker.job,worker.teg,worker.class].some(v => String(v ?? "").toLocaleLowerCase().includes(query))
+  );
+  list.replaceChildren();
+  document.getElementById("workersCount").textContent = String(allWorkers.length);
+  if (!filtered.length) {
+    const p = document.createElement("p");
+    p.textContent = allWorkers.length ? "Ничего не найдено" : "Участников пока нет";
+    p.className = "empty-message";
+    list.append(p);
+    return;
+  }
+  filtered.forEach(worker => list.append(createWorkerCard(worker)));
 }
+window.applyFirestoreWorkers = data => renderWorkers(data);
+window.applyFirestoreLevels = data => { levelsData = data; initLevelsModal(); };
+window.loadWorkers = loadWorkers;
+window.loadLevels = loadLevels;
+window.applySiteSettings = settings => {
+  const title = document.querySelector(".project-title");
+  const subtitle = document.querySelector(".project-subtitle");
+  if (title) title.textContent = settings.title || "⚡ Мои Рабочие";
+  if (subtitle) subtitle.textContent = settings.subtitle || "Список команды разработчиков и специалистов";
+  let overlay = document.getElementById("siteMaintenance");
+  if (settings.maintenance) {
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "siteMaintenance";
+      overlay.setAttribute("role", "alert");
+      overlay.className = "maintenance-overlay";
+      const h = document.createElement("h1");
+      h.textContent = "⚙️ Технический перерыв";
+      const p = document.createElement("p");
+      overlay.append(h,p);document.body.append(overlay);
+    }
+    overlay.querySelector("p").textContent = settings.maintenanceText || "Сайт временно недоступен, ведутся работы";
+  } else if (overlay) {
+    overlay.remove();
+  }
+};
+document.getElementById("workerSearch")?.addEventListener("input", () => renderWorkers(allWorkers));
+
 
 // Применяем цвет к карточке через CSS переменные (поддержка HEX и названий)
 function applyColorToCard(card, colorValue) {
@@ -706,7 +648,7 @@ window.addEventListener('resize', () => {
 });
 
 const snowflakes = [];
-const maxFlakes = 150;
+const maxFlakes = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : (window.innerWidth <= 600 ? 35 : 80);
 
 for (let i = 0; i < maxFlakes; i++) {
     snowflakes.push({
@@ -747,7 +689,7 @@ function updateSnow() {
 
 drawSnow();
 
-// Загружаем при загрузке страницы
+// TXT используется как стартовый список и резерв при отключённом Firebase.
 window.addEventListener('load', () => {
     loadWorkers();
     loadLevels();
