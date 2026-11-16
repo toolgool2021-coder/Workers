@@ -41,7 +41,7 @@ const colorMap = {
 let levelsData = [];
 
 // Загрузка уровней из Class/List.txt
-async async function loadLevels() {
+async function loadLevels() {
   try {
     const response = await fetch("./Class/List.txt");
     if (!response.ok) throw Error("HTTP " + response.status);
@@ -184,7 +184,7 @@ function showLevelDetails(index) {
   section.append(ul);box.append(section);details.replaceChildren(box);
 }
 
-async async function loadWorkers() {
+async function loadWorkers() {
   try {
     const response = await fetch("./Workers/Crafters.txt");
     if (!response.ok) throw Error("HTTP " + response.status);
