@@ -784,3 +784,5 @@ html, body {
 .maintenance-overlay p{font-size:17px;color:#9caec8;max-width:600px}
 @media(max-width:680px){.workers-section{padding:16px}.workers-list{grid-template-columns:minmax(0,1fr)}.levels-modal-container{grid-template-columns:1fr}.levels-modal-content{padding:20px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.avatar-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;font-size:60px;font-weight:800;color:var(--card-color);background:rgba(0,0,0,.28)}

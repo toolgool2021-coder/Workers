@@ -34,6 +34,10 @@ const colorMap = {
     red: { hex: '#ff4545', bg: 'rgba(255, 69, 69, 0.2)', bg2: 'rgba(255, 0, 0, 0.1)' },
     blue: { hex: '#1e90ff', bg: 'rgba(30, 144, 255, 0.2)', bg2: 'rgba(0, 102, 204, 0.1)' },
     yellow: { hex: '#ffff00', bg: 'rgba(255, 255, 0, 0.2)', bg2: 'rgba(255, 215, 0, 0.1)' },
+    grey: { hex: '#adb5c4', bg: 'rgba(173, 181, 196, 0.16)', bg2: 'rgba(130, 143, 165, 0.06)' },
+    violet: { hex: '#9565ed', bg: 'rgba(149, 101, 237, 0.18)', bg2: 'rgba(85, 62, 180, 0.07)' },
+    'violet-dark': { hex: '#7351b8', bg: 'rgba(115, 81, 184, 0.18)', bg2: 'rgba(55, 30, 110, 0.07)' },
+    'dark-red': { hex: '#ac3349', bg: 'rgba(172, 51, 73, 0.18)', bg2: 'rgba(93, 20, 30, 0.07)' },
     legend: { hex: '#ff8c42', bg: 'rgba(255, 140, 66, 0.2)', bg2: 'rgba(184, 134, 11, 0.1)' }
 };
 
@@ -105,9 +109,9 @@ function initLevelsModal() {
         levelsModal.style.display = 'none';
     };
     
-    levelsModal.addEventListener('click', (event) => {
+    levelsModal.onclick = event => {
         if (event.target === levelsModal) levelsModal.style.display = 'none';
-    }, { once: true });
+    };
 }
 
 function showLevelDetails(index) {
@@ -188,7 +192,8 @@ async function loadWorkers() {
   try {
     const response = await fetch("./Workers/Crafters.txt");
     if (!response.ok) throw Error("HTTP " + response.status);
-    renderWorkers(parseWorkers(await response.text()));
+    const backupWorkers = parseWorkers(await response.text());
+    if (!firestoreWorkersLoaded) renderWorkers(backupWorkers);
   } catch (error) {
     console.warn("Ошибка резервной загрузки команды", error);
     document.getElementById("workersList").textContent = "Не удалось загрузить резервный список.";
@@ -524,6 +529,20 @@ function createWorkerCard(worker) {
         createParticles(card, worker.color);
     }
 
+    // У отсутствующих файлов скрываем пустую картинку, аватар заменяем буквой.
+    card.querySelectorAll("img").forEach(img => {
+      img.addEventListener("error", () => {
+        if (img.classList.contains("avatar")) {
+          const placeholder = document.createElement("span");
+          placeholder.className = "avatar-fallback";
+          placeholder.textContent = (worker.name || "?").replace(/&[^;]+;/g, "").charAt(0).toUpperCase() || "?";
+          img.replaceWith(placeholder);
+        } else {
+          img.remove();
+        }
+      }, { once: true });
+    });
+
     // Запускаем Intersection Observer для видео
     const videos = card.querySelectorAll('video');
     videos.forEach(video => {
@@ -588,9 +607,10 @@ function renderWorkers(workers) {
   }
   filtered.forEach(worker => list.append(createWorkerCard(worker)));
 }
-window.applyFirestoreWorkers = data => renderWorkers(data);
+let firestoreWorkersLoaded = false;
+window.applyFirestoreWorkers = data => { firestoreWorkersLoaded = true; renderWorkers(data); };
 window.applyFirestoreLevels = data => { levelsData = data; initLevelsModal(); };
-window.loadWorkers = loadWorkers;
+window.loadWorkers = () => { firestoreWorkersLoaded = false; return loadWorkers(); };
 window.loadLevels = loadLevels;
 window.applySiteSettings = settings => {
   const title = document.querySelector(".project-title");
