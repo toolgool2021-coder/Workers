@@ -661,14 +661,16 @@ function applyColorToCard(card, colorValue) {
 
 // ===== СНЕЖНАЯ АНИМАЦИЯ =====
 const canvas = document.getElementById('snowCanvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas?.getContext('2d');
 
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
+let width = window.innerWidth;
+let height = window.innerHeight;
+if (canvas) { canvas.width = width; canvas.height = height; }
 
 window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    if (canvas) { canvas.width = width; canvas.height = height; }
 });
 
 const snowflakes = [];
@@ -711,7 +713,7 @@ function updateSnow() {
     requestAnimationFrame(drawSnow);
 }
 
-drawSnow();
+if (ctx) drawSnow();
 
 // TXT используется как стартовый список и резерв при отключённом Firebase.
 window.addEventListener('load', () => {

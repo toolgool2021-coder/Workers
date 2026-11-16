@@ -1,0 +1,1 @@
+(()=>{document.getElementById("sideLevelsBtn")?.addEventListener("click",()=>document.getElementById("levelsBtn")?.click());document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=document.getElementById("levelsModal");if(m)m.style.display="none";}});})();
