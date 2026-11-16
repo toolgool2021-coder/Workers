@@ -1,35 +1,17 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WORKERS — Команда, рейтинг и достижения</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<canvas id="snowCanvas"></canvas>
-
-<nav class="workers-nav"><a href="index.html" class="workers-logo"><span>WORKERS.</span></a><div class="nav-actions"><a href="#team">Команда</a><a href="#leaderboard">Рейтинг</a><a href="#achievements">Награды</a><a href="account.html" class="nav-login">Войти <i class="fas fa-arrow-up-right-from-square"></i></a></div></nav><div class="container">
-    <!-- ЗАГОЛОВОК ПРОЕКТА -->
-    <div class="project-header">
-        <h1 class="project-title">Команда.<br>Прогресс.<br><em>Результат.</em></h1>
-        <p class="project-subtitle">Пространство команды WORKERS. Участники, уровни, достижения и общий рейтинг — в одном месте.</p><div class="hero-actions"><a class="hero-main" href="#team">Исследовать команду <i class="fas fa-arrow-right"></i></a><button id="heroLevelsBtn" type="button" class="levels-btn">Система уровней <i class="fas fa-layer-group"></i></button></div>
-    </div>
-
-    <div class="overview-strip"><div class="overview-tile"><strong id="overviewMembers">—</strong><span>УЧАСТНИКОВ</span></div><div class="overview-tile"><strong id="overviewLevels">—</strong><span>УРОВНЕЙ</span></div><div class="overview-tile"><strong class="tile-accent">LIVE</strong><span>ОБНОВЛЕНИЯ FIREBASE</span></div></div>
-    <!-- КНОПКА УРОВНЕЙ -->
-    <div class="levels-button-section">
-        <button id="levelsBtn" class="levels-btn">
-            <i class="fas fa-layer-group"></i>
-            <span>Система уровней</span>
-        </button>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО УРОВНЕЙ -->
-    <div id="levelsModal" class="levels-modal">
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090e1c"><title>WORKERS ARENA — Команда и рейтинг</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar"><a href="index.html" class="logo"><span class="logo-mark">W</span><span>WORKERS<small>ARENA / SEASON 01</small></span></a><div class="nav-caption">НАВИГАЦИЯ</div><nav class="side-nav" aria-label="Основная навигация">
+<a class="nav-link active" href="#overview"><span class="nav-icon">◈</span> Обзор</a><a class="nav-link" href="#team"><span class="nav-icon">♙</span> Состав команды</a><a class="nav-link" href="#leaderboard"><span class="nav-icon">♛</span> Лидерборд</a><a class="nav-link" href="#achievements"><span class="nav-icon">✧</span> Достижения</a><button type="button" class="nav-link" id="heroLevelsBtn"><span class="nav-icon">⬡</span> Система рангов</button></nav><div class="sidebar-bottom"><div class="server-state"><span class="status-dot"></span><div><strong>WORKERS NETWORK</strong><small>Firebase · синхронизация</small></div></div><a href="account.html" class="side-account">↗ Личный кабинет</a></div></aside>
+<div class="workspace"><header class="topbar"><button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">☰</button><div class="breadcrumb">WORKERS <span>/</span> DASHBOARD <span>/</span> OVERVIEW</div><div class="top-actions"><span class="season-tag"><span class="status-dot"></span> СЕЗОН 01</span><a href="account.html" class="top-profile"><span class="profile-mini">W</span> Мой профиль</a></div></header>
+<main class="content">
+<section class="arena-hero" id="overview"><div class="hero-content"><div class="hero-label"><span class="status-dot"></span> WORKERS · TEAM HQ</div><h1 class="project-title">Играй в команде.<br><em>Расти в рейтинге.</em></h1><p class="project-subtitle">Твой прогресс — часть истории команды. Следи за участниками, открывай ранги и получай достижения.</p><div class="hero-actions"><a href="#team" class="btn-main">Участники команды <span>↗</span></a><a href="#leaderboard" class="btn-secondary">Таблица лидеров →</a></div></div><div class="hero-art" aria-hidden="true"><div class="art-ring ring-one"></div><div class="art-ring ring-two"></div><div class="art-core">W</div><div class="art-label">LEVEL UP <span>↑</span></div></div></section>
+<section class="metrics"><div class="metric"><span class="metric-icon purple">♙</span><div><small>ИГРОКОВ В КОМАНДЕ</small><strong id="overviewMembers">—</strong><span>Участники WORKERS</span></div></div><div class="metric"><span class="metric-icon cyan">⬡</span><div><small>ДОСТУПНЫХ РАНГОВ</small><strong id="overviewLevels">—</strong><span>Путь развития</span></div></div><div class="metric"><span class="metric-icon amber">♛</span><div><small>СИСТЕМА РЕЙТИНГА</small><strong>LIVE</strong><span>Очки из Firebase</span></div></div></section>
+<div class="dashboard-grid"><section class="section-block roster-block" id="team"><div class="block-head"><div><span class="kicker">01 / TEAM ROSTER</span><h2>Состав команды <span id="workersCount" class="count-pill">0</span></h2><p>Участники, уровни и текущий XP</p></div><button type="button" class="small-action" id="levelsBtn">Все ранги ↗</button></div><div class="roster-tools"><label class="search-row"><span>⌕</span><input id="workerSearch" type="search" placeholder="Поиск игрока, роли или тега…" aria-label="Поиск участников"></label><span class="roster-filter">● ALL PLAYERS</span></div><div class="workers-list" id="workersList"></div></section>
+<aside class="side-widgets"><section class="widget"><div class="widget-head"><span class="kicker">SEASON STANDINGS</span><h3>Топ игроков</h3></div><div class="rank-list" id="rankList"><p class="empty-message">Загрузка рейтинга…</p></div><a href="#leaderboard" class="widget-link">Полный рейтинг →</a></section><section class="widget highlight-widget"><span class="kicker">PROGRESSION SYSTEM</span><div class="widget-symbol">⬡</div><h3>Повышай свой ранг</h3><p>Изучай уровни, набирай опыт и открывай новые возможности.</p><button class="widget-button" id="sideLevelsBtn" type="button">Посмотреть ранги ↗</button></section></aside></div>
+<section class="section-block leaderboard-full" id="leaderboard"><div class="block-head"><div><span class="kicker">02 / COMPETITIVE</span><h2>Таблица лидеров</h2><p>Рейтинг по очкам, назначенным администрацией</p></div><span class="live-pill"><span class="status-dot"></span> LIVE DATA</span></div><div class="rank-list" id="rankListFull"><p class="empty-message">Загрузка рейтинга…</p></div></section>
+<section class="section-block achievements-full" id="achievements"><div class="block-head"><div><span class="kicker">03 / TROPHY ROOM</span><h2>Коллекция достижений</h2><p>Награды за вклад и развитие команды</p></div><span class="trophy-symbol">✦</span></div><div class="achievement-grid" id="achievementGrid"><p class="empty-message">Загрузка достижений…</p></div></section>
+<footer class="site-footer"><span>© WORKERS ARENA · TEAM PLATFORM</span><a href="https://t.me/Toolgool" target="_blank" rel="noopener noreferrer">Связаться с основателем ↗</a></footer></main></div></div>
+<div id="levelsModal" class="levels-modal">
         <div class="levels-modal-content">
             <span class="close-levels-modal">&times;</span>
             <div class="levels-modal-container">
@@ -44,29 +26,5 @@
         </div>
     </div>
 
-    <!-- РАБОЧИЕ СПИСОК -->
-    <div class="workers-section" id="team">
-        <div class="section-head"><div><span class="section-kicker">THE PEOPLE</span><h2>Наша команда <span id="workersCount" class="count-pill">0</span></h2><p>Каждый участник — часть общего результата.</p></div></div>
-        <div class="search-row"><input type="search" id="workerSearch" placeholder="Найти участника по имени, тегу или роли…" aria-label="Поиск участников"></div>
-        <div class="workers-list" id="workersList"></div>
-    </div>
 
-    <section class="feature-panel" id="leaderboard"><div class="section-heading"><div><p class="eyebrow">HALL OF FAME</p><h2>Рейтинг участников</h2><p>Рейтинг по подтверждённым очкам, выданным администрацией</p></div><span class="live-indicator">● LIVE</span></div><div class="rank-list" id="rankList"><p class="empty-message">Загрузка рейтинга…</p></div></section>
-    <section class="feature-panel" id="achievements"><div class="section-heading"><div><p class="eyebrow">MILESTONES</p><h2>Зал достижений</h2><p>Награды и особые отметки участников команды</p></div></div><div class="achievement-grid" id="achievementGrid"><p class="empty-message">Загрузка достижений…</p></div></section>
-    <!-- КОНТАКТЫ -->
-    <div class="contact-section">
-        <a href="https://t.me/Toolgool" target="_blank" class="contact-link telegram-link">
-            <i class="fab fa-telegram"></i>
-            <span>Связаться с основателем</span>
-        </a>
-    </div>
-</div>
-
-<script src="script.js" defer></script>
-<script type="module" src="firebase-public.js"></script>
-<script type="module" src="community-public.js"></script>
-
-
-
-</body>
-</html>
+<script src="script.js" defer></script><script src="dashboard-ui.js" defer></script><script type="module" src="firebase-public.js"></script><script type="module" src="community-public.js"></script></body></html>
